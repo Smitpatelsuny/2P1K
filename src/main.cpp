@@ -56,6 +56,7 @@ int main(void)
         Vector2 oldMerged = obj3;
 
 
+        //X-axis movement and collision
         if(merged){
             MergePlayerMotor(obj3, 2);
         }
@@ -64,12 +65,8 @@ int main(void)
             Player2Motor(ballPosition, 2);
         }
    
-        
-
-        // Player 1 collision with platforms
         for (int i = 0; i < platformCount; i++) {
             if (CheckCollisionCircleRec(player, rad, platform[i])) {
-                //boxCollision = GetCollisionCircleRec(player, rad, platform[i]);
                 player.x = oldP1.x;//go back to old position
                 break;
             }
@@ -77,7 +74,6 @@ int main(void)
         
         for (int i = 0; i < platformCount; i++) {
             if (CheckCollisionCircleRec(ballPosition, rad, platform[i])) {
-                //boxCollision = GetCollisionCircleRec(ballPosition, rad, platform[i]);
                 ballPosition.x = oldP2.x; //go back to old position
                 break;
             }
@@ -85,18 +81,16 @@ int main(void)
 
          for (int i = 0; i < platformCount; i++) {
             if (CheckCollisionCircleRec(obj3, rad, platform[i])) {
-                //boxCollision = GetCollisionCircleRec(player, rad, platform[i]);
                 obj3.x = oldMerged.x;//go back to old position
                 break;
             }
         }
         
-
+        //Y-axis movement and collision
         Jump(Jumpspeed, Jumpspeed2, JumpspeedMerged, P1CanJump, P2CanJump, MergedCanJump, merged, rad, player, ballPosition, obj3);
 
         for (int i = 0; i < platformCount; i++) {
             if (CheckCollisionCircleRec(player, rad, platform[i])) {
-                //boxCollision = GetCollisionCircleRec(player, rad, platform[i]);
                 player.y = oldP1.y;//go back to old position
                 P1CanJump = true;
                 Jumpspeed = 0.0;
@@ -104,10 +98,8 @@ int main(void)
             }
         }
 
-        // Player 2 collision with platforms
         for (int i = 0; i < platformCount; i++) {
             if (CheckCollisionCircleRec(ballPosition, rad, platform[i])) {
-               //boxCollision = GetCollisionCircleRec(ballPosition, rad, platform[i]);
                 ballPosition.y = oldP2.y; //go back to old position
                 P2CanJump = true;
                 Jumpspeed2 = 0.0;
@@ -117,7 +109,6 @@ int main(void)
         
           for (int i = 0; i < platformCount; i++) {
             if (CheckCollisionCircleRec(obj3, rad, platform[i])) {
-               //boxCollision = GetCollisionCircleRec(ballPosition, rad, platform[i]);
                 obj3.y = oldMerged.y; //go back to old position
                 MergedCanJump = true;
                 JumpspeedMerged = 0.0;
