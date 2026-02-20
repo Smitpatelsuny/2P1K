@@ -43,12 +43,13 @@ int main(void)
     SetTargetFPS(60);     
     
     int platformCount = (int)(sizeof(platform) / sizeof(platform[0]));
-  
+    
     while (!WindowShouldClose())    
     {
         MergeObjects(player, ballPosition, obj3, rad, merged);
 
         boxCollision = (Rectangle){0};
+        
 
         // Save old positions BEFORE moving
         Vector2 oldP1 = player;
