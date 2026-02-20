@@ -2,6 +2,8 @@
 #include "PlayerStuff.h"
 #include <stdio.h>
 
+//smit commit
+
 void PlayerBorderCollisions(Vector2& player, int radius, int screenWidth, int screenHeight, bool& CanJump)
 {
      if (player.x + radius >= screenWidth) 
