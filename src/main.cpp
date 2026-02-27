@@ -58,7 +58,8 @@ int main(void)
         {610, 305, 30, 15}, //spike hitbox for fourth platform
     };
 
-    //future spike hitbox: +5 on x (first vertice) and -15 on y from the spike's position, with a width of 30 and height of 15
+    //future spike hitbox: +5 on x (first vertice) and -15 on y from the spike's position, 
+    //with a width of 30 and height of 15
 
 
     SetTargetFPS(60);     
