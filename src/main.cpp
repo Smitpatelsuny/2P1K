@@ -40,10 +40,32 @@ int main(void)
     {  60, 280, 120, 15 },
     };
 
+    Vector2 spikes[][3]{
+        {{95, 500}, {135, 500}, {115, 470}}, //spike on first platform
+        {{265, 440}, {305, 440}, {285, 410}}, //spike on second platform
+        {{435, 380}, {475, 380}, {455, 350}}, //spike on third platform
+        {{605, 320}, {645, 320}, {625, 290}}, //spike on fourth platform
+    };
+
+    //spike parameters: first vetice = (x of platform + 15, y of platform), 
+    //second vertice = (x of platform + 55, y of platform), 
+    //third vertice = (x of platform + 35, y of platform - 30)
+
+    Rectangle spikeHitboxes[] = {
+        {100, 485, 30, 15}, //spike hitbox for first platform
+        {270, 425, 30, 15}, //spike hitbox for second platform
+        {440, 365, 30, 15}, //spike hitbox for third platform
+        {610, 305, 30, 15}, //spike hitbox for fourth platform
+    };
+
+    //future spike hitbox: +5 on x (first vertice) and -15 on y from the spike's position, with a width of 30 and height of 15
+
+
     SetTargetFPS(60);     
     
     int platformCount = (int)(sizeof(platform) / sizeof(platform[0]));
-    
+    int spikeCount = (int)(sizeof(spikes) / sizeof(spikes[0]));
+  
     while (!WindowShouldClose())    
     {
         MergeObjects(player, ballPosition, obj3, rad, merged);
@@ -132,6 +154,8 @@ int main(void)
             }
 
             for (int i = 0; i < platformCount; i++) DrawRectangleRec(platform[i], DARKGRAY);
+            for (int i = 0; i < spikeCount; i++) DrawTriangle(spikes[i][0], spikes[i][1], spikes[i][2], BLACK);
+            for (int i = 0; i < spikeCount; i++) DrawRectangleRec(spikeHitboxes[i], RED); //draw hitboxes for testing
         EndDrawing();   
     }
     CloseWindow();       
