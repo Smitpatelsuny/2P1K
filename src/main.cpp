@@ -71,6 +71,7 @@ int main(void)
         MergeObjects(player, ballPosition, obj3, rad, merged);
 
         boxCollision = (Rectangle){0};
+        
 
         // Save old positions BEFORE moving
         Vector2 oldP1 = player;

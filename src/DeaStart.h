@@ -1,4 +1,4 @@
-/* #ifndef DEASTART_H
+/*#ifndef DEASTART_H
 #define DEASTART_H
 
 #include <raylib.h>
@@ -17,5 +17,4 @@ public:
 
 
 
-#endif  
-*/ 
+#endif
