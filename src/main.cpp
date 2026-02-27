@@ -12,7 +12,7 @@ int main(void)
     float rad = 20.0;
     bool P1CanJump = true;
     bool P2CanJump = true;
-    bool MergedCanJump = true;
+    bool MergedCanJump = true; 
     bool merged = false;
     const int screenWidth = 800;
     const int screenHeight = 600;
@@ -48,7 +48,6 @@ int main(void)
     {
         MergeObjects(player, ballPosition, obj3, rad, merged);
 
-        boxCollision = (Rectangle){0};
         
 
         // Save old positions BEFORE moving
