@@ -2,27 +2,20 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Build Game",
+            "label": "build",
             "type": "shell",
-            "command": "make",
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "problemMatcher": ["$gcc"]
-        },
-        {
-            "label": "Build and Run",
-            "type": "shell",
-            "command": "make run",
-            "group": "build",
-            "problemMatcher": ["$gcc"]
-        },
-        {
-            "label": "Clean",
-            "type": "shell",
-            "command": "make clean",
-            "problemMatcher": []
+            "command": "g++",
+            "args": [
+                "src/main.cpp",
+                "-I", "C:/raylib/raylib/src",
+                "-L", "C:/raylib/raylib/release/libs/win64",
+                "-lraylib",
+                "-lopengl32",
+                "-lgdi32",
+                "-lwinmm",
+                "-o", "game.exe"
+            ],
+            "problemMatcher": "$gcc"
         }
     ]
 }
