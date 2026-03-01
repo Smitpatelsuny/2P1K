@@ -1,6 +1,8 @@
 #include "raylib.h"
 #include "PlayerStuff.h"
+#include "DeaStart.h"
 #include <stdio.h>
+
 
 //ChickenNuggetPotatoGuy21
 
@@ -16,6 +18,9 @@ int main(void)
     bool merged = false;
     const int screenWidth = 800;
     const int screenHeight = 600;
+    bool deathOccured = false;
+    bool invincibility = false;
+    float invincibilityTimer = 5.0f; // 5 seconds of invincibility after unmerging
 
     InitWindow(screenWidth, screenHeight, "All code test");
 
@@ -145,7 +150,12 @@ int main(void)
             ClearBackground(SKYBLUE);
 
             DrawText("Jump with the up arrow", 10, 10, 20, DARKGRAY);
+            DrawText(TextFormat("Invincibility left: %.1f", invincibilityTimer), 10, 100, 20, DARKGRAY);
             
+            death(player, ballPosition, spikeHitboxes, spikeCount, rad, deathOccured, invincibility, invincibilityTimer); 
+            forceUnmerge(player, ballPosition, obj3, spikeHitboxes, spikeCount, rad, merged, invincibility, invincibilityTimer);
+
+
             if(!merged){
                 DrawCircleV(player, rad, RED);
                 DrawCircleV(ballPosition, rad, BLUE);
@@ -157,6 +167,9 @@ int main(void)
             for (int i = 0; i < platformCount; i++) DrawRectangleRec(platform[i], DARKGRAY);
             for (int i = 0; i < spikeCount; i++) DrawTriangle(spikes[i][0], spikes[i][1], spikes[i][2], BLACK);
             for (int i = 0; i < spikeCount; i++) DrawRectangleRec(spikeHitboxes[i], RED); //draw hitboxes for testing
+
+            
+
         EndDrawing();   
     }
     CloseWindow();       
