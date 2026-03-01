@@ -181,5 +181,62 @@ void MergeObjects(Vector2& obj1, Vector2& obj2, Vector2& obj3, float& radius1, b
     }
 }
 
+void PlayerPlatformCollisions(Vector2& player, int rad, Rectangle platforms[], int platformCount, Vector2& ballPosition, Vector2& obj3, Vector2& oldP1, Vector2& oldP2, Vector2& oldMerged)
+{
+    for (int i = 0; i < platformCount; i++) {
+            if (CheckCollisionCircleRec(player, rad, platforms[i])) {
+                player.x = oldP1.x;//go back to old position
+                break;
+            }
+        }
+        
+        for (int i = 0; i < platformCount; i++) {
+            if (CheckCollisionCircleRec(ballPosition, rad, platforms[i])) {
+                ballPosition.x = oldP2.x; //go back to old position
+                break;
+            }
+        }
+
+         for (int i = 0; i < platformCount; i++) {
+            if (CheckCollisionCircleRec(obj3, rad, platforms[i])) {
+                obj3.x = oldMerged.x;//go back to old position
+                break;
+            }
+        }
+        
+}
+
+void PlayerJumpCollisions(Vector2& player, Vector2& ballPosition, Vector2& obj3, float rad, Rectangle platforms[], int platformCount, bool& P1CanJump, bool& P2CanJump, bool& MergedCanJump, float& Jumpspeed, float& Jumpspeed2, float& JumpspeedMerged, Vector2& oldP1, Vector2& oldP2, Vector2& oldMerged)
+{
+    for (int i = 0; i < platformCount; i++) {
+            if (CheckCollisionCircleRec(player, rad, platforms[i])) {
+                player.y = oldP1.y;//go back to old position
+                P1CanJump = true;
+                Jumpspeed = 0.0;
+                break;
+            }
+        }
+
+        for (int i = 0; i < platformCount; i++) {
+            if (CheckCollisionCircleRec(ballPosition, rad, platforms[i])) {
+                ballPosition.y = oldP2.y; //go back to old position
+                P2CanJump = true;
+                Jumpspeed2 = 0.0;
+                break;
+            }
+        }
+        
+          for (int i = 0; i < platformCount; i++) {
+            if (CheckCollisionCircleRec(obj3, rad, platforms[i])) {
+                obj3.y = oldMerged.y; //go back to old position
+                MergedCanJump = true;
+                JumpspeedMerged = 0.0;
+                break;
+            }
+        }
+}
+
+
+
 void PlayerStuff::PlayerMovement() {
 }
