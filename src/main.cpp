@@ -74,7 +74,7 @@ int main(void)
   
     while (!WindowShouldClose())    
     {
-        MergeObjects(player, ballPosition, obj3, rad, merged);
+        MergeObjects(player, ballPosition, obj3, rad, merged, invincibility);
 
         
 

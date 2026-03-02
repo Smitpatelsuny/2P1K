@@ -159,8 +159,11 @@ void Jump(float &Jumpspeed, float &Jumpspeed2, float &JumpspeedMerged, bool &P1C
     DrawText(TextFormat("Speed is: %.1f", JumpspeedMerged), 10, 50, 20, DARKGRAY);  
 }
 
-void MergeObjects(Vector2& obj1, Vector2& obj2, Vector2& obj3, float& radius1, bool& merged){
+void MergeObjects(Vector2& obj1, Vector2& obj2, Vector2& obj3, float& radius1, bool& merged, bool invincibility){
 
+    if(invincibility) return; // prevent merging while invincible
+    
+    
     if(!merged){
         float distance = Vector2Distance(obj1, obj2);
 
