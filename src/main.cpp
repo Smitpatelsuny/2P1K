@@ -34,9 +34,11 @@ int main(void)
     { 785,   0,  15, 800 },  // right wall
     {   0,   0, 800, 15 },   // ceiling (optional)
     { 325, 500, 150, 300 },   // x, y, width, height, middle wall
-    {   0, 710, 250, 15 },   // 1st Left platform
-    { 100, 625, 600, 15 },   // 2nd Middle platform
-    { 550, 710, 250, 15 }
+    {   0, 700, 250, 15 },   // 1st Left platform
+    { 100, 600, 600, 15 },   // 2nd Middle platform
+    { 550, 700, 250, 15 },   // 1st Right platform
+    {   0, 300, 250, 15 },   // Top left platfrom
+    { 550, 300, 250, 15 },   // Top right platform
     };
 
     Rectangle startbutton = { 250, 220, 300, 40 };
