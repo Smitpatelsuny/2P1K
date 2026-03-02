@@ -3,6 +3,7 @@
 #include "DeaStart.h"
 #include <stdio.h>
 
+typedef enum GameScreen { TITLE = 0, LEVSEL, GAMEPLAY} GameScreen;
 
 //ChickenNuggetPotatoGuy21
 
@@ -12,37 +13,45 @@ int main(void)
     float Jumpspeed2 = 0.0;
     float JumpspeedMerged = 0.0;
     float rad = 20.0;
-    bool P1CanJump = true;
+    bool P1CanJump = true; 
     bool P2CanJump = true;
     bool MergedCanJump = true; 
     bool merged = false;
     const int screenWidth = 800;
-    const int screenHeight = 600;
+    const int screenHeight = 800;
+    GameScreen currentScreen = TITLE;
     bool deathOccured = false;
     bool invincibility = false;
     float invincibilityTimer = 5.0f; // 5 seconds of invincibility after unmerging
 
     InitWindow(screenWidth, screenHeight, "All code test");
 
-    Vector2 ballPosition = { (float)screenWidth/2, (float)screenHeight/2 };
-    Vector2 player = { (float)screenWidth/2, (float)screenHeight/2 };
+    Vector2 Ying = { 40, 764};
+    Vector2 Yan = { 760, 764};
     Vector2 obj3 = {0, 0};
 
     Rectangle boxCollision = {0};
     Rectangle platform[] = {
-    // FLOOR + BOUNDARIES
-    {   0, 585, 800, 15 },   // floor
-    {   0,   0,  15, 600 },  // left wall
-    { 785,   0,  15, 600 },  // right wall
+    //Max Jump Height is about 2.5 player models.
+    {   0, 785, 800, 15 },   // floor
+    {   0,   0,  15, 800 },  // left wall
+    { 785,   0,  15, 800 },  // right wall
     {   0,   0, 800, 15 },   // ceiling (optional)
-    {  80, 500, 140, 15 },  //x, y, width, height
-    { 250, 440, 140, 15 },  //platforms
-    { 420, 380, 140, 15 },
-    { 590, 320, 140, 15 },
-    { 260, 520, 280, 15 },
-    { 520, 240, 240, 15 },   
-    { 120, 360, 180, 15 },
-    {  60, 280, 120, 15 },
+    { 325, 500, 150, 300 },   // x, y, width, height, middle wall
+    {   0, 700, 250, 15 },   // 1st Left platform
+    { 100, 600, 600, 15 },   // 2nd Middle platform
+    { 550, 700, 250, 15 },   // 1st Right platform
+    {   0, 300, 250, 15 },   // Top left platfrom
+    { 550, 300, 250, 15 },   // Top right platform
+    };
+
+    Rectangle startbutton = { 250, 220, 300, 40 };
+    Rectangle backbutton = { 10, 10, 30, 30 };
+    Rectangle levelselectbuttons[] ={
+        { 150, 200, 100, 50 },
+        { 270, 200, 100, 50 },
+        { 390, 200, 100, 50 },
+        { 510, 200, 100, 50 },
     };
 
     Vector2 spikes[][3]{
@@ -74,47 +83,98 @@ int main(void)
   
     while (!WindowShouldClose())    
     {
-        MergeObjects(player, ballPosition, obj3, rad, merged, invincibility);
+        MergeObjects(Ying, Yan, obj3, rad, merged, invincibility);
+
+        switch(currentScreen)
+        {
+            case TITLE:
+            {
+                if(IsGestureDetected(GESTURE_TAP) && CheckCollisionPointRec(GetMousePosition(), startbutton))
+                {
+                    currentScreen = LEVSEL;
+                }
+            }break;
+            case LEVSEL:
+            {
+                if(IsGestureDetected(GESTURE_TAP) && CheckCollisionPointRec(GetMousePosition(), backbutton))
+                {
+                    currentScreen = TITLE;
+                }
+                else if(IsGestureDetected(GESTURE_TAP) && CheckCollisionPointRec(GetMousePosition(), levelselectbuttons[0]))
+                {
+                    currentScreen = GAMEPLAY;
+                }
+            }break;
+            case GAMEPLAY:
+            {
+                if(IsKeyPressed(KEY_P))
+                {
+                    currentScreen = LEVSEL;
+                }
+   
 
         
 
-        // Save old positions BEFORE moving
-        Vector2 oldP1 = player;
-        Vector2 oldP2 = ballPosition;
-        Vector2 oldMerged = obj3;
+                // Save old positions BEFORE moving
+                Vector2 oldP1 = Ying;
+                Vector2 oldP2 = Yan;
+                Vector2 oldMerged = obj3;
 
 
-        //X-axis movement and collision
-        if(merged){
-            MergePlayerMotor(obj3, 2);
-        }
-        else{
-            PlayerMotor(player, 2);
-            Player2Motor(ballPosition, 2);
-        }
+                //X-axis movement and collision
+                if(merged){
+                    MergePlayerMotor(obj3, 2);
+                }
+                else{
+                    PlayerMotor(Ying, 2);
+                    Player2Motor(Yan, 2);
+                }
    
-        PlayerPlatformCollisions(player, rad, platform, platformCount, ballPosition, obj3, oldP1, oldP2, oldMerged);
+        PlayerPlatformCollisions(Ying, rad, platform, platformCount, Yan, obj3, oldP1, oldP2, oldMerged);
         
         //Y-axis movement and collision
-        Jump(Jumpspeed, Jumpspeed2, JumpspeedMerged, P1CanJump, P2CanJump, MergedCanJump, merged, rad, player, ballPosition, obj3);
+        Jump(Jumpspeed, Jumpspeed2, JumpspeedMerged, P1CanJump, P2CanJump, MergedCanJump, merged, rad, Ying, Yan, obj3);
 
+        PlayerJumpCollisions(Ying, Yan, obj3, rad, platform, platformCount, P1CanJump, P2CanJump, MergedCanJump, Jumpspeed, Jumpspeed2, JumpspeedMerged, oldP1, oldP2, oldMerged);
 
-        PlayerJumpCollisions(player, ballPosition, obj3, rad, platform, platformCount, P1CanJump, P2CanJump, MergedCanJump, Jumpspeed, Jumpspeed2, JumpspeedMerged, oldP1, oldP2, oldMerged);
+        }
 
         BeginDrawing();
 
-            ClearBackground(SKYBLUE);
+            switch(currentScreen)
+
+            {
+                case TITLE:
+                {
+                    DrawText("Ying and Yan", 150, 20, 80, WHITE);
+                    DrawText("The Second Coming", 200, 100, 40, WHITE);
+                    ClearBackground(BLACK);
+                    DrawRectangleRec(startbutton, GRAY);
+                    DrawText("START", 365, 230, 20, LIGHTGRAY);    
+                } break;
+                case LEVSEL:
+                {
+                    DrawRectangle(0, 0, screenWidth, screenHeight, BLACK);
+                    DrawText("LEVEL SELECT", 150, 40, 60, WHITE);
+                    int LevelSelectCount = 4;
+                    for (int i = 0; i < LevelSelectCount; i++) DrawRectangleRec(levelselectbuttons[i], DARKGRAY);
+                    DrawRectangleRec(backbutton, WHITE);
+
+                } break;
+                case GAMEPLAY:
+                {
+                    ClearBackground(SKYBLUE);
 
             DrawText("Jump with the up arrow", 10, 10, 20, DARKGRAY);
             DrawText(TextFormat("Invincibility left: %.1f", invincibilityTimer), 10, 100, 20, DARKGRAY);
             
-            death(player, ballPosition, spikeHitboxes, spikeCount, rad, deathOccured, invincibility, invincibilityTimer); 
-            forceUnmerge(player, ballPosition, obj3, spikeHitboxes, spikeCount, rad, merged, invincibility, invincibilityTimer);
+            death(Ying, Yan, spikeHitboxes, spikeCount, rad, deathOccured, invincibility, invincibilityTimer); 
+            forceUnmerge(Ying, Yan, obj3, spikeHitboxes, spikeCount, rad, merged, invincibility, invincibilityTimer);
 
 
             if(!merged){
-                DrawCircleV(player, rad, RED);
-                DrawCircleV(ballPosition, rad, BLUE);
+                DrawCircleV(Ying, rad, RED);
+                DrawCircleV(Yan, rad, BLUE);
             }
             else{
                 DrawCircleV(obj3, rad, PURPLE);
@@ -125,10 +185,14 @@ int main(void)
             for (int i = 0; i < spikeCount; i++) DrawRectangleRec(spikeHitboxes[i], RED); //draw hitboxes for testing
 
             
+                    for (int i = 0; i < platformCount; i++) DrawRectangleRec(platform[i], DARKGRAY);
 
+                }break;
+                default: break;
+            }
         EndDrawing();   
     }
+}
     CloseWindow();       
-
     return 0;
 }
