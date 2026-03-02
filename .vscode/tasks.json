@@ -6,16 +6,23 @@
             "type": "shell",
             "command": "g++",
             "args": [
-                "src/main.cpp",
-                "-I", "C:/raylib/raylib/src",
-                "-L", "C:/raylib/raylib/release/libs/win64",
+                "${workspaceFolder}/src/*.cpp",
+                "-I",
+                "C:/raylib/raylib/src",
+                "-L",
+                "C:/raylib/raylib/src",
                 "-lraylib",
                 "-lopengl32",
                 "-lgdi32",
                 "-lwinmm",
-                "-o", "game.exe"
+                "-o",
+                "${workspaceFolder}/game.exe"
             ],
-            "problemMatcher": "$gcc"
+            "problemMatcher": "$gcc",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         }
     ]
 }

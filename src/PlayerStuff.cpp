@@ -40,16 +40,12 @@ void Player2Motor(Vector2& player, int speedX)
 {
     if (IsKeyDown(KEY_RIGHT)) player.x += speedX;
     if (IsKeyDown(KEY_LEFT)) player.x -= speedX;
-    
-
 }
 
 void MergePlayerMotor(Vector2 &player, int speedX)
 {
         if (IsKeyDown(KEY_D)) player.x += speedX;
         if (IsKeyDown(KEY_A)) player.x -= speedX;
-        
-         //DrawText(TextFormat("Speed is: %.1f", Jumpspeed), 10, 50, 20, DARKGRAY);
 }
 
 
@@ -79,7 +75,8 @@ void Jump(float &Jumpspeed, float &Jumpspeed2, float &JumpspeedMerged, bool &P1C
         player.y -= Jumpspeed;
         Jumpspeed = Jumpspeed - 0.1;
 
-        //if (player.y + radius >= screenHeight) CanJump = true;
+        DrawText(TextFormat("Speed is: %.1f", Jumpspeed), 30, 70, 20, DARKGRAY);
+        
 
         if (IsKeyDown(KEY_UP) && P2CanJump == true && !merged){
            if (Jumpspeed2 <= 0.0){
@@ -104,7 +101,7 @@ void Jump(float &Jumpspeed, float &Jumpspeed2, float &JumpspeedMerged, bool &P1C
     ballPosition.y -= Jumpspeed2;
     Jumpspeed2 = Jumpspeed2 - 0.1;
 
-
+    DrawText(TextFormat("Speed is: %.1f", Jumpspeed2), 50, 90, 20, DARKGRAY);
     
 
     if (IsKeyDown(KEY_UP) && MergedCanJump == true){
