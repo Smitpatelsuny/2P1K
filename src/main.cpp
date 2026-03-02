@@ -1,5 +1,6 @@
 #include "raylib.h"
 #include "PlayerStuff.h"
+#include "DeaStart.h"
 #include <stdio.h>
 
 typedef enum GameScreen { TITLE = 0, LEVSEL, GAMEPLAY} GameScreen;
@@ -19,6 +20,10 @@ int main(void)
     const int screenWidth = 800;
     const int screenHeight = 800;
     GameScreen currentScreen = TITLE;
+    const int screenHeight = 600;
+    bool deathOccured = false;
+    bool invincibility = false;
+    float invincibilityTimer = 5.0f; // 5 seconds of invincibility after unmerging
 
     InitWindow(screenWidth, screenHeight, "All code test");
 
@@ -79,7 +84,7 @@ int main(void)
   
     while (!WindowShouldClose())    
     {
-        MergeObjects(Ying, Yan, obj3, rad, merged);
+        MergeObjects(Ying, Yan, obj3, rad, merged, invincibility);
 
         switch(currentScreen)
         {
@@ -107,6 +112,8 @@ int main(void)
                 {
                     currentScreen = LEVSEL;
                 }
+   
+
         
 
                 // Save old positions BEFORE moving
@@ -124,59 +131,38 @@ int main(void)
                     Player2Motor(Yan, 2);
                 }
    
-                for (int i = 0; i < platformCount; i++) {
-                    if (CheckCollisionCircleRec(Ying, rad, platform[i])) {
-                        Ying.x = oldP1.x;//go back to old position
-                        break;
-                    }
-                }
-        
-                for (int i = 0; i < platformCount; i++) {
-                    if (CheckCollisionCircleRec(Yan, rad, platform[i])) {
-                        Yan.x = oldP2.x; //go back to old position
-                        break;
-                    }
-                }
-
-                for (int i = 0; i < platformCount; i++) {
-                    if (CheckCollisionCircleRec(obj3, rad, platform[i])) {
-                        obj3.x = oldMerged.x;//go back to old position
-                        break;
-                    }
-                }
+        PlayerPlatformCollisions(Ying, rad, platform, platformCount, Yan, obj3, oldP1, oldP2, oldMerged);
         
                 //Y-axis movement and collision
                 Jump(Jumpspeed, Jumpspeed2, JumpspeedMerged, P1CanJump, P2CanJump, MergedCanJump, merged, rad, Ying, Yan, obj3);
 
-                for (int i = 0; i < platformCount; i++) {
-                    if (CheckCollisionCircleRec(Ying, rad, platform[i])) {
-                        Ying.y = oldP1.y;//go back to old position
-                        P1CanJump = true;
-                        Jumpspeed = 0.0;
-                        break;
-                    }
-                }
+        for (int i = 0; i < platformCount; i++) {
+            if (CheckCollisionCircleRec(player, rad, platform[i])) {
+                player.y = oldP1.y;//go back to old position
+                P1CanJump = true;
+                Jumpspeed = 0.0;
+                break;
+            }
+        }
 
-                for (int i = 0; i < platformCount; i++) {
-                    if (CheckCollisionCircleRec(Yan, rad, platform[i])) {
-                        Yan.y = oldP2.y; //go back to old position
-                        P2CanJump = true;
-                        Jumpspeed2 = 0.0;
-                        break;
-                    }
-                }
+        for (int i = 0; i < platformCount; i++) {
+            if (CheckCollisionCircleRec(ballPosition, rad, platform[i])) {
+                ballPosition.y = oldP2.y; //go back to old position
+                P2CanJump = true;
+                Jumpspeed2 = 0.0;
+                break;
+            }
+        }
         
-                for (int i = 0; i < platformCount; i++) {
-                    if (CheckCollisionCircleRec(obj3, rad, platform[i])) {
-                        obj3.y = oldMerged.y; //go back to old position
-                        MergedCanJump = true;
-                        JumpspeedMerged = 0.0;
-                        break;
-                    }
-                }
-            }break;
-            default: break;
-            }   
+          for (int i = 0; i < platformCount; i++) {
+            if (CheckCollisionCircleRec(obj3, rad, platform[i])) {
+                obj3.y = oldMerged.y; //go back to old position
+                MergedCanJump = true;
+                JumpspeedMerged = 0.0;
+                break;
+            }
+        }
+
 
         BeginDrawing();
 
@@ -204,21 +190,33 @@ int main(void)
                 {
                     ClearBackground(SKYBLUE);
 
-                    DrawText("Jump with the up arrow", 10, 10, 20, DARKGRAY);
+            DrawText("Jump with the up arrow", 10, 10, 20, DARKGRAY);
+            DrawText(TextFormat("Invincibility left: %.1f", invincibilityTimer), 10, 100, 20, DARKGRAY);
             
-                    if(!merged){
-                        DrawCircleV(Ying, rad, RED);
-                        DrawCircleV(Yan, rad, BLUE);
-                    }
-                    else{
-                        DrawCircleV(obj3, rad, PURPLE);
-                    }
+            death(Ying, Yan, spikeHitboxes, spikeCount, rad, deathOccured, invincibility, invincibilityTimer); 
+            forceUnmerge(Ying, Yan, obj3, spikeHitboxes, spikeCount, rad, merged, invincibility, invincibilityTimer);
 
+
+            if(!merged){
+                DrawCircleV(Ying, rad, RED);
+                DrawCircleV(Yan, rad, BLUE);
+            }
+            else{
+                DrawCircleV(obj3, rad, PURPLE);
+            }
+
+            for (int i = 0; i < platformCount; i++) DrawRectangleRec(platform[i], DARKGRAY);
+            for (int i = 0; i < spikeCount; i++) DrawTriangle(spikes[i][0], spikes[i][1], spikes[i][2], BLACK);
+            for (int i = 0; i < spikeCount; i++) DrawRectangleRec(spikeHitboxes[i], RED); //draw hitboxes for testing
+
+            
                     for (int i = 0; i < platformCount; i++) DrawRectangleRec(platform[i], DARKGRAY);
 
                     } break;
                 default: break;
             }
+            
+
         EndDrawing();   
     }
     CloseWindow();       
