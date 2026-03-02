@@ -20,7 +20,6 @@ int main(void)
     const int screenWidth = 800;
     const int screenHeight = 800;
     GameScreen currentScreen = TITLE;
-    const int screenHeight = 600;
     bool deathOccured = false;
     bool invincibility = false;
     float invincibilityTimer = 5.0f; // 5 seconds of invincibility after unmerging
@@ -133,36 +132,12 @@ int main(void)
    
         PlayerPlatformCollisions(Ying, rad, platform, platformCount, Yan, obj3, oldP1, oldP2, oldMerged);
         
-                //Y-axis movement and collision
-                Jump(Jumpspeed, Jumpspeed2, JumpspeedMerged, P1CanJump, P2CanJump, MergedCanJump, merged, rad, Ying, Yan, obj3);
+        //Y-axis movement and collision
+        Jump(Jumpspeed, Jumpspeed2, JumpspeedMerged, P1CanJump, P2CanJump, MergedCanJump, merged, rad, Ying, Yan, obj3);
 
-        for (int i = 0; i < platformCount; i++) {
-            if (CheckCollisionCircleRec(player, rad, platform[i])) {
-                player.y = oldP1.y;//go back to old position
-                P1CanJump = true;
-                Jumpspeed = 0.0;
-                break;
-            }
-        }
+        PlayerJumpCollisions(Ying, Yan, obj3, rad, platform, platformCount, P1CanJump, P2CanJump, MergedCanJump, Jumpspeed, Jumpspeed2, JumpspeedMerged, oldP1, oldP2, oldMerged);
 
-        for (int i = 0; i < platformCount; i++) {
-            if (CheckCollisionCircleRec(ballPosition, rad, platform[i])) {
-                ballPosition.y = oldP2.y; //go back to old position
-                P2CanJump = true;
-                Jumpspeed2 = 0.0;
-                break;
-            }
         }
-        
-          for (int i = 0; i < platformCount; i++) {
-            if (CheckCollisionCircleRec(obj3, rad, platform[i])) {
-                obj3.y = oldMerged.y; //go back to old position
-                MergedCanJump = true;
-                JumpspeedMerged = 0.0;
-                break;
-            }
-        }
-
 
         BeginDrawing();
 
@@ -212,14 +187,12 @@ int main(void)
             
                     for (int i = 0; i < platformCount; i++) DrawRectangleRec(platform[i], DARKGRAY);
 
-                    } break;
+                }break;
                 default: break;
             }
-            
-
         EndDrawing();   
     }
+}
     CloseWindow();       
-
     return 0;
 }
