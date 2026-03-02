@@ -26,7 +26,8 @@ void death(Vector2 &player, Vector2 &player2, Rectangle spikeHitboxes[], int num
     for (int i = 0; i < numSpikes; i++) 
     {
         if (CheckCollisionCircleRec(player, rad, spikeHitboxes[i]) 
-        || CheckCollisionCircleRec(player2, rad, spikeHitboxes[i])) 
+        || CheckCollisionCircleRec(player2, rad, spikeHitboxes[i])
+        || IsKeyPressed(KEY_R)) 
         {
             player = {35, 560};
             player2 = {765, 560};
