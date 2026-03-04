@@ -22,7 +22,7 @@ int main(void)
     GameScreen currentScreen = TITLE;
     bool deathOccured = false;
     bool invincibility = false;
-    float invincibilityTimer = 5.0f; // 5 seconds of invincibility after unmerging
+    float invincibilityTimer = 1.0f; // 5 seconds of invincibility after unmerging
 
     InitWindow(screenWidth, screenHeight, "All code test");
 
