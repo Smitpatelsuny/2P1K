@@ -1,6 +1,7 @@
 #include "raylib.h"
 #include "PlayerStuff.h"
 #include "DeaStart.h"
+#include "Objects.h"
 #include <stdio.h>
 
 typedef enum GameScreen { TITLE = 0, LEVSEL, GAMEPLAY} GameScreen;
@@ -137,6 +138,8 @@ int main(void)
 
         PlayerJumpCollisions(Ying, Yan, obj3, rad, platform, platformCount, P1CanJump, P2CanJump, MergedCanJump, Jumpspeed, Jumpspeed2, JumpspeedMerged, oldP1, oldP2, oldMerged);
 
+        levelOne(Ying, Yan, obj3,);
+
         }
     }
 
@@ -171,7 +174,7 @@ int main(void)
             
             death(Ying, Yan, spikeHitboxes, spikeCount, rad, deathOccured, invincibility, invincibilityTimer); 
             forceUnmerge(Ying, Yan, obj3, spikeHitboxes, spikeCount, rad, merged, invincibility, invincibilityTimer);
-
+            
 
             if(!merged){
                 DrawCircleV(Ying, rad, RED);
@@ -184,9 +187,7 @@ int main(void)
             for (int i = 0; i < platformCount; i++) DrawRectangleRec(platform[i], DARKGRAY);
             for (int i = 0; i < spikeCount; i++) DrawTriangle(spikes[i][0], spikes[i][1], spikes[i][2], BLACK);
             for (int i = 0; i < spikeCount; i++) DrawRectangleRec(spikeHitboxes[i], RED); //draw hitboxes for testing
-
-            
-                    for (int i = 0; i < platformCount; i++) DrawRectangleRec(platform[i], DARKGRAY);
+            for (int i = 0; i < platformCount; i++) DrawRectangleRec(platform[i], DARKGRAY);
 
                 }break;
                 default: break;

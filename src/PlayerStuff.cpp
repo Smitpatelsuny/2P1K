@@ -79,12 +79,12 @@ void Jump(float &Jumpspeed, float &Jumpspeed2, float &JumpspeedMerged, bool &P1C
                 Jumpspeed2 = 0.0;
             }
             
-            if(Jumpspeed2 < maxJump){
+            if(Jumpspeed2 < 80){
                 Jumpspeed2 = Jumpspeed2 + 0.5;
                 ballPosition.y -= Jumpspeed2;
             }
 
-            if(Jumpspeed2 >= maxJump) P2CanJump = false;  
+            if(Jumpspeed2 >= 80) P2CanJump = false;  
         }
 
     if(IsKeyReleased(KEY_UP) && !merged){
