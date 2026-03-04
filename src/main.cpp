@@ -55,8 +55,8 @@ int main(void)
     };
 
     Vector2 spikes[][3]{
-        {{95, 500}, {135, 500}, {115, 470}}, //spike on first platform
-        {{265, 440}, {305, 440}, {285, 410}}, //spike on second platform
+        {{105, 700}, {145, 700}, {125, 670}}, //spike on first platform
+        {{265, 700}, {305, 700}, {285, 670}}, //spike on second platform
         {{435, 380}, {475, 380}, {455, 350}}, //spike on third platform
         {{605, 320}, {645, 320}, {625, 290}}, //spike on fourth platform
     };
