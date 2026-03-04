@@ -138,6 +138,7 @@ int main(void)
         PlayerJumpCollisions(Ying, Yan, obj3, rad, platform, platformCount, P1CanJump, P2CanJump, MergedCanJump, Jumpspeed, Jumpspeed2, JumpspeedMerged, oldP1, oldP2, oldMerged);
 
         }
+    }
 
         BeginDrawing();
 
@@ -192,7 +193,7 @@ int main(void)
             }
         EndDrawing();   
     }
-}
+
     CloseWindow();       
     return 0;
 }
