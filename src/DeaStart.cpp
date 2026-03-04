@@ -17,7 +17,7 @@ void death(Vector2 &player, Vector2 &player2, Rectangle spikeHitboxes[], int num
         if (invincibilityTimer <= 0.0f)
         {
             invincibility = false;
-            invincibilityTimer = 5.0f; // reset timer for next time
+            invincibilityTimer = 1.0f; // reset timer for next time
         }
 
         return;
@@ -29,8 +29,8 @@ void death(Vector2 &player, Vector2 &player2, Rectangle spikeHitboxes[], int num
         || CheckCollisionCircleRec(player2, rad, spikeHitboxes[i])
         || IsKeyPressed(KEY_R)) 
         {
-            player = {35, 560};
-            player2 = {765, 560};
+            player =  { 40, 764};
+            player2 = { 760, 764};
             deathOccured = true;
             break;
         }
@@ -55,7 +55,7 @@ void forceUnmerge(Vector2 &player, Vector2 &player2, Vector2 &MergedPlayer, Rect
             MergedPlayer = {0, 0};
 
             invincibility = true;
-            invincibilityTimer = 5.0f; // reset timer for invincibility
+            invincibilityTimer = 1.0f; // reset timer for invincibility
 
             break;
         }
