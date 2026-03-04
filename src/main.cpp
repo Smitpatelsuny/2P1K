@@ -6,6 +6,7 @@
 
 typedef enum GameScreen { TITLE = 0, LEVSEL, GAMEPLAY} GameScreen;
 
+
 //ChickenNuggetPotatoGuy21
 
 int main(void)
@@ -134,11 +135,8 @@ int main(void)
         PlayerPlatformCollisions(Ying, rad, platform, platformCount, Yan, obj3, oldP1, oldP2, oldMerged);
         
         //Y-axis movement and collision
-        Jump(Jumpspeed, Jumpspeed2, JumpspeedMerged, P1CanJump, P2CanJump, MergedCanJump, merged, rad, Ying, Yan, obj3);
+        Jump(Jumpspeed, Jumpspeed2, JumpspeedMerged, P1CanJump, P2CanJump, MergedCanJump, merged, rad, player, ballPosition, obj3);
 
-        PlayerJumpCollisions(Ying, Yan, obj3, rad, platform, platformCount, P1CanJump, P2CanJump, MergedCanJump, Jumpspeed, Jumpspeed2, JumpspeedMerged, oldP1, oldP2, oldMerged);
-
-        levelOne(Ying, Yan, obj3,);
 
         }
     }
@@ -172,9 +170,9 @@ int main(void)
             DrawText("Jump with the up arrow", 10, 10, 20, DARKGRAY);
             DrawText(TextFormat("Invincibility left: %.1f", invincibilityTimer), 10, 100, 20, DARKGRAY);
             
-            death(Ying, Yan, spikeHitboxes, spikeCount, rad, deathOccured, invincibility, invincibilityTimer); 
-            forceUnmerge(Ying, Yan, obj3, spikeHitboxes, spikeCount, rad, merged, invincibility, invincibilityTimer);
-            
+            death(player, ballPosition, spikeHitboxes, spikeCount, rad, deathOccured, invincibility, invincibilityTimer); 
+            forceUnmerge(player, ballPosition, obj3, spikeHitboxes, spikeCount, rad, merged, invincibility, invincibilityTimer);
+
 
             if(!merged){
                 DrawCircleV(Ying, rad, RED);
@@ -187,11 +185,9 @@ int main(void)
             for (int i = 0; i < platformCount; i++) DrawRectangleRec(platform[i], DARKGRAY);
             for (int i = 0; i < spikeCount; i++) DrawTriangle(spikes[i][0], spikes[i][1], spikes[i][2], BLACK);
             for (int i = 0; i < spikeCount; i++) DrawRectangleRec(spikeHitboxes[i], RED); //draw hitboxes for testing
-            for (int i = 0; i < platformCount; i++) DrawRectangleRec(platform[i], DARKGRAY);
 
-                }break;
-                default: break;
-            }
+            
+
         EndDrawing();   
     }
 
