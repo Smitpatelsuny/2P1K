@@ -34,39 +34,31 @@ void PlayerMotor(Vector2 &player, int speedX)
          //DrawText(TextFormat("Speed is: %.1f", Jumpspeed), 10, 50, 20, DARKGRAY);
 }
 
-
-
 void Player2Motor(Vector2& player, int speedX)
 {
     if (IsKeyDown(KEY_RIGHT)) player.x += speedX;
     if (IsKeyDown(KEY_LEFT)) player.x -= speedX;
-    
-
 }
 
 void MergePlayerMotor(Vector2 &player, int speedX)
 {
         if (IsKeyDown(KEY_D)) player.x += speedX;
         if (IsKeyDown(KEY_A)) player.x -= speedX;
-        
-         //DrawText(TextFormat("Speed is: %.1f", Jumpspeed), 10, 50, 20, DARKGRAY);
 }
 
-
-
 void Jump(float &Jumpspeed, float &Jumpspeed2, float &JumpspeedMerged, bool &P1CanJump, bool &P2CanJump, bool &MergedCanJump, bool &merged, float radius, Vector2 &player, Vector2 &ballPosition, Vector2 &obj3)
-{
-    
+{ 
+    float maxJump = 3.5;
     if (IsKeyDown(KEY_W) && P1CanJump == true){
             if (Jumpspeed <= 0.0) {
                 Jumpspeed = 0.0;
             }
-                if(Jumpspeed < 3.0){
+                if(Jumpspeed < maxJump){
                     Jumpspeed = Jumpspeed + 0.5;
                     player.y -= Jumpspeed;
                 }
 
-            if(Jumpspeed >= 3.0) P1CanJump = false;   
+            if(Jumpspeed >= maxJump) P1CanJump = false;   
         }
 
         if(IsKeyReleased(KEY_W)){
@@ -79,19 +71,20 @@ void Jump(float &Jumpspeed, float &Jumpspeed2, float &JumpspeedMerged, bool &P1C
         player.y -= Jumpspeed;
         Jumpspeed = Jumpspeed - 0.1;
 
-        //if (player.y + radius >= screenHeight) CanJump = true;
+        DrawText(TextFormat("Speed is: %.1f", Jumpspeed), 30, 70, 20, DARKGRAY);
+        
 
         if (IsKeyDown(KEY_UP) && P2CanJump == true && !merged){
            if (Jumpspeed2 <= 0.0){
                 Jumpspeed2 = 0.0;
             }
             
-            if(Jumpspeed2 < 3.0){
+            if(Jumpspeed2 < 80){
                 Jumpspeed2 = Jumpspeed2 + 0.5;
                 ballPosition.y -= Jumpspeed2;
             }
 
-            if(Jumpspeed2 >= 3.0) P2CanJump = false;  
+            if(Jumpspeed2 >= 80) P2CanJump = false;  
         }
 
     if(IsKeyReleased(KEY_UP) && !merged){
@@ -104,45 +97,20 @@ void Jump(float &Jumpspeed, float &Jumpspeed2, float &JumpspeedMerged, bool &P1C
     ballPosition.y -= Jumpspeed2;
     Jumpspeed2 = Jumpspeed2 - 0.1;
 
-
+    DrawText(TextFormat("Speed is: %.1f", Jumpspeed2), 50, 90, 20, DARKGRAY);
     
-
-    if (IsKeyDown(KEY_UP) && MergedCanJump == true){
-           if (JumpspeedMerged <= 0.0){
-                JumpspeedMerged = 0.0;
-            }
-            
-            if(JumpspeedMerged < 3.0){
-                JumpspeedMerged = JumpspeedMerged + 0.5;
-                ballPosition.y -= JumpspeedMerged;
-            }
-
-            if(JumpspeedMerged >= 3.0) MergedCanJump = false;  
-        }
-
-    if(IsKeyReleased(KEY_UP)&& !merged){
-        MergedCanJump = false;
-    }
-        
-
-    if(JumpspeedMerged <= -6.8){
-        JumpspeedMerged = -6.8;
-    }
-
-    obj3.y -= JumpspeedMerged;
-    JumpspeedMerged = JumpspeedMerged - 0.1;
 
     if (IsKeyDown(KEY_UP) && MergedCanJump == true && merged){
            if (JumpspeedMerged <= 0.0){
                 JumpspeedMerged = 0.0;
             }
             
-            if(JumpspeedMerged < 3.0){
+            if(JumpspeedMerged < maxJump){
                 JumpspeedMerged = JumpspeedMerged + 0.5;
                 obj3.y -= JumpspeedMerged;
             }
 
-            if(JumpspeedMerged >= 3.0) MergedCanJump = false;  
+            if(JumpspeedMerged >= maxJump) MergedCanJump = false;  
         }
 
     if(IsKeyReleased(KEY_UP) && merged){
@@ -238,6 +206,7 @@ void PlayerJumpCollisions(Vector2& player, Vector2& ballPosition, Vector2& obj3,
             }
         }
 }
+
 
 
 
