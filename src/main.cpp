@@ -1,11 +1,9 @@
 #include "raylib.h"
 #include "PlayerStuff.h"
 #include "DeaStart.h"
-#include "Objects.h"
 #include <stdio.h>
 
 typedef enum GameScreen { TITLE = 0, LEVSEL, GAMEPLAY} GameScreen;
-
 
 //ChickenNuggetPotatoGuy21
 
@@ -24,7 +22,7 @@ int main(void)
     GameScreen currentScreen = TITLE;
     bool deathOccured = false;
     bool invincibility = false;
-    float invincibilityTimer = 1.0f; // 5 seconds of invincibility after unmerging
+    float invincibilityTimer = 1.0f; // 1 second of invincibility after unmerging
 
     InitWindow(screenWidth, screenHeight, "All code test");
 
@@ -57,8 +55,8 @@ int main(void)
     };
 
     Vector2 spikes[][3]{
-        {{105, 700}, {145, 700}, {125, 670}}, //spike on first platform
-        {{265, 700}, {305, 700}, {285, 670}}, //spike on second platform
+        {{95, 500}, {135, 500}, {115, 470}}, //spike on first platform
+        {{265, 440}, {305, 440}, {285, 410}}, //spike on second platform
         {{435, 380}, {475, 380}, {455, 350}}, //spike on third platform
         {{605, 320}, {645, 320}, {625, 290}}, //spike on fourth platform
     };
@@ -135,8 +133,9 @@ int main(void)
         PlayerPlatformCollisions(Ying, rad, platform, platformCount, Yan, obj3, oldP1, oldP2, oldMerged);
         
         //Y-axis movement and collision
-        Jump(Jumpspeed, Jumpspeed2, JumpspeedMerged, P1CanJump, P2CanJump, MergedCanJump, merged, rad, player, ballPosition, obj3);
+        Jump(Jumpspeed, Jumpspeed2, JumpspeedMerged, P1CanJump, P2CanJump, MergedCanJump, merged, rad, Ying, Yan, obj3);
 
+        PlayerJumpCollisions(Ying, Yan, obj3, rad, platform, platformCount, P1CanJump, P2CanJump, MergedCanJump, Jumpspeed, Jumpspeed2, JumpspeedMerged, oldP1, oldP2, oldMerged);
 
         }
     }
@@ -170,8 +169,8 @@ int main(void)
             DrawText("Jump with the up arrow", 10, 10, 20, DARKGRAY);
             DrawText(TextFormat("Invincibility left: %.1f", invincibilityTimer), 10, 100, 20, DARKGRAY);
             
-            death(player, ballPosition, spikeHitboxes, spikeCount, rad, deathOccured, invincibility, invincibilityTimer); 
-            forceUnmerge(player, ballPosition, obj3, spikeHitboxes, spikeCount, rad, merged, invincibility, invincibilityTimer);
+            death(Ying, Yan, spikeHitboxes, spikeCount, rad, deathOccured, invincibility, invincibilityTimer); 
+            forceUnmerge(Ying, Yan, obj3, spikeHitboxes, spikeCount, rad, merged, invincibility, invincibilityTimer);
 
 
             if(!merged){
@@ -187,7 +186,11 @@ int main(void)
             for (int i = 0; i < spikeCount; i++) DrawRectangleRec(spikeHitboxes[i], RED); //draw hitboxes for testing
 
             
+                    for (int i = 0; i < platformCount; i++) DrawRectangleRec(platform[i], DARKGRAY);
 
+                }break;
+                default: break;
+            }
         EndDrawing();   
     }
 
