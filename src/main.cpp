@@ -1,8 +1,9 @@
 #include "raylib.h"
 #include "PlayerStuff.h"
 #include "DeaStart.h"
-#include "Objects.h"
 #include <stdio.h>
+#include "Objects.h"
+
 
 typedef enum GameScreen { TITLE = 0, LEVSEL, GAMEPLAY} GameScreen;
 
@@ -40,7 +41,7 @@ int main(void)
     {   0,   0, 800, 15 },   // ceiling (optional)
     { 325, 500, 150, 300 },   // x, y, width, height, middle wall
     {   0, 700, 250, 15 },   // 1st Left platform
-    { 100, 580, 600, 15 },   // 2nd Middle platform
+    { 100, 600, 600, 15 },   // 2nd Middle platform
     { 550, 700, 250, 15 },   // 1st Right platform
     {   0, 300, 250, 15 },   // Top left platfrom
     { 550, 300, 250, 15 },   // Top right platform
@@ -58,8 +59,8 @@ int main(void)
     Vector2 spikes[][3]{
         {{105, 700}, {145, 700}, {125, 670}}, //spike on first left platform
         {{650, 700}, {690, 700}, {670, 670}}, //spike on first right platform
-        {{193, 580}, {233, 580}, {213, 550}}, //spike on middle left platform
-        {{558, 580}, {598, 580}, {578, 550}}, //spike on middle right platform
+        {{193, 600}, {233, 600}, {213, 570}}, //spike on middle left platform
+        {{558, 600}, {598, 600}, {578, 570}}, //spike on middle right platform
     };
 
     //spike parameters: first vetice = (x of platform + 15, y of platform), 
@@ -67,10 +68,10 @@ int main(void)
     //third vertice = (x of platform + 35, y of platform - 30)
 
     Rectangle spikeHitboxes[] = {
-        {110, 685, 30, 15}, //spike hitbox for first platform
-        {655, 685, 30, 15}, //spike hitbox for second platform
-        {198, 565, 30, 15}, //spike hitbox for third platform
-        {563, 565, 30, 15}, //spike hitbox for fourth platform
+        {110, 685, 30, 15}, //spike hitbox for first left platform
+        {655, 685, 30, 15}, //spike hitbox for first right platform
+        {198, 585, 30, 15}, //spike hitbox for middle left platform
+        {563, 585, 30, 15}, //spike hitbox for middle right platform
     };
 
     //future spike hitbox: +5 on x (first vertice) and -15 on y from the spike's position, 
@@ -114,11 +115,15 @@ int main(void)
                 {
                     currentScreen = LEVSEL;
                 }
+   
+
+        
 
                 // Save old positions BEFORE moving
                 Vector2 oldP1 = Ying;
                 Vector2 oldP2 = Yan;
                 Vector2 oldMerged = obj3;
+
 
                 //X-axis movement and collision
                 if(merged){
@@ -128,21 +133,17 @@ int main(void)
                     PlayerMotor(Ying, 2);
                     Player2Motor(Yan, 2);
                 }
-
+   
         PlayerPlatformCollisions(Ying, rad, platform, platformCount, Yan, obj3, oldP1, oldP2, oldMerged);
-        LyftHorControls(Ying, Yan, obj3, rad, oldP1, oldP2, oldMerged);
-
+        
         //Y-axis movement and collision
         Jump(Jumpspeed, Jumpspeed2, JumpspeedMerged, P1CanJump, P2CanJump, MergedCanJump, merged, rad, Ying, Yan, obj3);
 
         PlayerJumpCollisions(Ying, Yan, obj3, rad, platform, platformCount, P1CanJump, P2CanJump, MergedCanJump, Jumpspeed, Jumpspeed2, JumpspeedMerged, oldP1, oldP2, oldMerged);
-        LyftVertControls(Ying, Yan, obj3, rad, oldP1, oldP2, oldMerged, P1CanJump, P2CanJump, MergedCanJump, Jumpspeed, Jumpspeed2, JumpspeedMerged);
 
-           /// }break;
-            //default: break;
-        
         }
     }
+
         BeginDrawing();
 
             switch(currentScreen)
@@ -169,14 +170,13 @@ int main(void)
                 {
                     ClearBackground(SKYBLUE);
 
-            //DrawText("Jump with the up arrow", 10, 10, 20, DARKGRAY);
+            DrawText("Jump with the up arrow", 10, 10, 20, DARKGRAY);
             DrawText(TextFormat("Invincibility left: %.1f", invincibilityTimer), 10, 100, 20, DARKGRAY);
 
             ExitGame();
             ExitDoors(Ying, Yan, exitDoorHitboxYin, exitDoorHitboxYang, rad);
             death(Ying, Yan, spikeHitboxes, spikeCount, rad, deathOccured, invincibility, invincibilityTimer); 
             forceUnmerge(Ying, Yan, obj3, spikeHitboxes, spikeCount, rad, merged, invincibility, invincibilityTimer);
-            levelOne(Ying, Yan, obj3, rad);
 
 
             if(!merged){
@@ -192,16 +192,16 @@ int main(void)
             for (int i = 0; i < spikeCount; i++) DrawRectangleRec(spikeHitboxes[i], RED); //draw hitboxes for testing
             DrawRectangleRec(exitDoorHitboxYin, GREEN);
             DrawRectangleRec(exitDoorHitboxYang, GREEN);
-            for (int i = 0; i < platformCount; i++) DrawRectangleRec(platform[i], DARKGRAY);
+
+            
+                    for (int i = 0; i < platformCount; i++) DrawRectangleRec(platform[i], DARKGRAY);
 
                 }break;
                 default: break;
             }
         EndDrawing();   
-
-}
+    }
 
     CloseWindow();       
     return 0;
 }
-    
