@@ -71,7 +71,7 @@ void Jump(float &Jumpspeed, float &Jumpspeed2, float &JumpspeedMerged, bool &P1C
         player.y -= Jumpspeed;
         Jumpspeed = Jumpspeed - 0.1;
 
-        DrawText(TextFormat("Speed is: %.1f", Jumpspeed), 30, 70, 20, DARKGRAY);
+       // DrawText(TextFormat("Speed is: %.1f", Jumpspeed), 30, 70, 20, DARKGRAY);
         
 
         if (IsKeyDown(KEY_UP) && P2CanJump == true && !merged){
@@ -97,7 +97,7 @@ void Jump(float &Jumpspeed, float &Jumpspeed2, float &JumpspeedMerged, bool &P1C
     ballPosition.y -= Jumpspeed2;
     Jumpspeed2 = Jumpspeed2 - 0.1;
 
-    DrawText(TextFormat("Speed is: %.1f", Jumpspeed2), 50, 90, 20, DARKGRAY);
+    //DrawText(TextFormat("Speed is: %.1f", Jumpspeed2), 50, 90, 20, DARKGRAY);
     
 
     if (IsKeyDown(KEY_UP) && MergedCanJump == true && merged){
@@ -124,7 +124,7 @@ void Jump(float &Jumpspeed, float &Jumpspeed2, float &JumpspeedMerged, bool &P1C
     obj3.y -= JumpspeedMerged;
     JumpspeedMerged = JumpspeedMerged - 0.1;
 
-    DrawText(TextFormat("Speed is: %.1f", JumpspeedMerged), 10, 50, 20, DARKGRAY);  
+    //DrawText(TextFormat("Speed is: %.1f", JumpspeedMerged), 10, 50, 20, DARKGRAY);  
 }
 
 void MergeObjects(Vector2& obj1, Vector2& obj2, Vector2& obj3, float& radius1, bool& merged, bool invincibility){
@@ -206,9 +206,6 @@ void PlayerJumpCollisions(Vector2& player, Vector2& ballPosition, Vector2& obj3,
             }
         }
 }
-
-
-
 
 void PlayerStuff::PlayerMovement() {
 }
