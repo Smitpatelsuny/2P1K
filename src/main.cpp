@@ -113,15 +113,11 @@ int main(void)
                 {
                     currentScreen = LEVSEL;
                 }
-   
-
-        
 
                 // Save old positions BEFORE moving
                 Vector2 oldP1 = Ying;
                 Vector2 oldP2 = Yan;
                 Vector2 oldMerged = obj3;
-
 
                 //X-axis movement and collision
                 if(merged){
@@ -131,17 +127,24 @@ int main(void)
                     PlayerMotor(Ying, 2);
                     Player2Motor(Yan, 2);
                 }
-   
+
         PlayerPlatformCollisions(Ying, rad, platform, platformCount, Yan, obj3, oldP1, oldP2, oldMerged);
-        
+        LyftHorControls(Ying, Yan, obj3, rad, oldP1, oldP2, oldMerged);
+
         //Y-axis movement and collision
         Jump(Jumpspeed, Jumpspeed2, JumpspeedMerged, P1CanJump, P2CanJump, MergedCanJump, merged, rad, Ying, Yan, obj3);
 
         PlayerJumpCollisions(Ying, Yan, obj3, rad, platform, platformCount, P1CanJump, P2CanJump, MergedCanJump, Jumpspeed, Jumpspeed2, JumpspeedMerged, oldP1, oldP2, oldMerged);
+<<<<<<< HEAD
+=======
+        LyftVertControls(Ying, Yan, obj3, rad, oldP1, oldP2, oldMerged, P1CanJump, P2CanJump, MergedCanJump, Jumpspeed, Jumpspeed2, JumpspeedMerged);
+>>>>>>> Lyft
 
+           /// }break;
+            //default: break;
+        
         }
     }
-
         BeginDrawing();
 
             switch(currentScreen)
@@ -168,14 +171,21 @@ int main(void)
                 {
                     ClearBackground(SKYBLUE);
 
-            DrawText("Jump with the up arrow", 10, 10, 20, DARKGRAY);
+            //DrawText("Jump with the up arrow", 10, 10, 20, DARKGRAY);
             DrawText(TextFormat("Invincibility left: %.1f", invincibilityTimer), 10, 100, 20, DARKGRAY);
+<<<<<<< HEAD
 
             ExitGame();
             ExitDoors(Ying, Yan, exitDoorHitboxYin, exitDoorHitboxYang, rad);
             death(Ying, Yan, spikeHitboxes, spikeCount, rad, deathOccured, invincibility, invincibilityTimer); 
             forceUnmerge(Ying, Yan, obj3, spikeHitboxes, spikeCount, rad, merged, invincibility, invincibilityTimer);
 
+=======
+            
+            death(Ying, Yan, spikeHitboxes, spikeCount, rad, deathOccured, invincibility, invincibilityTimer); 
+            forceUnmerge(Ying, Yan, obj3, spikeHitboxes, spikeCount, rad, merged, invincibility, invincibilityTimer);
+            levelOne(Ying, Yan, obj3, rad);
+>>>>>>> Lyft
 
             if(!merged){
                 DrawCircleV(Ying, rad, RED);
@@ -191,6 +201,9 @@ int main(void)
             DrawRectangleRec(exitDoorHitboxYin, GREEN);
             DrawRectangleRec(exitDoorHitboxYang, GREEN);
 
+        }break;
+                default: break;
+            }
             
                     for (int i = 0; i < platformCount; i++) DrawRectangleRec(platform[i], DARKGRAY);
 
@@ -198,8 +211,10 @@ int main(void)
                 default: break;
             }
         EndDrawing();   
-    }
+
+}
 
     CloseWindow();       
     return 0;
 }
+    
