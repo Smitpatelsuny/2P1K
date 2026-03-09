@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 Rectangle LyftL1 = {250, 300, 50, 15 };
-float LyftSpeed = 0.1f;
+float LyftSpeed = 0.5f;
 
 void levelOne(Vector2 Ying, Vector2 Yan, Vector2 obj3, int rad)
 {
