@@ -63,6 +63,22 @@ void forceUnmerge(Vector2 &player, Vector2 &player2, Vector2 &MergedPlayer, Rect
     }
 }
 
+void ExitGame() 
+{
+    if (IsKeyPressed(KEY_ESCAPE)) 
+    {
+        CloseWindow();
+    }
+}
+
+void ExitDoors(Vector2 &player, Vector2 &player2, Rectangle exitDoorHitboxYin, Rectangle exitDoorHitboxYang, float &rad) 
+{
+    if (CheckCollisionCircleRec(player, rad, exitDoorHitboxYin) 
+    && CheckCollisionCircleRec(player2, rad, exitDoorHitboxYang)) 
+    {
+        CloseWindow();
+    }
+}
 
 
 

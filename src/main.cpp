@@ -75,6 +75,8 @@ int main(void)
     //future spike hitbox: +5 on x (first vertice) and -15 on y from the spike's position, 
     //with a width of 30 and height of 15
 
+    Rectangle exitDoorHitboxYin = { 10, 280, 30, 30 };
+    Rectangle exitDoorHitboxYang = { 760, 280, 30, 30 };
 
     SetTargetFPS(60);     
     
@@ -168,7 +170,9 @@ int main(void)
 
             DrawText("Jump with the up arrow", 10, 10, 20, DARKGRAY);
             DrawText(TextFormat("Invincibility left: %.1f", invincibilityTimer), 10, 100, 20, DARKGRAY);
-            
+
+            ExitGame();
+            ExitDoors(Ying, Yan, exitDoorHitboxYin, exitDoorHitboxYang, rad);
             death(Ying, Yan, spikeHitboxes, spikeCount, rad, deathOccured, invincibility, invincibilityTimer); 
             forceUnmerge(Ying, Yan, obj3, spikeHitboxes, spikeCount, rad, merged, invincibility, invincibilityTimer);
 
@@ -184,6 +188,8 @@ int main(void)
             for (int i = 0; i < platformCount; i++) DrawRectangleRec(platform[i], DARKGRAY);
             for (int i = 0; i < spikeCount; i++) DrawTriangle(spikes[i][0], spikes[i][1], spikes[i][2], BLACK);
             for (int i = 0; i < spikeCount; i++) DrawRectangleRec(spikeHitboxes[i], RED); //draw hitboxes for testing
+            DrawRectangleRec(exitDoorHitboxYin, GREEN);
+            DrawRectangleRec(exitDoorHitboxYang, GREEN);
 
             
                     for (int i = 0; i < platformCount; i++) DrawRectangleRec(platform[i], DARKGRAY);
