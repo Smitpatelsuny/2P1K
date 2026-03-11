@@ -10,26 +10,20 @@ void levelOne(Vector2 Ying, Vector2 Yan, Vector2 obj3, int rad)
 {
     Rectangle ButtonLyft = {600, 290, 10, 5};
 
-    DrawRectangleRec(ButtonLyft, DARKGRAY);
+    DrawRectangleRec(ButtonLyft, RED);
     DrawRectangleRec(LyftL1, GRAY);
-    DrawText(TextFormat("Lift Y: %.2f", LyftL1.y), 10, 130, 20, RED);
-
-    
+    //DrawText(TextFormat("Lift Y: %.2f", LyftL1.y), 10, 130, 20, RED);
 
     if(CheckCollisionCircleRec(Ying, rad, ButtonLyft) || CheckCollisionCircleRec(Yan, rad, ButtonLyft) || CheckCollisionCircleRec(obj3, rad, ButtonLyft))
     {
         if(LyftL1.y <= 500){
             LyftL1.y += LyftSpeed;
-            DrawText("Inside 1st if works", 10, 30, 20, DARKGRAY);
         }
-         DrawText("outside 1st if works", 10, 30, 20, DARKGRAY);
     }else if(!CheckCollisionCircleRec(Ying, rad, ButtonLyft) || !CheckCollisionCircleRec(Yan, rad, ButtonLyft) || !CheckCollisionCircleRec(obj3, rad, ButtonLyft))
     {
         if(LyftL1.y >= 300){
             LyftL1.y -= LyftSpeed;
-            DrawText("Inside 2nd if works", 10, 50, 20, DARKGRAY);
         }
-         DrawText("outside 2nd if works", 10, 70, 20, DARKGRAY);
     }
 
 }
