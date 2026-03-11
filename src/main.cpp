@@ -193,7 +193,7 @@ int main(void)
 
             for (int i = 0; i < platformCount; i++) DrawRectangleRec(platform[i], DARKGRAY);
             for (int i = 0; i < spikeCount; i++) DrawTriangle(spikes[i][0], spikes[i][1], spikes[i][2], BLACK);
-            for (int i = 0; i < spikeCount; i++) DrawRectangleRec(spikeHitboxes[i], RED); //draw hitboxes for testing
+            //for (int i = 0; i < spikeCount; i++) DrawRectangleRec(spikeHitboxes[i], RED); //draw hitboxes for testing
             DrawRectangleRec(exitDoorHitboxYin, GREEN);
             DrawRectangleRec(exitDoorHitboxYang, GREEN);
 
