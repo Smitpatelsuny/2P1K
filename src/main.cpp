@@ -173,14 +173,6 @@ int main(void)
                     ClearBackground(SKYBLUE);
 
 
-            //DrawText("Jump with the up arrow", 10, 10, 20, DARKGRAY);
-<<<<<<< HEAD
-            DrawText(TextFormat("Invincibility left: %.1f", invincibilityTimer), 10, 10, 20, DARKGRAY);
-=======
-            DrawText(TextFormat("Invincibility left: %.1f", invincibilityTimer), 20, 20, 20, DARKGRAY);
->>>>>>> 9f160549385c54dfda199141212b45869bb30cd8
-
-
             ExitGame();
             ExitDoors(Ying, Yan, exitDoorHitboxYin, exitDoorHitboxYang, rad);
             death(Ying, Yan, spikeHitboxes, spikeCount, rad, deathOccured, invincibility, invincibilityTimer); 
