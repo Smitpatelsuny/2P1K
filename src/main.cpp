@@ -4,13 +4,8 @@
 #include <stdio.h>
 #include "Objects.h"
  
- enum GameScreen{ 
-    TITLE,
-    LEVSEL,
-    GAMEPLAY
-    };
 
-
+typedef enum GameScreen { TITLE = 0, LEVSEL, GAMEPLAY} GameScreen;
 
 //ChickenNuggetPotatoGuy21
 
