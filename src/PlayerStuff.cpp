@@ -148,6 +148,8 @@ void MergeObjects(Vector2& obj1, Vector2& obj2, Vector2& obj3, float& radius1, b
             obj1.y = obj3.y;
             obj2.x = obj3.x + radius1;
             obj2.y = obj3.y;
+            obj3.x = 0;
+            obj3.y = 0;
         }
     }
 }

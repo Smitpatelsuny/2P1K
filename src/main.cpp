@@ -3,7 +3,7 @@
 #include "DeaStart.h"
 #include <stdio.h>
 #include "Objects.h"
-
+ 
 
 typedef enum GameScreen { TITLE = 0, LEVSEL, GAMEPLAY} GameScreen;
 
@@ -111,13 +111,10 @@ int main(void)
             }break;
             case GAMEPLAY:
             {
-                if(IsKeyPressed(KEY_P))
+                if(IsKeyPressed(KEY_P)||ExitDoors(Ying, Yan, exitDoorHitboxYin, exitDoorHitboxYang, rad))
                 {
                     currentScreen = LEVSEL;
-                }
-   
-
-        
+                }     
 
                 // Save old positions BEFORE moving
                 Vector2 oldP1 = Ying;
@@ -173,12 +170,8 @@ int main(void)
                     ClearBackground(SKYBLUE);
 
 
-            //DrawText("Jump with the up arrow", 10, 10, 20, DARKGRAY);
-            //DrawText(TextFormat("Invincibility left: %.1f", invincibilityTimer), 10, 100, 20, DARKGRAY);
-
-
             ExitGame();
-            ExitDoors(Ying, Yan, exitDoorHitboxYin, exitDoorHitboxYang, rad);
+            //ExitDoors(Ying, Yan, exitDoorHitboxYin, exitDoorHitboxYang, rad);
             death(Ying, Yan, spikeHitboxes, spikeCount, rad, deathOccured, invincibility, invincibilityTimer); 
             forceUnmerge(Ying, Yan, obj3, spikeHitboxes, spikeCount, rad, merged, invincibility, invincibilityTimer);
             levelOne(Ying, Yan, obj3, rad);
