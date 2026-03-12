@@ -174,7 +174,7 @@ int main(void)
 
 
             //DrawText("Jump with the up arrow", 10, 10, 20, DARKGRAY);
-            //DrawText(TextFormat("Invincibility left: %.1f", invincibilityTimer), 10, 100, 20, DARKGRAY);
+            DrawText(TextFormat("Invincibility left: %.1f", invincibilityTimer), 10, 10, 20, DARKGRAY);
 
 
             ExitGame();
