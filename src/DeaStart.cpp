@@ -5,6 +5,9 @@
 
 
 
+
+
+
 void death(Vector2 &player, Vector2 &player2, Rectangle spikeHitboxes[], int numSpikes, float &rad, bool &deathOccured, bool &invincibility, float &invincibilityTimer) 
 {
     
@@ -76,7 +79,11 @@ bool ExitDoors(Vector2 &player, Vector2 &player2, Rectangle exitDoorHitboxYin, R
     if (CheckCollisionCircleRec(player, rad, exitDoorHitboxYin) 
     && CheckCollisionCircleRec(player2, rad, exitDoorHitboxYang)) 
     {
+<<<<<<< HEAD
         return true;
+=======
+         CloseWindow();
+>>>>>>> 7649784971e1fcaf69e9879836335eaed58a75f0
     }
     return false;
 }
