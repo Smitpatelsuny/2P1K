@@ -4,8 +4,13 @@
 #include <stdio.h>
 #include "Objects.h"
  
+ enum GameScreen{ 
+    TITLE,
+    LEVSEL,
+    GAMEPLAY
+    };
 
-typedef enum GameScreen { TITLE = 0, LEVSEL, GAMEPLAY} GameScreen;
+
 
 //ChickenNuggetPotatoGuy21
 
@@ -27,6 +32,11 @@ int main(void)
     float invincibilityTimer = 1.0f; // 1 second of invincibility after unmerging
 
     InitWindow(screenWidth, screenHeight, "All code test");
+    Texture2D background_menu = LoadTexture("C:/Users/payne/2P1K/New2P1K/2P1K-2/src/assets/background_menu.jpg");
+    // Texture2D gamePlay = LoadTexture("C:/Users/payne/2P1K/New2P1K/2P1K-2/src/assets/gamePlay.png");
+    Texture2D gamePlay2 = LoadTexture("C:/Users/payne/2P1K/New2P1K/2P1K-2/src/assets/gamePlay2.jpg");
+    // Texture2D p1Texture = LoadTexture("resources/white.png");
+    // Texture2D p2Texture = LoadTexture ("resources/black.png");;
 
     Vector2 Ying = { 40, 764};
     Vector2 Yan = { 760, 764};
@@ -92,12 +102,43 @@ int main(void)
         switch(currentScreen)
         {
             case TITLE:
-            {
-                if(IsGestureDetected(GESTURE_TAP) && CheckCollisionPointRec(GetMousePosition(), startbutton))
+        {
+if(IsGestureDetected(GESTURE_TAP) && CheckCollisionPointRec(GetMousePosition(), startbutton))
                 {
                     currentScreen = LEVSEL;
                 }
-            }break;
+
+            ClearBackground(WHITE);
+
+            DrawText(TextFormat("bg width: %i", background_menu.width), 20, 20, 20, WHITE);
+            DrawText(TextFormat("bg height: %i", background_menu.height), 20, 50, 20, WHITE);
+
+            if (background_menu.width > 0 && background_menu.height > 0)
+            {
+                DrawTexturePro(
+                    background_menu,
+                    (Rectangle){0, 0, (float)background_menu.width, (float)background_menu.height},
+                    (Rectangle){0, 0, (float)screenWidth, (float)screenHeight},
+                    (Vector2){0, 0},
+                    0.0f,
+                    WHITE);
+            }
+            int startSize = 20;
+            int startWidth = MeasureText("START", startSize);
+
+            DrawText("Ying and Yan", 150, 20, 80, WHITE);
+            DrawText("The Second Coming", 200, 100, 40, WHITE);
+            DrawRectangleRec(startbutton, GREEN);
+            
+
+    DrawText(
+        "START",
+        startbutton.x + startbutton.width/2 - startWidth/2,
+        startbutton.y + startbutton.height/2 - startSize/2,
+        startSize,
+        LIGHTGRAY);
+        }
+        break;
             case LEVSEL:
             {
                 if(IsGestureDetected(GESTURE_TAP) && CheckCollisionPointRec(GetMousePosition(), backbutton))
@@ -166,39 +207,49 @@ int main(void)
 
                 } break;
                 case GAMEPLAY:
-                {
-                    ClearBackground(SKYBLUE);
+        {
+            ClearBackground(SKYBLUE);
+            // ClearBackground(SKYBLUE);
+            DrawTexturePro(
+                gamePlay2, {0, 0, (float)gamePlay2.width, (float)gamePlay2.height},
+                {0, 0, (float)screenWidth, (float)screenHeight}, (Vector2){0, 0}, 0.0f, WHITE);
 
 
             ExitGame();
-            //ExitDoors(Ying, Yan, exitDoorHitboxYin, exitDoorHitboxYang, rad);
-            death(Ying, Yan, spikeHitboxes, spikeCount, rad, deathOccured, invincibility, invincibilityTimer); 
+            ExitDoors(Ying, Yan, exitDoorHitboxYin, exitDoorHitboxYang, rad);
+            death(Ying, Yan, spikeHitboxes, spikeCount, rad, deathOccured, invincibility, invincibilityTimer);
             forceUnmerge(Ying, Yan, obj3, spikeHitboxes, spikeCount, rad, merged, invincibility, invincibilityTimer);
             levelOne(Ying, Yan, obj3, rad);
 
-            if(!merged){
+            if (!merged)
+            {
                 DrawCircleV(Ying, rad, RED);
                 DrawCircleV(Yan, rad, BLUE);
             }
-            else{
+            else
+            {
                 DrawCircleV(obj3, rad, PURPLE);
             }
 
-            for (int i = 0; i < platformCount; i++) DrawRectangleRec(platform[i], DARKGRAY);
-            for (int i = 0; i < spikeCount; i++) DrawTriangle(spikes[i][0], spikes[i][1], spikes[i][2], BLACK);
-            //for (int i = 0; i < spikeCount; i++) DrawRectangleRec(spikeHitboxes[i], RED); //draw hitboxes for testing
+            for (int i = 0; i < platformCount; i++)
+                DrawRectangleRec(platform[i], DARKGRAY);
+            for (int i = 0; i < spikeCount; i++)
+                DrawTriangle(spikes[i][0], spikes[i][1], spikes[i][2], RED);
+           /* for (int i = 0; i < spikeCount; i++)
+                DrawRectangleRec(spikeHitboxes[i], RED); // draw hitboxes for testing */
             DrawRectangleRec(exitDoorHitboxYin, GREEN);
             DrawRectangleRec(exitDoorHitboxYang, GREEN);
 
-            
-                    for (int i = 0; i < platformCount; i++) DrawRectangleRec(platform[i], DARKGRAY);
-
-                }break;
-                default: break;
-            }
-        EndDrawing();   
+            for (int i = 0; i < platformCount; i++)
+                DrawRectangleRec(platform[i], DARKGRAY);
+        }
+        break;
+        default:
+            break;
+        }
+        EndDrawing();
     }
-
-    CloseWindow();       
+    UnloadTexture(background_menu);
+    CloseWindow();
     return 0;
 }
