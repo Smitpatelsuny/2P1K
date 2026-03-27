@@ -30,13 +30,14 @@ int main(void)
     bool deathOccured = false;
     bool invincibility = false;
     float invincibilityTimer = 1.0f; // 1 second of invincibility after unmerging
+    bool ejected;
 
     InitWindow(screenWidth, screenHeight, "All code test");
-    Texture2D background_menu = LoadTexture("C:/Users/payne/2P1K/New2P1K/2P1K-2/src/assets/background_menu.jpg");
-    // Texture2D gamePlay = LoadTexture("C:/Users/payne/2P1K/New2P1K/2P1K-2/src/assets/gamePlay.png");
-    Texture2D gamePlay2 = LoadTexture("C:/Users/payne/2P1K/New2P1K/2P1K-2/src/assets/gamePlay2.jpg");
+    Texture2D background_menu = LoadTexture("C:/Users/austi/projects/New2P1K/2P1K-2/src/assets/background_menu.jpg");
+    // Texture2D gamePlay = LoadTexture("C:/Users/austi/projects/New2P1K/2P1K-2/src/assets/gamePlay.png");
+    Texture2D gamePlay2 = LoadTexture("C:/Users/austi/projects/New2P1K/2P1K-2/src/assets/gamePlay2.jpg");
     // Texture2D p1Texture = LoadTexture("resources/white.png");
-    // Texture2D p2Texture = LoadTexture ("resources/black.png");;
+    // Texture2D p2Texture = LoadTexture ("resources/black.png");
 
     Vector2 Ying = { 40, 764};
     Vector2 Yan = { 760, 764};
@@ -97,13 +98,13 @@ int main(void)
   
     while (!WindowShouldClose())    
     {
-        MergeObjects(Ying, Yan, obj3, rad, merged, invincibility);
+        MergeObjects(Ying, Yan, obj3, rad, merged, invincibility, Jumpspeed2, ejected);
 
         switch(currentScreen)
         {
             case TITLE:
         {
-if(IsGestureDetected(GESTURE_TAP) && CheckCollisionPointRec(GetMousePosition(), startbutton))
+                if(IsGestureDetected(GESTURE_TAP) && CheckCollisionPointRec(GetMousePosition(), startbutton))
                 {
                     currentScreen = LEVSEL;
                 }
@@ -176,7 +177,7 @@ if(IsGestureDetected(GESTURE_TAP) && CheckCollisionPointRec(GetMousePosition(), 
         LyftHorControls(Ying, Yan, obj3, rad, oldP1, oldP2, oldMerged);
 
         //Y-axis movement and collision
-        Jump(Jumpspeed, Jumpspeed2, JumpspeedMerged, P1CanJump, P2CanJump, MergedCanJump, merged, rad, Ying, Yan, obj3);
+        Jump(Jumpspeed, Jumpspeed2, JumpspeedMerged, P1CanJump, P2CanJump, MergedCanJump, merged, rad, Ying, Yan, obj3, ejected);
 
         PlayerJumpCollisions(Ying, Yan, obj3, rad, platform, platformCount, P1CanJump, P2CanJump, MergedCanJump, Jumpspeed, Jumpspeed2, JumpspeedMerged, oldP1, oldP2, oldMerged);
         LyftVertControls(Ying, Yan, obj3, rad, oldP1, oldP2, oldMerged, P1CanJump, P2CanJump, MergedCanJump, Jumpspeed, Jumpspeed2, JumpspeedMerged);
