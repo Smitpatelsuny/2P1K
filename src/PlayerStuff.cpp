@@ -190,6 +190,8 @@ void PlayerJumpCollisions(Vector2& player, Vector2& ballPosition, Vector2& obj3,
                 player.y = oldP1.y;//go back to old position
                 if((platforms[i].height+platforms[i].y) >= player.y){
                     P1CanJump = true;
+                }else{
+                    P1CanJump = false;
                 }
                 Jumpspeed = 0.0;
                 break;
@@ -199,8 +201,10 @@ void PlayerJumpCollisions(Vector2& player, Vector2& ballPosition, Vector2& obj3,
         for (int i = 0; i < platformCount; i++) {
             if (CheckCollisionCircleRec(ballPosition, rad, platforms[i])) {
                 ballPosition.y = oldP2.y; //go back to old position
-                if((platforms[i].height+platforms[i].y) >= player.y){
+                if((platforms[i].height+platforms[i].y) >= ballPosition.y){
                     P2CanJump = true;
+                }else{
+                    P2CanJump = false;
                 }
                 Jumpspeed2 = 0.0;
                 break;
@@ -210,8 +214,10 @@ void PlayerJumpCollisions(Vector2& player, Vector2& ballPosition, Vector2& obj3,
           for (int i = 0; i < platformCount; i++) {
             if (CheckCollisionCircleRec(obj3, rad, platforms[i])) {
                 obj3.y = oldMerged.y; //go back to old position
-                if((platforms[i].height+platforms[i].y) >= player.y){
+                if((platforms[i].height+platforms[i].y) >= obj3.y){
                     MergedCanJump = true;
+                }else{
+                    MergedCanJump = false;
                 }
                 JumpspeedMerged = 0.0;
                 break;
