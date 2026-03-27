@@ -2,7 +2,6 @@
 #include "PlayerStuff.h"
 #include <stdio.h>
 
-//smit commit
 
 void PlayerBorderCollisions(Vector2& player, int radius, int screenWidth, int screenHeight, bool& CanJump)
 {
@@ -46,7 +45,7 @@ void MergePlayerMotor(Vector2 &player, int speedX)
         if (IsKeyDown(KEY_A)) player.x -= speedX;
 }
 
-void Jump(float &Jumpspeed, float &Jumpspeed2, float &JumpspeedMerged, bool &P1CanJump, bool &P2CanJump, bool &MergedCanJump, bool &merged, float radius, Vector2 &player, Vector2 &ballPosition, Vector2 &obj3)
+void Jump(float &Jumpspeed, float &Jumpspeed2, float &JumpspeedMerged, bool &P1CanJump, bool &P2CanJump, bool &MergedCanJump, bool &merged, float radius, Vector2 &player, Vector2 &ballPosition, Vector2 &obj3, bool Ejected)
 { 
     float maxJump = 3.5;
     if (IsKeyDown(KEY_W) && P1CanJump == true){
@@ -79,12 +78,12 @@ void Jump(float &Jumpspeed, float &Jumpspeed2, float &JumpspeedMerged, bool &P1C
                 Jumpspeed2 = 0.0;
             }
             
-            if(Jumpspeed2 < 80){
+            if(Jumpspeed2 < maxJump){
                 Jumpspeed2 = Jumpspeed2 + 0.5;
                 ballPosition.y -= Jumpspeed2;
             }
 
-            if(Jumpspeed2 >= 80) P2CanJump = false;  
+            if(Jumpspeed2 >= maxJump) P2CanJump = false;  
         }
 
     if(IsKeyReleased(KEY_UP) && !merged){
@@ -122,12 +121,12 @@ void Jump(float &Jumpspeed, float &Jumpspeed2, float &JumpspeedMerged, bool &P1C
         JumpspeedMerged = -6.8;
     }
     obj3.y -= JumpspeedMerged;
-    JumpspeedMerged = JumpspeedMerged - 0.1;
+    JumpspeedMerged = JumpspeedMerged - 0.25;
 
     //DrawText(TextFormat("Speed is: %.1f", JumpspeedMerged), 10, 50, 20, DARKGRAY);  
 }
 
-void MergeObjects(Vector2& obj1, Vector2& obj2, Vector2& obj3, float& radius1, bool& merged, bool invincibility){
+void MergeObjects(Vector2& obj1, Vector2& obj2, Vector2& obj3, float& radius1, bool& merged, bool invincibility, float &YanJumpSpeed, bool Ejected){
 
     if(invincibility) return; // prevent merging while invincible
     
@@ -148,6 +147,13 @@ void MergeObjects(Vector2& obj1, Vector2& obj2, Vector2& obj3, float& radius1, b
             obj1.y = obj3.y;
             obj2.x = obj3.x + radius1;
             obj2.y = obj3.y;
+            obj3.x = 0;
+            obj3.y = 0;
+            if (IsKeyDown(KEY_UP)){
+                Ejected = true;
+                YanJumpSpeed = YanJumpSpeed + 6;
+                obj2.y -= YanJumpSpeed;
+            }
         }
     }
 }
@@ -182,7 +188,11 @@ void PlayerJumpCollisions(Vector2& player, Vector2& ballPosition, Vector2& obj3,
     for (int i = 0; i < platformCount; i++) {
             if (CheckCollisionCircleRec(player, rad, platforms[i])) {
                 player.y = oldP1.y;//go back to old position
-                P1CanJump = true;
+                if((platforms[i].height+platforms[i].y) >= player.y){
+                    P1CanJump = true;
+                }else{
+                    P1CanJump = false;
+                }
                 Jumpspeed = 0.0;
                 break;
             }
@@ -191,7 +201,11 @@ void PlayerJumpCollisions(Vector2& player, Vector2& ballPosition, Vector2& obj3,
         for (int i = 0; i < platformCount; i++) {
             if (CheckCollisionCircleRec(ballPosition, rad, platforms[i])) {
                 ballPosition.y = oldP2.y; //go back to old position
-                P2CanJump = true;
+                if((platforms[i].height+platforms[i].y) >= ballPosition.y){
+                    P2CanJump = true;
+                }else{
+                    P2CanJump = false;
+                }
                 Jumpspeed2 = 0.0;
                 break;
             }
@@ -200,7 +214,11 @@ void PlayerJumpCollisions(Vector2& player, Vector2& ballPosition, Vector2& obj3,
           for (int i = 0; i < platformCount; i++) {
             if (CheckCollisionCircleRec(obj3, rad, platforms[i])) {
                 obj3.y = oldMerged.y; //go back to old position
-                MergedCanJump = true;
+                if((platforms[i].height+platforms[i].y) >= obj3.y){
+                    MergedCanJump = true;
+                }else{
+                    MergedCanJump = false;
+                }
                 JumpspeedMerged = 0.0;
                 break;
             }
