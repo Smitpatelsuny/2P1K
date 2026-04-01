@@ -31,6 +31,8 @@ int main(void)
     bool invincibility = false;
     float invincibilityTimer = 1.0f; // 1 second of invincibility after unmerging
     bool ejected;
+    float BoxGravSpeed = 0;
+    int levelcom = 0;
 
     InitWindow(screenWidth, screenHeight, "All code test");
     Texture2D background_menu = LoadTexture("C:/Users/austi/projects/New2P1K/2P1K-2/src/assets/background_menu.jpg");
@@ -90,6 +92,8 @@ int main(void)
 
     Rectangle exitDoorHitboxYin = { 10, 280, 30, 30 };
     Rectangle exitDoorHitboxYang = { 760, 280, 30, 30 };
+
+    Rectangle Box = {300, 100, 50, 50};
 
     SetTargetFPS(60);     
     
@@ -153,7 +157,7 @@ int main(void)
             }break;
             case GAMEPLAY:
             {
-                if(IsKeyPressed(KEY_P)||ExitDoors(Ying, Yan, exitDoorHitboxYin, exitDoorHitboxYang, rad))
+                if(IsKeyPressed(KEY_P)||ExitDoors(Ying, Yan, exitDoorHitboxYin, exitDoorHitboxYang, rad, levelcom))
                 {
                     currentScreen = LEVSEL;
                 }     
@@ -162,6 +166,7 @@ int main(void)
                 Vector2 oldP1 = Ying;
                 Vector2 oldP2 = Yan;
                 Vector2 oldMerged = obj3;
+                Rectangle oldBox = Box;
 
 
                 //X-axis movement and collision
@@ -182,6 +187,8 @@ int main(void)
         PlayerJumpCollisions(Ying, Yan, obj3, rad, platform, platformCount, P1CanJump, P2CanJump, MergedCanJump, Jumpspeed, Jumpspeed2, JumpspeedMerged, oldP1, oldP2, oldMerged);
         LyftVertControls(Ying, Yan, obj3, rad, oldP1, oldP2, oldMerged, P1CanJump, P2CanJump, MergedCanJump, Jumpspeed, Jumpspeed2, JumpspeedMerged);
 
+        BoxPhy(Box, platformCount, platform, BoxGravSpeed);
+        PlayerBoxCollisions(Ying, rad, Yan, obj3, platformCount, platform, Box, BoxGravSpeed, oldBox);
         }
     }
 
@@ -210,17 +217,18 @@ int main(void)
                 case GAMEPLAY:
         {
             ClearBackground(SKYBLUE);
-            // ClearBackground(SKYBLUE);
             DrawTexturePro(
                 gamePlay2, {0, 0, (float)gamePlay2.width, (float)gamePlay2.height},
                 {0, 0, (float)screenWidth, (float)screenHeight}, (Vector2){0, 0}, 0.0f, WHITE);
 
-
             ExitGame();
-            ExitDoors(Ying, Yan, exitDoorHitboxYin, exitDoorHitboxYang, rad);
+            ExitDoors(Ying, Yan, exitDoorHitboxYin, exitDoorHitboxYang, rad, levelcom);
             death(Ying, Yan, spikeHitboxes, spikeCount, rad, deathOccured, invincibility, invincibilityTimer);
             forceUnmerge(Ying, Yan, obj3, spikeHitboxes, spikeCount, rad, merged, invincibility, invincibilityTimer);
             levelOne(Ying, Yan, obj3, rad);
+           
+            DrawText(TextFormat("X Speed is: %.1f", Box.x), 20, 20, 20, WHITE);
+            DrawText(TextFormat("Speed is: %.1f", BoxGravSpeed), 30, 70, 20, DARKGRAY);
 
             if (!merged)
             {
@@ -240,6 +248,7 @@ int main(void)
                 DrawRectangleRec(spikeHitboxes[i], RED); // draw hitboxes for testing */
             DrawRectangleRec(exitDoorHitboxYin, GREEN);
             DrawRectangleRec(exitDoorHitboxYang, GREEN);
+            DrawRectangleRec(Box, BROWN);
 
             for (int i = 0; i < platformCount; i++)
                 DrawRectangleRec(platform[i], DARKGRAY);

@@ -74,11 +74,14 @@ void ExitGame()
     }
 }
 
-bool ExitDoors(Vector2 &player, Vector2 &player2, Rectangle exitDoorHitboxYin, Rectangle exitDoorHitboxYang, float &rad) 
+bool ExitDoors(Vector2 &player, Vector2 &player2, Rectangle exitDoorHitboxYin, Rectangle exitDoorHitboxYang, float &rad, int& levelcom) 
 {
     if (CheckCollisionCircleRec(player, rad, exitDoorHitboxYin) 
     && CheckCollisionCircleRec(player2, rad, exitDoorHitboxYang)) 
     {
+        if(levelcom = 0){
+            levelcom = 1;
+        }
         return true;
     }
     return false;

@@ -6,6 +6,7 @@
 Rectangle LyftL1 = {250, 300, 50, 15 };
 float LyftSpeed = 0.5f;
 
+
 void levelOne(Vector2 Ying, Vector2 Yan, Vector2 obj3, int rad)
 {
     Rectangle ButtonLyft = {600, 290, 10, 5};
@@ -46,3 +47,64 @@ void LyftVertControls(Vector2 &Ying, Vector2 &Yan, Vector2 &obj3, int rad, Vecto
     }
 }
 
+void BoxPhy(Rectangle &Box, int platformCount, Rectangle platforms[], float &BoxGravSpeed)
+{
+    for (int i = 0; i < platformCount; i++) {
+        if(!(CheckCollisionRecs(Box, platforms[i])))
+        {
+            if(BoxGravSpeed <= -0.8){
+                BoxGravSpeed = -0.8;
+            }
+
+            Box.y -= BoxGravSpeed;
+            BoxGravSpeed = BoxGravSpeed - 0.1f;
+        }
+    }
+}
+
+void PlayerBoxCollisions(Vector2& player, float rad, Vector2& ballPosition, Vector2& obj3, int platformCount, Rectangle platforms[], Rectangle &box, float &BoxGravSpeed, Rectangle oldBox)
+{
+    for (int i = 0; i < platformCount; i++)
+    {
+        if (CheckCollisionRecs(box, platforms[i])) {
+            box.x = oldBox.x;
+            box.y = oldBox.y;
+        }
+    }
+
+    for (int i = 0; i < platformCount; i++)
+    {
+        if(box.x + box.width != platforms[i].x + platforms[i].width || box.x + box.width != platforms[i].x - platforms[i].width || box.x - box.width != platforms[i].x + platforms[i].width || box.x - box.width != platforms[i].x - platforms[i].width){
+            if (CheckCollisionCircleRec(player, rad, box) && (box.x + box.width <= player.x)){
+                box.x -= 2.0f;
+            }else if (CheckCollisionCircleRec(player, rad, box) && (box.x - box.width <= player.x)){
+                box.x += 2.0f;
+            }
+
+            if (CheckCollisionCircleRec(ballPosition, rad, box) && (box.x + box.width <= ballPosition.x)){
+                box.x -= 2.0f;
+            }else if (CheckCollisionCircleRec(ballPosition, rad, box) && (box.x - box.width <= ballPosition.x)){
+                box.x += 2.0f;
+            }
+
+            if (CheckCollisionCircleRec(obj3, rad, box) && (box.x + box.width <= obj3.x)){
+                box.x -= 2.0f;
+            }else if (CheckCollisionCircleRec(obj3, rad, box) && (box.x - box.width <= obj3.x)){
+                box.x += 2.0f;
+            }
+        }
+    }
+   
+}
+
+/* //---------------------Box interactions, boxes count as people too!---------------------------//
+   
+
+ //---------------------Box interactions, boxes count as people too!---------------------------//
+    if(BoxGravSpeed <= -6.8){
+        BoxGravSpeed = -6.8;
+    }
+
+    box.y += BoxGravSpeed;
+    BoxGravSpeed = BoxGravSpeed - 0.1;
+    */

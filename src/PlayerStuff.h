@@ -15,7 +15,6 @@ void PlayerPlatformCollisions(Vector2& player, int rad, Rectangle platforms[], i
 void PlayerJumpCollisions(Vector2& player, Vector2& ballPosition, Vector2& obj3, float rad, Rectangle platforms[], int platformCount, bool& P1CanJump, bool& P2CanJump, bool& MergedCanJump, float& Jumpspeed, float& Jumpspeed2, float& JumpspeedMerged, Vector2& oldP1, Vector2& oldP2, Vector2& oldMerged);
 
 
-
 class PlayerStuff
 {
 public:
