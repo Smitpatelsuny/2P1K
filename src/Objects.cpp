@@ -29,12 +29,12 @@ void levelOne(Vector2 Ying, Vector2 Yan, Vector2 obj3, int rad)
 
 }
 
-void LyftHorControls(Vector2 &Ying, Vector2 &Yan, Vector2 &obj3, int rad, Vector2 &oldP1, Vector2 &oldP2, Vector2 &oldMerged){
-    PlayerPlatformCollisions(Ying, rad, &LyftL1, 1, Yan, obj3, oldP1, oldP2, oldMerged);
+void LyftHorControls(Vector2 &Ying, Vector2 &Yan, Vector2 &obj3, int rad, Vector2 &oldP1, Vector2 &oldP2, Vector2 &oldMerged, Rectangle box){
+    PlayerPlatformCollisions(Ying, rad, &LyftL1, 1, Yan, obj3, oldP1, oldP2, oldMerged, box);
 }
 
-void LyftVertControls(Vector2 &Ying, Vector2 &Yan, Vector2 &obj3, int rad, Vector2 &oldP1, Vector2 &oldP2, Vector2 &oldMerged, bool &P1CanJump, bool &P2CanJump, bool &MergedCanJump, float &Jumpspeed, float &Jumpspeed2, float &JumpspeedMerged){
-    PlayerJumpCollisions(Ying, Yan, obj3, rad, &LyftL1, 1, P1CanJump, P2CanJump, MergedCanJump, Jumpspeed, Jumpspeed2, JumpspeedMerged, oldP1, oldP2, oldMerged);
+void LyftVertControls(Vector2 &Ying, Vector2 &Yan, Vector2 &obj3, int rad, Vector2 &oldP1, Vector2 &oldP2, Vector2 &oldMerged, bool &P1CanJump, bool &P2CanJump, bool &MergedCanJump, float &Jumpspeed, float &Jumpspeed2, float &JumpspeedMerged, Rectangle box){
+    PlayerJumpCollisions(Ying, Yan, obj3, rad, &LyftL1, 1, P1CanJump, P2CanJump, MergedCanJump, Jumpspeed, Jumpspeed2, JumpspeedMerged, oldP1, oldP2, oldMerged, box);
 
     if (CheckCollisionCircleRec(Ying, 21, LyftL1)) {
         Ying.y -= LyftSpeed;
@@ -47,64 +47,73 @@ void LyftVertControls(Vector2 &Ying, Vector2 &Yan, Vector2 &obj3, int rad, Vecto
     }
 }
 
-void BoxPhy(Rectangle &Box, int platformCount, Rectangle platforms[], float &BoxGravSpeed)
+void PlayerBoxCollisions(Vector2& player, float rad, Vector2& ballPosition, Vector2& obj3, int platformCount, Rectangle platforms[], Rectangle &box, float &BoxGravSpeed, Rectangle oldBox, Vector2 oldP1, Vector2 oldP2, Vector2 oldMerge)
 {
+    Rectangle newBox = {box.x, box.y, 54, 50};
+
     for (int i = 0; i < platformCount; i++) {
-        if(!(CheckCollisionRecs(Box, platforms[i])))
+        if(!(CheckCollisionRecs(box, platforms[i])))
         {
             if(BoxGravSpeed <= -0.8){
                 BoxGravSpeed = -0.8;
             }
 
-            Box.y -= BoxGravSpeed;
+            box.y -= BoxGravSpeed;
             BoxGravSpeed = BoxGravSpeed - 0.1f;
         }
     }
-}
 
-void PlayerBoxCollisions(Vector2& player, float rad, Vector2& ballPosition, Vector2& obj3, int platformCount, Rectangle platforms[], Rectangle &box, float &BoxGravSpeed, Rectangle oldBox)
-{
     for (int i = 0; i < platformCount; i++)
     {
         if (CheckCollisionRecs(box, platforms[i])) {
             box.x = oldBox.x;
             box.y = oldBox.y;
+            BoxGravSpeed = 0;
+        }
+
+        if(CheckCollisionCircleRec(player, rad, box)){
+            if (CanMoveBox(box, 2.0f, 0, platforms, platformCount) || CanMoveBox(box, -2.0f, 0, platforms, platformCount)){
+                if (player.x < box.x){
+                    box.x += 2.0f; //push left
+                }else{
+                    box.x -= 2.0f; // push right
+                }
+            }
+        }
+
+        if(CheckCollisionCircleRec(ballPosition, rad, box)){
+            if (CanMoveBox(box, 2.0f, 0, platforms, platformCount) || CanMoveBox(box, -2.0f, 0, platforms, platformCount)){
+                if (ballPosition.x < box.x){
+                    box.x += 2.0f; //push left
+                }else{
+                    box.x -= 2.0f; // push right
+                }
+            }
+        }
+        
+        if(CheckCollisionCircleRec(obj3, rad, box)){
+            if (CanMoveBox(box, 2.0f, 0, platforms, platformCount) || CanMoveBox(box, -2.0f, 0, platforms, platformCount)){
+                if (obj3.x < box.x){
+                    box.x += 2.0f; //push left
+                }else{
+                    box.x -= 2.0f; // push right
+                }
+            }
         }
     }
+            
+}
+
+bool CanMoveBox(Rectangle box, float dx, float dy, Rectangle platforms[], int platformCount)
+{
+    Rectangle newBox = box;
+    newBox.x += dx;
+    newBox.y += dy;
 
     for (int i = 0; i < platformCount; i++)
     {
-        if(box.x + box.width != platforms[i].x + platforms[i].width || box.x + box.width != platforms[i].x - platforms[i].width || box.x - box.width != platforms[i].x + platforms[i].width || box.x - box.width != platforms[i].x - platforms[i].width){
-            if (CheckCollisionCircleRec(player, rad, box) && (box.x + box.width <= player.x)){
-                box.x -= 2.0f;
-            }else if (CheckCollisionCircleRec(player, rad, box) && (box.x - box.width <= player.x)){
-                box.x += 2.0f;
-            }
-
-            if (CheckCollisionCircleRec(ballPosition, rad, box) && (box.x + box.width <= ballPosition.x)){
-                box.x -= 2.0f;
-            }else if (CheckCollisionCircleRec(ballPosition, rad, box) && (box.x - box.width <= ballPosition.x)){
-                box.x += 2.0f;
-            }
-
-            if (CheckCollisionCircleRec(obj3, rad, box) && (box.x + box.width <= obj3.x)){
-                box.x -= 2.0f;
-            }else if (CheckCollisionCircleRec(obj3, rad, box) && (box.x - box.width <= obj3.x)){
-                box.x += 2.0f;
-            }
-        }
+        if (CheckCollisionRecs(newBox, platforms[i]))
+            return false;
     }
-   
+    return true;
 }
-
-/* //---------------------Box interactions, boxes count as people too!---------------------------//
-   
-
- //---------------------Box interactions, boxes count as people too!---------------------------//
-    if(BoxGravSpeed <= -6.8){
-        BoxGravSpeed = -6.8;
-    }
-
-    box.y += BoxGravSpeed;
-    BoxGravSpeed = BoxGravSpeed - 0.1;
-    */

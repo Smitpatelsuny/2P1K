@@ -93,7 +93,7 @@ int main(void)
     Rectangle exitDoorHitboxYin = { 10, 280, 30, 30 };
     Rectangle exitDoorHitboxYang = { 760, 280, 30, 30 };
 
-    Rectangle Box = {300, 100, 50, 50};
+    Rectangle Box = {100, 350, 50, 50};
 
     SetTargetFPS(60);     
     
@@ -178,17 +178,16 @@ int main(void)
                     Player2Motor(Yan, 2);
                 }
    
-        PlayerPlatformCollisions(Ying, rad, platform, platformCount, Yan, obj3, oldP1, oldP2, oldMerged);
-        LyftHorControls(Ying, Yan, obj3, rad, oldP1, oldP2, oldMerged);
+        PlayerPlatformCollisions(Ying, rad, platform, platformCount, Yan, obj3, oldP1, oldP2, oldMerged, Box);
+        LyftHorControls(Ying, Yan, obj3, rad, oldP1, oldP2, oldMerged, Box);
 
         //Y-axis movement and collision
         Jump(Jumpspeed, Jumpspeed2, JumpspeedMerged, P1CanJump, P2CanJump, MergedCanJump, merged, rad, Ying, Yan, obj3, ejected);
 
-        PlayerJumpCollisions(Ying, Yan, obj3, rad, platform, platformCount, P1CanJump, P2CanJump, MergedCanJump, Jumpspeed, Jumpspeed2, JumpspeedMerged, oldP1, oldP2, oldMerged);
-        LyftVertControls(Ying, Yan, obj3, rad, oldP1, oldP2, oldMerged, P1CanJump, P2CanJump, MergedCanJump, Jumpspeed, Jumpspeed2, JumpspeedMerged);
+        PlayerJumpCollisions(Ying, Yan, obj3, rad, platform, platformCount, P1CanJump, P2CanJump, MergedCanJump, Jumpspeed, Jumpspeed2, JumpspeedMerged, oldP1, oldP2, oldMerged, Box);
+        LyftVertControls(Ying, Yan, obj3, rad, oldP1, oldP2, oldMerged, P1CanJump, P2CanJump, MergedCanJump, Jumpspeed, Jumpspeed2, JumpspeedMerged, Box);
 
-        BoxPhy(Box, platformCount, platform, BoxGravSpeed);
-        PlayerBoxCollisions(Ying, rad, Yan, obj3, platformCount, platform, Box, BoxGravSpeed, oldBox);
+        PlayerBoxCollisions(Ying, rad, Yan, obj3, platformCount, platform, Box, BoxGravSpeed, oldBox, oldP1, oldP2, oldMerged);
         }
     }
 
@@ -226,9 +225,6 @@ int main(void)
             death(Ying, Yan, spikeHitboxes, spikeCount, rad, deathOccured, invincibility, invincibilityTimer);
             forceUnmerge(Ying, Yan, obj3, spikeHitboxes, spikeCount, rad, merged, invincibility, invincibilityTimer);
             levelOne(Ying, Yan, obj3, rad);
-           
-            DrawText(TextFormat("X Speed is: %.1f", Box.x), 20, 20, 20, WHITE);
-            DrawText(TextFormat("Speed is: %.1f", BoxGravSpeed), 30, 70, 20, DARKGRAY);
 
             if (!merged)
             {

@@ -158,24 +158,24 @@ void MergeObjects(Vector2& obj1, Vector2& obj2, Vector2& obj3, float& radius1, b
     }
 }
 
-void PlayerPlatformCollisions(Vector2& player, int rad, Rectangle platforms[], int platformCount, Vector2& ballPosition, Vector2& obj3, Vector2& oldP1, Vector2& oldP2, Vector2& oldMerged)
+void PlayerPlatformCollisions(Vector2& player, int rad, Rectangle platforms[], int platformCount, Vector2& ballPosition, Vector2& obj3, Vector2& oldP1, Vector2& oldP2, Vector2& oldMerged, Rectangle box)
 {
     for (int i = 0; i < platformCount; i++) {
-            if (CheckCollisionCircleRec(player, rad, platforms[i])) {
+            if (CheckCollisionCircleRec(player, rad, platforms[i]) || CheckCollisionCircleRec(player, rad -0.1, box)) {
                 player.x = oldP1.x;//go back to old position
                 break;
             }
         }
         
         for (int i = 0; i < platformCount; i++) {
-            if (CheckCollisionCircleRec(ballPosition, rad, platforms[i])) {
+            if (CheckCollisionCircleRec(ballPosition, rad, platforms[i]) || CheckCollisionCircleRec(ballPosition, rad -0.1, box)) {
                 ballPosition.x = oldP2.x; //go back to old position
                 break;
             }
         }
 
          for (int i = 0; i < platformCount; i++) {
-            if (CheckCollisionCircleRec(obj3, rad, platforms[i])) {
+            if (CheckCollisionCircleRec(obj3, rad, platforms[i]) || CheckCollisionCircleRec(obj3, rad -0.1, box)) {
                 obj3.x = oldMerged.x;//go back to old position
                 break;
             }
@@ -183,10 +183,10 @@ void PlayerPlatformCollisions(Vector2& player, int rad, Rectangle platforms[], i
         
 }
 
-void PlayerJumpCollisions(Vector2& player, Vector2& ballPosition, Vector2& obj3, float rad, Rectangle platforms[], int platformCount, bool& P1CanJump, bool& P2CanJump, bool& MergedCanJump, float& Jumpspeed, float& Jumpspeed2, float& JumpspeedMerged, Vector2& oldP1, Vector2& oldP2, Vector2& oldMerged)
+void PlayerJumpCollisions(Vector2& player, Vector2& ballPosition, Vector2& obj3, float rad, Rectangle platforms[], int platformCount, bool& P1CanJump, bool& P2CanJump, bool& MergedCanJump, float& Jumpspeed, float& Jumpspeed2, float& JumpspeedMerged, Vector2& oldP1, Vector2& oldP2, Vector2& oldMerged, Rectangle box)
 {
     for (int i = 0; i < platformCount; i++) {
-            if (CheckCollisionCircleRec(player, rad, platforms[i])) {
+            if (CheckCollisionCircleRec(player, rad, platforms[i]) || CheckCollisionCircleRec(player, rad, box)) {
                 player.y = oldP1.y;//go back to old position
                 if((platforms[i].height+platforms[i].y) >= player.y){
                     P1CanJump = true;
@@ -199,7 +199,7 @@ void PlayerJumpCollisions(Vector2& player, Vector2& ballPosition, Vector2& obj3,
         }
 
         for (int i = 0; i < platformCount; i++) {
-            if (CheckCollisionCircleRec(ballPosition, rad, platforms[i])) {
+            if (CheckCollisionCircleRec(ballPosition, rad, platforms[i]) || CheckCollisionCircleRec(ballPosition, rad, box)) {
                 ballPosition.y = oldP2.y; //go back to old position
                 if((platforms[i].height+platforms[i].y) >= ballPosition.y){
                     P2CanJump = true;
@@ -212,7 +212,7 @@ void PlayerJumpCollisions(Vector2& player, Vector2& ballPosition, Vector2& obj3,
         }
         
           for (int i = 0; i < platformCount; i++) {
-            if (CheckCollisionCircleRec(obj3, rad, platforms[i])) {
+            if (CheckCollisionCircleRec(obj3, rad, platforms[i]) || CheckCollisionCircleRec(obj3, rad, box)) {
                 obj3.y = oldMerged.y; //go back to old position
                 if((platforms[i].height+platforms[i].y) >= obj3.y){
                     MergedCanJump = true;
