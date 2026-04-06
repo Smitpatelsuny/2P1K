@@ -195,7 +195,7 @@ int main(void)
 
                                          gs.platforms.data(), (int)gs.platforms.size(), 
 
-                                         gs.Yan, gs.obj3, oldP1, oldP2, oldMerged, gs.currentLift.rect); 
+                                         gs.Yan, gs.obj3, oldP1, oldP2, oldMerged, currentLift.rect); 
 
                 if (gs.hasLift) 
 
@@ -211,7 +211,7 @@ int main(void)
 
                      gs.P1CanJump, gs.P2CanJump, gs.MergedCanJump, 
 
-                     gs.merged, gs.rad, gs.Ying, gs.Yan, gs.obj3, gs.currentLift.rect); 
+                     gs.merged, gs.rad, gs.Ying, gs.Yan, gs.obj3); 
 
  
 
@@ -223,7 +223,7 @@ int main(void)
 
                                      gs.Jumpspeed, gs.Jumpspeed2, gs.JumpspeedMerged, 
 
-                                     oldP1, oldP2, oldMerged, gs.currentLift.rect); 
+                                     oldP1, oldP2, oldMerged, currentLift.rect); 
 
                 if (gs.hasLift) 
 
