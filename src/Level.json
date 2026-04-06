@@ -1,0 +1,341 @@
+
+
+{
+  
+  "game": {
+    "title": "Ying and Yan",
+    "subtitle": "The Second Coming",
+    "screenWidth": 800,
+    "screenHeight": 800,
+    "targetFPS": 60,
+    "playerRadius": 20,
+    "invincibilityDuration": 1
+  },
+  "assets": {
+    "text":{
+
+    }
+    
+  },
+  "ui": {
+    "startButton": {
+      "x": 250,
+      "y": 220,
+      "width": 300,
+      "height": 40
+    },
+    "backButton": {
+      "x": 10,
+      "y": 10,
+      "width": 30,
+      "height": 30
+    },
+    "levelSelectButtons": [
+      {
+        "x": 150,
+        "y": 200,
+        "width": 100,
+        "height": 50
+      },
+      {
+        "x": 270,
+        "y": 200,
+        "width": 100,
+        "height": 50
+      },
+      {
+        "x": 390,
+        "y": 200,
+        "width": 100,
+        "height": 50
+      },
+      {
+        "x": 510,
+        "y": 200,
+        "width": 100,
+        "height": 50
+      }
+    ]
+  },
+  "Level": [
+    {
+      "id": 1,
+      "name": "Level 1",
+      "asset": "C:/Users/dalma/projects/2P1K/src/assets/gamePlay2.jpg",
+      "players": {
+        "p1Start": {
+          "x": 40,
+          "y": 764
+        },
+        "p2Start": {
+          "x": 760,
+          "y": 764
+        },
+        "obj3": {
+          "x": 0,
+          "y": 0
+        }
+      },
+      "exitDoors": {
+        "yin": {
+          "x": 10,
+          "y": 280,
+          "width": 30,
+          "height": 30
+        },
+        "yang": {
+          "x": 760,
+          "y": 280,
+          "width": 30,
+          "height": 30
+        }
+      },
+      "platforms": [
+        {
+          "label": "floor",
+          "x": 0,
+          "y": 785,
+          "width": 800,
+          "height": 15
+        },
+        {
+          "label": "leftWall",
+          "x": 0,
+          "y": 0,
+          "width": 15,
+          "height": 800
+        },
+        {
+          "label": "rightWall",
+          "x": 785,
+          "y": 0,
+          "width": 15,
+          "height": 800
+        },
+        {
+          "label": "ceiling",
+          "x": 0,
+          "y": 0,
+          "width": 800,
+          "height": 15
+        },
+        {
+          "label": "middleWall",
+          "x": 325,
+          "y": 500,
+          "width": 150,
+          "height": 300
+        },
+        {
+          "label": "firstLeftPlatform",
+          "x": 0,
+          "y": 700,
+          "width": 250,
+          "height": 15
+        },
+        {
+          "label": "middlePlatform",
+          "x": 100,
+          "y": 580,
+          "width": 600,
+          "height": 15
+        },
+        {
+          "label": "firstRightPlatform",
+          "x": 550,
+          "y": 700,
+          "width": 250,
+          "height": 15
+        },
+        {
+          "label": "topLeftPlatform",
+          "x": 0,
+          "y": 300,
+          "width": 250,
+          "height": 15
+        },
+        {
+          "label": "topRightPlatform",
+          "x": 550,
+          "y": 300,
+          "width": 250,
+          "height": 15
+        }
+      ],
+      "spikes": [
+        {
+          "label": "firstLeftPlatformSpike",
+          "vertices": [
+            {
+              "x": 105,
+              "y": 700
+            },
+            {
+              "x": 145,
+              "y": 700
+            },
+            {
+              "x": 125,
+              "y": 670
+            }
+          ],
+          "hitbox": {
+            "x": 110,
+            "y": 685,
+            "width": 30,
+            "height": 15
+          }
+        },
+        {
+          "label": "firstRightPlatformSpike",
+          "vertices": [
+            {
+              "x": 650,
+              "y": 700
+            },
+            {
+              "x": 690,
+              "y": 700
+            },
+            {
+              "x": 670,
+              "y": 670
+            }
+          ],
+          "hitbox": {
+            "x": 655,
+            "y": 685,
+            "width": 30,
+            "height": 15
+          }
+        },
+        {
+          "label": "middleLeftPlatformSpike",
+          "vertices": [
+            {
+              "x": 193,
+              "y": 580
+            },
+            {
+              "x": 233,
+              "y": 580
+            },
+            {
+              "x": 213,
+              "y": 550
+            }
+          ],
+          "hitbox": {
+            "x": 198,
+            "y": 565,
+            "width": 30,
+            "height": 15
+          }
+        },
+        {
+          "label": "middleRightPlatformSpike",
+          "vertices": [
+            {
+              "x": 558,
+              "y": 580
+            },
+            {
+              "x": 598,
+              "y": 580
+            },
+            {
+              "x": 578,
+              "y": 550
+            }
+          ],
+          "hitbox": {
+            "x": 563,
+            "y": 565,
+            "width": 30,
+            "height": 15
+          }
+        }
+      ],
+      "lifts": {
+        "x": 250,
+        "y": 300,
+        "width": 50,
+        "height": 10,
+        "maxHeight": 300,
+        "minHeight": 500,
+        "button": {
+          "x": 600,
+          "y": 290,
+          "width": 10,
+          "height": 5
+        }
+      },
+      "Boxes": {
+        "x": 300,
+        "y": 100,
+        "width": 50,
+        "height": 50
+      }
+    },
+    {
+      "id": 2,
+      "name": "Level 2",
+      "asset": "C:/Users/dalma/projects/2P1K/src/assets/gamePlay2.jpg",
+      "players": {
+        "p1Start": {
+          "x": 40,
+          "y": 764
+        },
+        "p2Start": {
+          "x": 760,
+          "y": 764
+        }
+      },
+      "exitDoors": {
+        "yin": {
+          "x": 10,
+          "y": 280,
+          "width": 30,
+          "height": 30
+        },
+        "yang": {
+          "x": 760,
+          "y": 280,
+          "width": 30,
+          "height": 30
+        }
+      },
+      "platforms": [
+        {
+          "label": "floor",
+          "x": 0,
+          "y": 785,
+          "width": 800,
+          "height": 15
+        },
+        {
+          "label": "leftWall",
+          "x": 0,
+          "y": 0,
+          "width": 15,
+          "height": 800
+        },
+        {
+          "label": "rightWall",
+          "x": 785,
+          "y": 0,
+          "width": 15,
+          "height": 800
+        },
+        {
+          "label": "ceiling",
+          "x": 0,
+          "y": 0,
+          "width": 800,
+          "height": 15
+        }
+      ],
+      "spikes": []
+    }
+  ]
+}

@@ -1,261 +1,422 @@
-#include "raylib.h"
-#include "PlayerStuff.h"
-#include "DeaStart.h"
-#include <stdio.h>
-#include "Objects.h"
  
- enum GameScreen{ 
-    TITLE,
-    LEVSEL,
-    GAMEPLAY
-    };
 
+#include "raylib.h" 
 
+#include "PlayerStuff.h" 
 
-//ChickenNuggetPotatoGuy21
+#include "DeaStart.h" 
 
-int main(void)
-{
-    float Jumpspeed = 0.0;
-    float Jumpspeed2 = 0.0;
-    float JumpspeedMerged = 0.0;
-    float rad = 20.0;
-    bool P1CanJump = true; 
-    bool P2CanJump = true;
-    bool MergedCanJump = true; 
-    bool merged = false;
-    const int screenWidth = 800;
-    const int screenHeight = 800;
-    GameScreen currentScreen = TITLE;
-    bool deathOccured = false;
-    bool invincibility = false;
-    float invincibilityTimer = 1.0f; // 1 second of invincibility after unmerging
-    bool ejected;
-    float BoxGravSpeed = 0;
-    int levelcom = 0;
+#include "Objects.h" 
 
-    InitWindow(screenWidth, screenHeight, "All code test");
-    Texture2D background_menu = LoadTexture("C:/Users/austi/projects/New2P1K/2P1K-2/src/assets/background_menu.jpg");
-    // Texture2D gamePlay = LoadTexture("C:/Users/austi/projects/New2P1K/2P1K-2/src/assets/gamePlay.png");
-    Texture2D gamePlay2 = LoadTexture("C:/Users/austi/projects/New2P1K/2P1K-2/src/assets/gamePlay2.jpg");
-    // Texture2D p1Texture = LoadTexture("resources/white.png");
-    // Texture2D p2Texture = LoadTexture ("resources/black.png");
+#include "GameState.h" 
 
-    Vector2 Ying = { 40, 764};
-    Vector2 Yan = { 760, 764};
-    Vector2 obj3 = {0, 0};
+#include "json.hpp" 
 
-    Rectangle boxCollision = {0};
-    Rectangle platform[] = {
-    //Max Jump Height is about 2.5 player models.
-    {   0, 785, 800, 15 },   // floor
-    {   0,   0,  15, 800 },  // left wall
-    { 785,   0,  15, 800 },  // right wall
-    {   0,   0, 800, 15 },   // ceiling (optional)
-    { 325, 500, 150, 300 },   // x, y, width, height, middle wall
-    {   0, 700, 250, 15 },   // 1st Left platform
-    { 100, 580, 600, 15 },   // 2nd Middle platform
-    { 550, 700, 250, 15 },   // 1st Right platform
-    {   0, 300, 250, 15 },   // Top left platfrom
-    { 550, 300, 250, 15 },   // Top right platform
-    };
+#include <fstream> 
 
-    Rectangle startbutton = { 250, 220, 300, 40 };
-    Rectangle backbutton = { 10, 10, 30, 30 };
-    Rectangle levelselectbuttons[] ={
-        { 150, 200, 100, 50 },
-        { 270, 200, 100, 50 },
-        { 390, 200, 100, 50 },
-        { 510, 200, 100, 50 },
-    };
+#include <iostream> 
 
-    Vector2 spikes[][3]{
-        {{105, 700}, {145, 700}, {125, 670}}, //spike on first left platform
-        {{650, 700}, {690, 700}, {670, 670}}, //spike on first right platform
-        {{193, 580}, {233, 580}, {213, 550}}, //spike on middle left platform
-        {{558, 580}, {598, 580}, {578, 550}}, //spike on middle right platform
-    };
+ 
 
-    //spike parameters: first vetice = (x of platform + 15, y of platform), 
-    //second vertice = (x of platform + 55, y of platform), 
-    //third vertice = (x of platform + 35, y of platform - 30)
+using json = nlohmann::json; 
 
-    Rectangle spikeHitboxes[] = {
-        {110, 685, 30, 15}, //spike hitbox for first left platform
-        {655, 685, 30, 15}, //spike hitbox for first right platform
-        {198, 565, 30, 15}, //spike hitbox for middle left platform
-        {563, 565, 30, 15}, //spike hitbox for middle right platform
-    };
+ 
 
-    //future spike hitbox: +5 on x (first vertice) and -15 on y from the spike's position, 
-    //with a width of 30 and height of 15
+int main(void) 
 
-    Rectangle exitDoorHitboxYin = { 10, 280, 30, 30 };
-    Rectangle exitDoorHitboxYang = { 760, 280, 30, 30 };
+{ 
 
-    Rectangle Box = {100, 350, 50, 50};
+    const int screenWidth  = 800; 
 
-    SetTargetFPS(60);     
-    
-    int platformCount = (int)(sizeof(platform) / sizeof(platform[0]));
-    int spikeCount = (int)(sizeof(spikes) / sizeof(spikes[0]));
-  
-    while (!WindowShouldClose())    
-    {
-        MergeObjects(Ying, Yan, obj3, rad, merged, invincibility, Jumpspeed2, ejected);
+    const int screenHeight = 800; 
 
-        switch(currentScreen)
-        {
-            case TITLE:
-        {
-                if(IsGestureDetected(GESTURE_TAP) && CheckCollisionPointRec(GetMousePosition(), startbutton))
-                {
-                    currentScreen = LEVSEL;
-                }
+ 
 
-            ClearBackground(WHITE);
+    json data; 
 
-            DrawText(TextFormat("bg width: %i", background_menu.width), 20, 20, 20, WHITE);
-            DrawText(TextFormat("bg height: %i", background_menu.height), 20, 50, 20, WHITE);
+    { 
 
-            if (background_menu.width > 0 && background_menu.height > 0)
-            {
-                DrawTexturePro(
-                    background_menu,
-                    (Rectangle){0, 0, (float)background_menu.width, (float)background_menu.height},
-                    (Rectangle){0, 0, (float)screenWidth, (float)screenHeight},
-                    (Vector2){0, 0},
-                    0.0f,
-                    WHITE);
-            }
-            int startSize = 20;
-            int startWidth = MeasureText("START", startSize);
+        std::ifstream file("C:/Users/dalma/projects/2P1K/src/Level.json"); 
 
-            DrawText("Ying and Yan", 150, 20, 80, WHITE);
-            DrawText("The Second Coming", 200, 100, 40, WHITE);
-            DrawRectangleRec(startbutton, GREEN);
-            
+        data = json::parse(file); 
 
-    DrawText(
-        "START",
-        startbutton.x + startbutton.width/2 - startWidth/2,
-        startbutton.y + startbutton.height/2 - startSize/2,
-        startSize,
-        LIGHTGRAY);
-        }
-        break;
-            case LEVSEL:
-            {
-                if(IsGestureDetected(GESTURE_TAP) && CheckCollisionPointRec(GetMousePosition(), backbutton))
-                {
-                    currentScreen = TITLE;
-                }
-                else if(IsGestureDetected(GESTURE_TAP) && CheckCollisionPointRec(GetMousePosition(), levelselectbuttons[0]))
-                {
-                    currentScreen = GAMEPLAY;
-                }
-            }break;
-            case GAMEPLAY:
-            {
-                if(IsKeyPressed(KEY_P)||ExitDoors(Ying, Yan, exitDoorHitboxYin, exitDoorHitboxYang, rad, levelcom))
-                {
-                    currentScreen = LEVSEL;
-                }     
+    } 
 
-                // Save old positions BEFORE moving
-                Vector2 oldP1 = Ying;
-                Vector2 oldP2 = Yan;
-                Vector2 oldMerged = obj3;
-                Rectangle oldBox = Box;
+ 
 
+    GameState gs;   // <-- everything lives here 
 
-                //X-axis movement and collision
-                if(merged){
-                    MergePlayerMotor(obj3, 2);
-                }
-                else{
-                    PlayerMotor(Ying, 2);
-                    Player2Motor(Yan, 2);
-                }
-   
-        PlayerPlatformCollisions(Ying, rad, platform, platformCount, Yan, obj3, oldP1, oldP2, oldMerged, Box);
-        LyftHorControls(Ying, Yan, obj3, rad, oldP1, oldP2, oldMerged, Box);
+ 
 
-        //Y-axis movement and collision
-        Jump(Jumpspeed, Jumpspeed2, JumpspeedMerged, P1CanJump, P2CanJump, MergedCanJump, merged, rad, Ying, Yan, obj3, ejected);
+    InitWindow(screenWidth, screenHeight, "All code test"); 
 
-        PlayerJumpCollisions(Ying, Yan, obj3, rad, platform, platformCount, P1CanJump, P2CanJump, MergedCanJump, Jumpspeed, Jumpspeed2, JumpspeedMerged, oldP1, oldP2, oldMerged, Box);
-        LyftVertControls(Ying, Yan, obj3, rad, oldP1, oldP2, oldMerged, P1CanJump, P2CanJump, MergedCanJump, Jumpspeed, Jumpspeed2, JumpspeedMerged, Box);
+ 
 
-        PlayerBoxCollisions(Ying, rad, Yan, obj3, platformCount, platform, Box, BoxGravSpeed, oldBox, oldP1, oldP2, oldMerged);
-        }
-    }
+    Texture2D background_menu = LoadTexture("C:/Users/dalma/projects/2P1K/src/assets/background_menu.jpg"); 
 
-        BeginDrawing();
+    Texture2D gamePlay2       = LoadTexture("C:/Users/dalma/projects/2P1K/src/assets/gamePlay2.jpg"); 
 
-            switch(currentScreen)
+ 
 
-            {
-                case TITLE:
-                {
-                    DrawText("Ying and Yan", 150, 20, 80, WHITE);
-                    DrawText("The Second Coming", 200, 100, 40, WHITE);
-                    ClearBackground(BLACK);
-                    DrawRectangleRec(startbutton, GRAY);
-                    DrawText("START", 365, 230, 20, LIGHTGRAY);    
-                } break;
-                case LEVSEL:
-                {
-                    DrawRectangle(0, 0, screenWidth, screenHeight, BLACK);
-                    DrawText("LEVEL SELECT", 150, 40, 60, WHITE);
-                    int LevelSelectCount = 4;
-                    for (int i = 0; i < LevelSelectCount; i++) DrawRectangleRec(levelselectbuttons[i], DARKGRAY);
-                    DrawRectangleRec(backbutton, WHITE);
+    Rectangle startbutton = { 250, 220, 300, 40 }; 
 
-                } break;
-                case GAMEPLAY:
-        {
-            ClearBackground(SKYBLUE);
-            DrawTexturePro(
-                gamePlay2, {0, 0, (float)gamePlay2.width, (float)gamePlay2.height},
-                {0, 0, (float)screenWidth, (float)screenHeight}, (Vector2){0, 0}, 0.0f, WHITE);
+    Rectangle backbutton  = { 10,  10,  30,  30 }; 
 
-            ExitGame();
-            ExitDoors(Ying, Yan, exitDoorHitboxYin, exitDoorHitboxYang, rad, levelcom);
-            death(Ying, Yan, spikeHitboxes, spikeCount, rad, deathOccured, invincibility, invincibilityTimer);
-            forceUnmerge(Ying, Yan, obj3, spikeHitboxes, spikeCount, rad, merged, invincibility, invincibilityTimer);
-            levelOne(Ying, Yan, obj3, rad);
+    Rectangle levelselectbuttons[] = { 
 
-            if (!merged)
-            {
-                DrawCircleV(Ying, rad, RED);
-                DrawCircleV(Yan, rad, BLUE);
-            }
-            else
-            {
-                DrawCircleV(obj3, rad, PURPLE);
-            }
+        { 150, 200, 100, 50 }, 
 
-            for (int i = 0; i < platformCount; i++)
-                DrawRectangleRec(platform[i], DARKGRAY);
-            for (int i = 0; i < spikeCount; i++)
-                DrawTriangle(spikes[i][0], spikes[i][1], spikes[i][2], RED);
-           /* for (int i = 0; i < spikeCount; i++)
-                DrawRectangleRec(spikeHitboxes[i], RED); // draw hitboxes for testing */
-            DrawRectangleRec(exitDoorHitboxYin, GREEN);
-            DrawRectangleRec(exitDoorHitboxYang, GREEN);
-            DrawRectangleRec(Box, BROWN);
+        { 270, 200, 100, 50 }, 
 
-            for (int i = 0; i < platformCount; i++)
-                DrawRectangleRec(platform[i], DARKGRAY);
-        }
-        break;
-        default:
-            break;
-        }
-        EndDrawing();
-    }
-    UnloadTexture(background_menu);
-    CloseWindow();
-    return 0;
-}
+        { 390, 200, 100, 50 }, 
+
+        { 510, 200, 100, 50 }, 
+
+    }; 
+
+ 
+
+    SetTargetFPS(60); 
+
+ 
+
+    while (!WindowShouldClose()) 
+
+    { 
+
+        MergeObjects(gs.Ying, gs.Yan, gs.obj3, gs.rad, gs.merged, gs.invincibility);
+ 
+
+        // ── Update ─────────────────────────────────────────────────────── 
+
+        switch (gs.currentScreen) 
+
+        { 
+
+            case GameState::Screen::TITLE: 
+
+            { 
+
+                if (IsGestureDetected(GESTURE_TAP) && 
+
+                    CheckCollisionPointRec(GetMousePosition(), startbutton)) 
+
+                    gs.currentScreen = GameState::Screen::LEVSEL; 
+
+            } break; 
+
+ 
+
+            case GameState::Screen::LEVSEL: 
+
+            { 
+
+                if (IsGestureDetected(GESTURE_TAP) && 
+
+                    CheckCollisionPointRec(GetMousePosition(), backbutton)) 
+
+                { 
+
+                    gs.currentScreen = GameState::Screen::TITLE; 
+
+                } 
+
+                for (int i = 0; i < 4; i++) 
+
+                { 
+
+                    if (IsGestureDetected(GESTURE_TAP) && 
+
+                        CheckCollisionPointRec(GetMousePosition(), levelselectbuttons[i])) 
+
+                    { 
+
+                        gs.LoadLevel(data, i + 1); 
+
+                        gs.currentScreen = GameState::Screen::GAMEPLAY; 
+
+                        break; 
+
+                    } 
+
+                } 
+
+            } break; 
+
+ 
+
+            case GameState::Screen::GAMEPLAY: 
+
+            { 
+
+                if (IsKeyPressed(KEY_P) || 
+
+                    ExitDoors(gs.Ying, gs.Yan, 
+
+                              gs.exitDoorHitboxYin, gs.exitDoorHitboxYang, gs.rad)) 
+
+                { 
+
+                    gs.currentScreen = GameState::Screen::LEVSEL; 
+
+                    break; 
+
+                } 
+
+ 
+
+                Vector2 oldP1     = gs.Ying; 
+
+                Vector2 oldP2     = gs.Yan; 
+
+                Vector2 oldMerged = gs.obj3; 
+
+ 
+
+                // Movement 
+
+                if (gs.merged) 
+
+                    MergePlayerMotor(gs.obj3, 2); 
+
+                else { 
+
+                    PlayerMotor(gs.Ying, 2); 
+
+                    Player2Motor(gs.Yan, 2); 
+
+                } 
+
+ 
+
+                // Horizontal collisions 
+
+                PlayerPlatformCollisions(gs.Ying, gs.rad, 
+
+                                         gs.platforms.data(), (int)gs.platforms.size(), 
+
+                                         gs.Yan, gs.obj3, oldP1, oldP2, oldMerged, gs.currentLift.rect); 
+
+                if (gs.hasLift) 
+
+                    LyftHorControls(gs.Ying, gs.Yan, gs.obj3, gs.rad, 
+
+                                    oldP1, oldP2, oldMerged, gs.currentLift, gs.merged); 
+
+ 
+
+                // Vertical collisions 
+
+                Jump(gs.Jumpspeed, gs.Jumpspeed2, gs.JumpspeedMerged, 
+
+                     gs.P1CanJump, gs.P2CanJump, gs.MergedCanJump, 
+
+                     gs.merged, gs.rad, gs.Ying, gs.Yan, gs.obj3, gs.currentLift.rect); 
+
+ 
+
+                PlayerJumpCollisions(gs.Ying, gs.Yan, gs.obj3, gs.rad, 
+
+                                     gs.platforms.data(), (int)gs.platforms.size(), 
+
+                                     gs.P1CanJump, gs.P2CanJump, gs.MergedCanJump, 
+
+                                     gs.Jumpspeed, gs.Jumpspeed2, gs.JumpspeedMerged, 
+
+                                     oldP1, oldP2, oldMerged, gs.currentLift.rect); 
+
+                if (gs.hasLift) 
+
+                    LyftVertControls(gs.Ying, gs.Yan, gs.obj3, gs.rad, 
+
+                                     oldP1, oldP2, oldMerged, 
+
+                                     gs.P1CanJump, gs.P2CanJump, gs.MergedCanJump, 
+
+                                     gs.Jumpspeed, gs.Jumpspeed2, gs.JumpspeedMerged, 
+
+                                     gs.currentLift); 
+
+            } break; 
+
+        } 
+
+ 
+
+        // ── Draw ───────────────────────────────────────────────────────── 
+
+        BeginDrawing(); 
+
+ 
+
+        switch (gs.currentScreen) 
+
+        { 
+
+            case GameState::Screen::TITLE: 
+
+            { 
+
+                ClearBackground(BLACK); 
+
+                if (background_menu.width > 0) 
+                    DrawTexturePro(background_menu, 
+                        { 0, 0, (float)background_menu.width, (float)background_menu.height }, 
+                        { 0, 0, (float)screenWidth, (float)screenHeight }, 
+                        { 0, 0 }, 0.0f, WHITE); 
+
+ 
+
+                int startSize  = 20; 
+                int startWidth = MeasureText("START", startSize); 
+                DrawText("Ying and Yan",      150, 20,  80, WHITE); 
+                DrawText("The Second Coming", 200, 100, 40, WHITE); 
+                DrawRectangleRec(startbutton, GREEN); 
+                DrawText("START", 
+
+                    (int)(startbutton.x + startbutton.width  / 2 - startWidth / 2), 
+
+                    (int)(startbutton.y + startbutton.height / 2 - startSize  / 2), 
+
+                    startSize, LIGHTGRAY); 
+
+            } break; 
+
+ 
+
+            case GameState::Screen::LEVSEL: 
+
+            { 
+
+                DrawRectangle(0, 0, screenWidth, screenHeight, BLACK); 
+
+                DrawText("LEVEL SELECT", 150, 40, 60, WHITE); 
+
+                for (int i = 0; i < 4; i++) 
+
+                { 
+
+                    DrawRectangleRec(levelselectbuttons[i], DARKGRAY); 
+
+                    char label[8]; 
+
+                    snprintf(label, sizeof(label), "Lv %d", i + 1); 
+
+                    DrawText(label, 
+
+                        (int)(levelselectbuttons[i].x + 20), 
+
+                        (int)(levelselectbuttons[i].y + 15), 
+
+                        20, WHITE); 
+
+                } 
+
+                DrawRectangleRec(backbutton, WHITE); 
+
+            } break; 
+
+ 
+
+            case GameState::Screen::GAMEPLAY: 
+
+            { 
+
+                ClearBackground(SKYBLUE); 
+
+                DrawTexturePro(gamePlay2, 
+
+                    { 0, 0, (float)gamePlay2.width, (float)gamePlay2.height }, 
+
+                    { 0, 0, (float)screenWidth, (float)screenHeight }, 
+
+                    { 0, 0 }, 0.0f, WHITE); 
+
+ 
+
+                ExitGame(); 
+
+ 
+
+                death(gs.Ying, gs.Yan, 
+
+                      gs.spikeHitboxes.data(), (int)gs.spikeHitboxes.size(), 
+
+                      gs.rad, gs.deathOccured, 
+
+                      gs.invincibility, gs.invincibilityTimer, 
+
+                      gs.p1Spawn, gs.p2Spawn); 
+
+ 
+
+                forceUnmerge(gs.Ying, gs.Yan, gs.obj3, 
+
+                             gs.spikeHitboxes.data(), (int)gs.spikeHitboxes.size(), 
+
+                             gs.rad, gs.merged, 
+
+                             gs.invincibility, gs.invincibilityTimer); 
+
+ 
+
+                if (gs.hasLift) 
+
+                    levelOne(gs.Ying, gs.Yan, gs.obj3, gs.rad, gs.currentLift); 
+
+ 
+
+                if (!gs.merged) { 
+
+                    DrawCircleV(gs.Ying, gs.rad, RED); 
+
+                    DrawCircleV(gs.Yan,  gs.rad, BLUE); 
+
+                } else { 
+
+                    DrawCircleV(gs.obj3, gs.rad, PURPLE); 
+
+                } 
+
+ 
+
+                for (const auto& p : gs.platforms) 
+
+                    DrawRectangleRec(p, DARKGRAY); 
+
+ 
+
+                for (const auto& s : gs.spikes) 
+
+                    DrawTriangle(s[0], s[1], s[2], RED); 
+
+ 
+
+                DrawRectangleRec(gs.exitDoorHitboxYin,  GREEN); 
+
+                DrawRectangleRec(gs.exitDoorHitboxYang, GREEN); 
+
+            } break; 
+
+ 
+
+            default: break; 
+
+        } 
+
+ 
+
+        EndDrawing(); 
+
+    } 
+
+ 
+
+    UnloadTexture(background_menu); 
+
+    UnloadTexture(gamePlay2); 
+
+    CloseWindow(); 
+
+    return 0; 
+} 

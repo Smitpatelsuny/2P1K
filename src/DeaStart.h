@@ -1,22 +1,26 @@
+#ifndef DEASTART_H 
+#define DEASTART_H 
 
+ 
 
-#ifndef DEASTART_H
-#define DEASTART_H
+#include <raylib.h> 
+#include <raymath.h> 
 
-#include <raylib.h>
-#include <raymath.h>
+ 
 
-void death(Vector2 &player, Vector2 &player2, Rectangle spikeHitboxes[], int numSpikes, float &rad, bool &deathOccured, bool &invincibility, float &invincibilityTimer);
-void forceUnmerge(Vector2 &player, Vector2 &player2, Vector2 &MergedPlayer, Rectangle spikeHitboxes[], int numSpikes, float &rad, bool &merged, bool &invincibility, float &invincibilityTimer);
-void ExitGame();
-bool ExitDoors(Vector2 &player, Vector2 &player2, Rectangle exitDoorHitboxYin, Rectangle exitDoorHitboxYang, float &rad, int& levelcom);
+void death(Vector2 &player, Vector2 &player2, Rectangle spikeHitboxes[], int numSpikes, float &rad, bool &deathOccured, bool &invincibility, float &invincibilityTimer, Vector2 p1spawn, Vector2 p2spawn); 
+void forceUnmerge(Vector2 &player, Vector2 &player2, Vector2 &MergedPlayer, Rectangle spikeHitboxes[], int numSpikes, float &rad, bool &merged, bool &invincibility, float &invincibilityTimer); 
+void ExitGame(); 
+bool ExitDoors(Vector2 &player, Vector2 &player2, Rectangle exitDoorHitboxYin, Rectangle exitDoorHitboxYang, float &rad); 
+
     
-   
-class DeaStart
-{
-public:
-    void Initialize();
 
+class DeaStart 
+{ 
+public: 
 
-};
-#endif
+    void Initialize(); 
+
+}; 
+
+#endif 
