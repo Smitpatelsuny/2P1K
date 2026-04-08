@@ -32,6 +32,7 @@ struct GameState
     bool  P1CanJump        = true;
     bool  P2CanJump        = true;
     bool  MergedCanJump    = true;
+    bool Ejected           = false;
 
     // ── Death / invincibility ─────────────────────────────────────────────
     bool  deathOccured       = false;

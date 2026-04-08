@@ -40,7 +40,7 @@ int main(void)
 
     while (!WindowShouldClose())
     {
-        MergeObjects(gs.Ying, gs.Yan, gs.obj3, gs.rad, gs.merged, gs.invincibility);
+        MergeObjects(gs.Ying, gs.Yan, gs.obj3, gs.rad, gs.merged, gs.invincibility, gs.Jumpspeed2, gs.Ejected);
 
         // ── Update ───────────────────────────────────────────────────────
         switch (gs.currentScreen)
@@ -104,7 +104,7 @@ int main(void)
                 // Vertical collisions
                 Jump(gs.Jumpspeed, gs.Jumpspeed2, gs.JumpspeedMerged,
                      gs.P1CanJump, gs.P2CanJump, gs.MergedCanJump,
-                     gs.merged, gs.rad, gs.Ying, gs.Yan, gs.obj3);
+                     gs.merged, gs.rad, gs.Ying, gs.Yan, gs.obj3, gs.Ejected);
 
                 PlayerJumpCollisions(gs.Ying, gs.Yan, gs.obj3, gs.rad,
                                      gs.platforms.data(), (int)gs.platforms.size(),

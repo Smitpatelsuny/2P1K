@@ -283,11 +283,11 @@
       "asset": "C:/Users/dalma/projects/2P1K/src/assets/gamePlay2.jpg",
       "players": {
         "p1Start": {
-          "x": 40,
+          "x": 75,
           "y": 764
         },
         "p2Start": {
-          "x": 760,
+          "x": 701,
           "y": 764
         }
       },
