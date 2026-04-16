@@ -335,7 +335,34 @@
         "y": 100,
         "width": 50,
         "height": 50
-      }
+      },
+
+         "Doors": {
+        "lever": {
+        "switched": false,
+        "base":        { "x": 400, "y": 780, "width": 20, "height": 5  },
+        "hitboxLeft":  { "x": 400, "y": 780, "width": 10, "height": 10 },
+        "hitboxRight": { "x": 410, "y": 780, "width": 10, "height": 10 },
+        "spriteOff":   { "x": 402, "y": 772, "width": 5,  "height": 10 },
+        "spriteOn":    { "x": 413, "y": 772, "width": 5,  "height": 10 }
+      },
+      "door": {
+      "closed":  { "x": 510, "y": 690, "width": 20, "height": 100 },
+      "open":    { "x": 490, "y": 690, "width": 20, "height": 100 },
+      "frame": [
+        { "x": 510, "y": 680, "width": 30, "height": 10  },
+        { "x": 530, "y": 690, "width": 10, "height": 100 }
+     ]
+    }
+    },
+      "shooter": {
+      "rect":         { "x": 380, "y": 0,  "width": 40, "height": 20 },
+      "projectile":   { "x": 390, "y": 20, "width": 20, "height": 20 },
+      "speed":        3.0,
+      "interval":     2.0,
+      "active":       false
+    }
+      
     },
     {
       "id": 3,
@@ -394,6 +421,8 @@
           "height": 15
         }
       ]
+   
+
     },
     {
       "id": 4,

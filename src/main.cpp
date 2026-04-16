@@ -39,6 +39,26 @@ int main(void)
     Texture2D background_menu = LoadTexture("C:/Users/dalma/projects/2P1K/src/assets/background_menu.jpg");
     Texture2D gamePlay2       = LoadTexture("C:/Users/dalma/projects/2P1K/src/assets/gamePlay2.jpg");
 
+    AnimState yingState = ANIM_IDLE;
+    AnimState yanState = ANIM_IDLE;
+    AnimState mergedState = ANIM_IDLE;
+    
+    
+       AnimatedSprite w_player = LoadAnimatedSprite(
+        "C:/Users/dalma/projects/2P1K/src/assets/player_w.png",
+        1.5f, 3, 4, 0.15f);
+
+     AnimatedSprite b_player = LoadAnimatedSprite(
+        "C:/Users/dalma/projects/2P1K/src/assets/Player_b.png",
+        1.5f, 3, 4, 0.15f);
+
+    AnimatedSprite m_player = LoadAnimatedSprite(
+        "C:/Users/dalma/projects/2P1K/src/assets/player_m.png",
+        1.5f, 3, 4, 0.15f);
+
+    
+    
+
     Rectangle startbutton = { 250, 220, 300, 40 };
     Rectangle backbutton  = { 10,  10,  30,  30 };
     Rectangle levelselectbuttons[] = {
@@ -105,10 +125,15 @@ int main(void)
                     Player2Motor(gs.Yan, 2);
                 }
 
+                
+
                 // Horizontal collisions
                 PlayerPlatformCollisions(gs.Ying, gs.rad,
                                          gs.platforms.data(), (int)gs.platforms.size(),
                                          gs.Yan, gs.obj3, oldP1, oldP2, oldMerged, gs.currentBox.rect);
+                    
+                if (gs.hasDoor && !gs.currentDoor.switched)
+                    gs.platforms.push_back(gs.currentDoor.doorClosed);
                 
                 if (gs.hasBox)
                 {
@@ -139,15 +164,15 @@ int main(void)
                                      oldP1, oldP2, oldMerged, gs.currentBox.rect);
         
                 if (gs.hasBox)
-{
-    PlayerBoxCollisions(gs.Ying, gs.rad, gs.Yan, gs.obj3,    // gravity only
+                {
+                    PlayerBoxCollisions(gs.Ying, gs.rad, gs.Yan, gs.obj3,    // gravity only
                         (int)gs.platforms.size(), gs.platforms.data(),
                         gs.currentBox);
-    PlayerBoxVerticalCollisions(gs.Ying, gs.Yan, gs.obj3, gs.rad, gs.currentBox,
+                    PlayerBoxVerticalCollisions(gs.Ying, gs.Yan, gs.obj3, gs.rad, gs.currentBox,
                                  gs.P1CanJump, gs.P2CanJump, gs.MergedCanJump,
                                  gs.Jumpspeed, gs.Jumpspeed2, gs.JumpspeedMerged,
                                  oldP1, oldP2, oldMerged);
-}
+                }
                 if (gs.hasLift)
                 {
                     LyftVertControls(gs.Ying, gs.Yan, gs.obj3, gs.rad,
@@ -157,6 +182,86 @@ int main(void)
                         gs.currentLift, gs.currentBox);
                 }
              
+       
+            if (!gs.merged)
+            {
+                if (IsKeyDown(KEY_D))
+                    gs.yingFacingRight = true;
+                if (IsKeyDown(KEY_A))
+                    gs.yingFacingRight = false;
+
+                if (IsKeyDown(KEY_RIGHT))
+                    gs.yanFacingRight = true;
+                if (IsKeyDown(KEY_LEFT))
+                    gs.yanFacingRight = false;
+
+                if (!gs.P1CanJump)
+                {
+                    if (gs.Jumpspeed > 0)
+                        yingState = ANIM_JUMP;
+                    else
+                        yingState = ANIM_FALL;
+                }
+                else if (IsKeyDown(KEY_A) || IsKeyDown(KEY_D))
+                {
+                    yingState = ANIM_RUN;
+                }
+                else
+                {
+                    yingState = ANIM_IDLE;
+                }
+
+                if (!gs.P2CanJump)
+                {
+                    if (gs.Jumpspeed2 > 0)
+                        yanState = ANIM_JUMP;
+                    else
+                        yanState = ANIM_FALL;
+                }
+                else if (IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_RIGHT))
+                {
+                    yanState = ANIM_RUN;
+                }
+                else
+                {
+                    yanState = ANIM_IDLE;
+                }
+
+                UpdateAnimatedSprite(w_player, yingState);
+                UpdateAnimatedSprite(b_player, yanState);
+            }
+            else
+            {
+                if (IsKeyDown(KEY_D))
+                    gs.mergedFacingRight = true;
+                if (IsKeyDown(KEY_A))
+                    gs.mergedFacingRight = false;
+
+                if (!gs.MergedCanJump)
+                {
+                    if (gs.JumpspeedMerged > 0)
+                        mergedState = ANIM_JUMP;
+                    else
+                        mergedState = ANIM_FALL;
+                }
+                else if (IsKeyDown(KEY_A) || IsKeyDown(KEY_D))
+                {
+                    mergedState = ANIM_RUN;
+                }
+                else
+                {
+                    mergedState = ANIM_IDLE;
+                }
+
+                UpdateAnimatedSprite(m_player, mergedState);
+            }
+
+        if (gs.hasDoor && !gs.currentDoor.switched)
+                gs.platforms.pop_back();
+
+        if (gs.hasDoor){
+            UpdateDoor(gs.Ying, gs.Yan, gs.obj3, gs.rad, gs.currentDoor);
+        }
 
             } break;
 
@@ -223,10 +328,6 @@ int main(void)
                 
                 Restart(gs.Ying, gs.Yan, gs.obj3, gs.p1Spawn, gs.p2Spawn, gs.merged);
 
-                if(Restart)
-                {
-
-                }
 
                 forceUnmerge(gs.Ying, gs.Yan, gs.obj3,
                              gs.spikeHitboxes.data(), (int)gs.spikeHitboxes.size(),
@@ -236,19 +337,28 @@ int main(void)
                 if (gs.hasLift)
                     levelLift(gs.Ying, gs.Yan, gs.obj3, gs.rad, gs.currentLift);
 
-                if (!gs.merged) {
-                    DrawCircleV(gs.Ying, gs.rad, RED);
-                    DrawCircleV(gs.Yan,  gs.rad, BLUE);
-                } else {
-                    DrawCircleV(gs.obj3, gs.rad, PURPLE);
-                }
-
                 if (gs.hasBox)
+                {
                     PlayerBoxCollisions(gs.Ying, gs.rad, gs.Yan, gs.obj3,    // gravity only
                         (int)gs.platforms.size(), gs.platforms.data(),
                         gs.currentBox);
-                   
+                }
 
+        if (gs.hasDoor){
+            UpdateDoor(gs.Ying, gs.Yan, gs.obj3, gs.rad, gs.currentDoor);
+        }
+             
+           if (!gs.merged)
+            {
+                DrawAnimatedSpriteCentered(w_player, gs.Ying, gs.yingFacingRight, WHITE);
+                DrawAnimatedSpriteCentered(b_player, gs.Yan, gs.yanFacingRight, WHITE);
+            }
+            else
+            {
+                DrawAnimatedSpriteCentered(m_player, gs.obj3, gs.mergedFacingRight, WHITE);
+            }
+
+             
                 for (const auto& p : gs.platforms)
                     DrawRectangleRec(p, DARKGRAY);
 
@@ -265,8 +375,15 @@ int main(void)
         EndDrawing();
     }
 
+
+    UnloadAnimatedSprite(w_player);
+    UnloadAnimatedSprite(b_player);
+    UnloadAnimatedSprite(m_player);
+
+
     UnloadTexture(background_menu);
     UnloadTexture(gamePlay2);
     CloseWindow();
     return 0;
+    
 }

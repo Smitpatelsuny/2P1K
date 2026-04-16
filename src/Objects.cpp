@@ -175,13 +175,13 @@ void PlayerBoxCollisions(Vector2& player, float rad,
 
     if (!onAnyPlatform)
     {
-        if (box.gravSpeed <= -0.8f) 
+        if (box.gravSpeed >= -0.8f) 
         {
             box.gravSpeed = -0.8f;
         }
 
         box.y -= box.gravSpeed;
-        box.gravSpeed -= 0.5f;
+        box.gravSpeed -= 0.1f;
         box.onGround = false;
 
         // After moving, snap back if we landed on something
@@ -224,6 +224,40 @@ void LyftHorControls(Vector2& Ying, Vector2& Yan, Vector2& obj3, int rad,
     PlayerPlatformCollisions(Ying, rad, &currentLift.rect, 1, Yan, obj3, oldP1, oldP2, oldMerged, box.rect);
 
 }
+
+
+void UpdateDoor(Vector2 Ying, Vector2 Yan, Vector2 obj3, float rad, DoorData& ld)
+{
+    // Draw lever base
+    DrawRectangleRec(ld.leverBase, DARKGRAY);
+
+    // Draw correct lever sprite based on state
+    DrawRectangleRec(ld.switched ? ld.spriteOn : ld.spriteOff, BROWN);
+
+    // Toggle lever when any player touches either hitbox
+    bool touchingLeft  = CheckCollisionCircleRec(Ying, rad, ld.hitboxLeft)  ||
+                         CheckCollisionCircleRec(Yan,  rad, ld.hitboxLeft)  ||
+                         CheckCollisionCircleRec(obj3, rad, ld.hitboxLeft);
+
+    bool touchingRight = CheckCollisionCircleRec(Ying, rad, ld.hitboxRight) ||
+                         CheckCollisionCircleRec(Yan,  rad, ld.hitboxRight) ||
+                         CheckCollisionCircleRec(obj3, rad, ld.hitboxRight);
+
+    if (touchingLeft && !ld.switched)  ld.switched = true;
+    if (touchingRight && ld.switched)  ld.switched = false;
+
+    // Draw door frame (always visible)
+    for (int i = 0; i < 2; i++)
+        DrawRectangleRec(ld.doorFrame[i], DARKGRAY);
+
+    // Draw door — open or closed depending on lever state
+    if (ld.switched)
+        DrawRectangleRec(ld.doorOpen,   BLANK);     // open = invisible/passable
+    else
+        DrawRectangleRec(ld.doorClosed, DARKBROWN); // closed = solid
+}
+
+
 
 
 
