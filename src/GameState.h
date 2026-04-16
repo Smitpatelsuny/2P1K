@@ -45,10 +45,14 @@ struct GameState
     std::vector<Rectangle>             spikeHitboxes;
     Rectangle exitDoorHitboxYin  = { 0 };
     Rectangle exitDoorHitboxYang = { 0 };
-
+ 
     // ── Lift ──────────────────────────────────────────────────────────────
     bool     hasLift    = false;
     LiftData currentLift = {};
+
+    // ── Box ───────────────────────────────────────────────────────────────
+    bool    hasBox    = false;      // <-- new
+    BoxData currentBox = {};  
 
     // ── Methods ───────────────────────────────────────────────────────────
     void LoadLevel(const json& data, int levelId);

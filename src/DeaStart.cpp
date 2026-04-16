@@ -29,8 +29,7 @@ void death(Vector2 &player, Vector2 &player2, Rectangle spikeHitboxes[], int num
     { 
 
         if (CheckCollisionCircleRec(player, rad, spikeHitboxes[i])  
-        || CheckCollisionCircleRec(player2, rad, spikeHitboxes[i]) 
-        || IsKeyPressed(KEY_R))  
+        || CheckCollisionCircleRec(player2, rad, spikeHitboxes[i]))  
         { 
             player =  p1spawn; 
             player2 = p2spawn; 
@@ -40,6 +39,16 @@ void death(Vector2 &player, Vector2 &player2, Rectangle spikeHitboxes[], int num
     } 
 } 
 
+void Restart (Vector2 &player, Vector2 &player2, Vector2 &MergedPlayer, Vector2 p1spawn, Vector2 p2spawn, bool &merged)  
+{ 
+    if (IsKeyPressed(KEY_R))  
+    {
+        player =  p1spawn; 
+        player2 = p2spawn; 
+        MergedPlayer = {0, 0}; 
+        merged = false; 
+    }
+}
  
 
 void forceUnmerge(Vector2 &player, Vector2 &player2, Vector2 &MergedPlayer, Rectangle spikeHitboxes[], int numSpikes, float &rad, bool &merged, bool &invincibility, float &invincibilityTimer) 

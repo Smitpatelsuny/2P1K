@@ -9,6 +9,18 @@
 
 using json = nlohmann::json;
 
+
+
+//spike placement cheat sheet 
+/*
+ //spike parameters: first vetice = (x of platform + 15, y of platform), 
+    //second vertice = (x of platform + 55, y of platform), 
+    //third vertice = (x of platform + 35, y of platform - 30)
+//future spike hitbox: +5 on x (first vertice) and -15 on y from the spike's position, 
+    //with a width of 30 and height of 15
+
+
+*/
 int main(void)
 {
     const int screenWidth  = 800;
@@ -20,7 +32,7 @@ int main(void)
         data = json::parse(file);
     }
 
-    GameState gs;   // <-- everything lives here
+    GameState gs;   
 
     InitWindow(screenWidth, screenHeight, "All code test");
 
@@ -96,11 +108,25 @@ int main(void)
                 // Horizontal collisions
                 PlayerPlatformCollisions(gs.Ying, gs.rad,
                                          gs.platforms.data(), (int)gs.platforms.size(),
-                                         gs.Yan, gs.obj3, oldP1, oldP2, oldMerged);
-                if (gs.hasLift)
-                    LyftHorControls(gs.Ying, gs.Yan, gs.obj3, gs.rad,
-                                    oldP1, oldP2, oldMerged, gs.currentLift, gs.merged);
+                                         gs.Yan, gs.obj3, oldP1, oldP2, oldMerged, gs.currentBox.rect);
+                
+                if (gs.hasBox)
+                {
+                    PlayerBoxHorizontalCollisions(gs.Ying, gs.Yan, gs.obj3,
+                                                 gs.rad, gs.currentBox,
+                                                 gs.platforms.data(), (int)gs.platforms.size(),
+                                                 oldP1, oldP2, oldMerged);
+                }
+                
+             if (gs.hasLift)
+             {       
 
+                LyftHorControls(gs.Ying, gs.Yan, gs.obj3, gs.rad,
+                    oldP1, oldP2, oldMerged,
+                    gs.currentLift, gs.currentBox);   
+
+             }
+                
                 // Vertical collisions
                 Jump(gs.Jumpspeed, gs.Jumpspeed2, gs.JumpspeedMerged,
                      gs.P1CanJump, gs.P2CanJump, gs.MergedCanJump,
@@ -110,14 +136,31 @@ int main(void)
                                      gs.platforms.data(), (int)gs.platforms.size(),
                                      gs.P1CanJump, gs.P2CanJump, gs.MergedCanJump,
                                      gs.Jumpspeed, gs.Jumpspeed2, gs.JumpspeedMerged,
-                                     oldP1, oldP2, oldMerged);
+                                     oldP1, oldP2, oldMerged, gs.currentBox.rect);
+        
+                if (gs.hasBox)
+{
+    PlayerBoxCollisions(gs.Ying, gs.rad, gs.Yan, gs.obj3,    // gravity only
+                        (int)gs.platforms.size(), gs.platforms.data(),
+                        gs.currentBox);
+    PlayerBoxVerticalCollisions(gs.Ying, gs.Yan, gs.obj3, gs.rad, gs.currentBox,
+                                 gs.P1CanJump, gs.P2CanJump, gs.MergedCanJump,
+                                 gs.Jumpspeed, gs.Jumpspeed2, gs.JumpspeedMerged,
+                                 oldP1, oldP2, oldMerged);
+}
                 if (gs.hasLift)
+                {
                     LyftVertControls(gs.Ying, gs.Yan, gs.obj3, gs.rad,
-                                     oldP1, oldP2, oldMerged,
-                                     gs.P1CanJump, gs.P2CanJump, gs.MergedCanJump,
-                                     gs.Jumpspeed, gs.Jumpspeed2, gs.JumpspeedMerged,
-                                     gs.currentLift);
+                        oldP1, oldP2, oldMerged,
+                        gs.P1CanJump, gs.P2CanJump, gs.MergedCanJump,
+                        gs.Jumpspeed, gs.Jumpspeed2, gs.JumpspeedMerged,
+                        gs.currentLift, gs.currentBox);
+                }
+             
+
             } break;
+
+          
         }
 
         // ── Draw ─────────────────────────────────────────────────────────
@@ -177,6 +220,13 @@ int main(void)
                       gs.rad, gs.deathOccured,
                       gs.invincibility, gs.invincibilityTimer,
                       gs.p1Spawn, gs.p2Spawn);
+                
+                Restart(gs.Ying, gs.Yan, gs.obj3, gs.p1Spawn, gs.p2Spawn, gs.merged);
+
+                if(Restart)
+                {
+
+                }
 
                 forceUnmerge(gs.Ying, gs.Yan, gs.obj3,
                              gs.spikeHitboxes.data(), (int)gs.spikeHitboxes.size(),
@@ -184,7 +234,7 @@ int main(void)
                              gs.invincibility, gs.invincibilityTimer);
 
                 if (gs.hasLift)
-                    levelOne(gs.Ying, gs.Yan, gs.obj3, gs.rad, gs.currentLift);
+                    levelLift(gs.Ying, gs.Yan, gs.obj3, gs.rad, gs.currentLift);
 
                 if (!gs.merged) {
                     DrawCircleV(gs.Ying, gs.rad, RED);
@@ -192,6 +242,12 @@ int main(void)
                 } else {
                     DrawCircleV(gs.obj3, gs.rad, PURPLE);
                 }
+
+                if (gs.hasBox)
+                    PlayerBoxCollisions(gs.Ying, gs.rad, gs.Yan, gs.obj3,    // gravity only
+                        (int)gs.platforms.size(), gs.platforms.data(),
+                        gs.currentBox);
+                   
 
                 for (const auto& p : gs.platforms)
                     DrawRectangleRec(p, DARKGRAY);

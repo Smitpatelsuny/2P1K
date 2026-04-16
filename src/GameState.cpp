@@ -17,7 +17,10 @@ void GameState::LoadLevel(const json& data, int levelId)
     platforms.clear();
     spikes.clear();
     spikeHitboxes.clear();
-    hasLift = false;
+    hasLift = false;                          
+    hasBox  = false;                        
+    currentBox = {};
+    
 
     for (const auto& lvl : data["Level"])
     {
@@ -71,9 +74,21 @@ void GameState::LoadLevel(const json& data, int levelId)
                                    l["button"]["width"].get<float>(), l["button"]["height"].get<float>() };
             currentLift.maxHeight = l["maxHeight"].get<float>();
             currentLift.minHeight = l["minHeight"].get<float>();
-            currentLift.speed     = 0.5f;
+            currentLift.speed  = 0.5f;
             hasLift = true;
         }
+
+    if (lvl.contains("Boxes"))
+    {
+    const auto& b = lvl["Boxes"];
+        currentBox.x      = b["x"].get<float>();
+        currentBox.y      = b["y"].get<float>();
+        currentBox.width  = b["width"].get<float>();
+        currentBox.height = b["height"].get<float>();
+        currentBox.onGround  = false;
+        currentBox.gravSpeed = 0.0f;
+        hasBox = true;
+    }
 
         currentLevelId = levelId;
         ResetJumpState(); 
