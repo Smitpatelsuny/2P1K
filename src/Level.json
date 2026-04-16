@@ -254,7 +254,8 @@
           }
         }
       ],
-      "lifts": {
+      "lifts":[
+        {
         "x": 250,
         "y": 300,
         "width": 50,
@@ -268,6 +269,7 @@
           "height": 5
         }
       }
+      ] 
     
     },
     {
@@ -398,24 +400,24 @@
       "name": "Level 4",
       "players": {
         "p1Start": {
-          "x": 75,
+          "x": 370,
           "y": 764
         },
         "p2Start": {
-          "x": 701,
+          "x": 430,
           "y": 764
         }
       },
       "exitDoors": {
         "yin": {
-          "x": 10,
-          "y": 280,
+          "x": 370,
+          "y": 625,
           "width": 30,
           "height": 30
         },
         "yang": {
-          "x": 760,
-          "y": 280,
+          "x": 450,
+          "y": 625,
           "width": 30,
           "height": 30
         }
@@ -448,8 +450,144 @@
           "y": 0,
           "width": 800,
           "height": 15
+        },
+        {
+          "label": "middleWall",
+          "x": 395,
+          "y": 680,
+          "width": 10,
+          "height": 115
+        },
+        {
+          "label": "1stLeftPlatform",
+          "x": 100,
+          "y": 680,
+          "width": 425,
+          "height": 15
+        },
+        {
+          "label": "2ndLeftPlatformHighUp",
+          "x": 0,
+          "y": 400,
+          "width": 200,
+          "height": 15
+        },
+        {
+          "label": "1stRightPlatform",
+          "x": 600,
+          "y": 680,
+          "width": 250,
+          "height": 15
+        },
+        {
+          "label": "1stParkourOnRightWall",
+          "x": 735,
+          "y": 600,
+          "width": 50,
+          "height": 10
+        },
+        {
+          "label": "2ndParkourOnRightWall",
+          "x": 735,
+          "y": 500,
+          "width": 50,
+          "height": 10
+        },
+        {
+          "label": "3rdParkourOnRightWall",
+          "x": 735,
+          "y": 400,
+          "width": 50,
+          "height": 0
+        },
+        {
+          "label": "4thParkourOnRightWall",
+          "x": 735,
+          "y": 300,
+          "width": 50,
+          "height": 10
+        },
+        {
+          "label": "Inner-rightWall",
+          "x": 510,
+          "y": 500,
+          "width": 15,
+          "height": 185
+        },
+        {
+          "label": "TopLeftPlatform",
+          "x": 75,
+          "y": 300,
+          "width": 50,
+          "height": 15
+        },
+        {
+          "label": "Inner-LeftWall",
+          "x": 510,
+          "y": 500,
+          "width": 15,
+          "height": 430
+        },
+        {
+          "label": "Inner-rightChamberFloor",
+          "x": 510,
+          "y": 500,
+          "width": 165,
+          "height": 15
+        },
+        {
+          "label": "Inner-rightUpperWall",
+          "x": 660,
+          "y": 250,
+          "width": 200,
+          "height": 250
+        },
+        {
+          "label": "TopPLatform",
+          "x": 475,
+          "y": 250,
+          "width": 200,
+          "height": 15
         }
-      ]
+      ],
+      "Boxes": {
+        "x": 100,
+        "y": 350,
+        "width": 30,
+        "height": 30
+      },
+      "lifts": [
+        {
+        "Label": "LeftLift",
+        "x": 200,
+        "y": 400,
+        "width": 130,
+        "height": 15,
+        "maxHeight": 400,
+        "minHeight": 665,
+        "button": {
+          "x": 780,
+          "y": 755,
+          "width": 5,
+          "height": 10
+        }
+      },
+      {
+        "Label": "MiddleLift",
+        "x": 325,
+        "y": 500,
+        "width": 200,
+        "height": 15,
+        "maxHeight": 500,
+        "minHeight": 655,
+        "button": {
+          "x": 120,
+          "y": 755,
+          "width": 10,
+          "height": 5
+        }
+      }
+    ]
     }
   ]
 }

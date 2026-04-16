@@ -28,7 +28,7 @@ int main(void)
 
     json data;
     {
-        std::ifstream file("C:/Users/dalma/projects/2P1K/src/Level.json");
+        std::ifstream file("C:/Users/austi/projects/New2P1K/2P1K-2/src/Level.json");
         data = json::parse(file);
     }
 
@@ -36,8 +36,8 @@ int main(void)
 
     InitWindow(screenWidth, screenHeight, "All code test");
 
-    Texture2D background_menu = LoadTexture("C:/Users/dalma/projects/2P1K/src/assets/background_menu.jpg");
-    Texture2D gamePlay2       = LoadTexture("C:/Users/dalma/projects/2P1K/src/assets/gamePlay2.jpg");
+    Texture2D background_menu = LoadTexture("C:/Users/austi/projects/New2P1K/2P1K-2/src/assets/background_menu.jpg");
+    Texture2D gamePlay2       = LoadTexture("C:/Users/austi/projects/New2P1K/2P1K-2/src/assets/gamePlay2.jpg");
 
     Rectangle startbutton = { 250, 220, 300, 40 };
     Rectangle backbutton  = { 10,  10,  30,  30 };
