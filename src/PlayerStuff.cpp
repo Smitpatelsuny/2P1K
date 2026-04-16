@@ -230,5 +230,90 @@ void PlayerJumpCollisions(Vector2& player, Vector2& ballPosition, Vector2& obj3,
 }
 
 
+AnimatedSprite LoadAnimatedSprite(const char* filePath, float scale, int columns, int rows, float frameDuration)
+{
+    AnimatedSprite sprite = {};
+
+    Image img = LoadImage(filePath);
+
+    int newWidth = (int)(img.width * scale);
+    int newHeight = (int)(img.height * scale);
+
+    ImageResizeNN(&img, newWidth, newHeight);
+
+    sprite.texture = LoadTextureFromImage(img);
+    UnloadImage(img);
+
+    sprite.columns = columns;
+    sprite.rows = rows;
+    sprite.frameWidth = sprite.texture.width / columns;
+    sprite.frameHeight = sprite.texture.height / rows;
+    sprite.frameRec = {0, 0, (float)sprite.frameWidth, (float)sprite.frameHeight};
+    sprite.currentFrame = 0;
+    sprite.currentRow = 0;
+    sprite.frameTimer = 0.0f;
+    sprite.frameDuration = frameDuration;
+
+    return sprite;
+}
+
+void UpdateAnimatedSprite(AnimatedSprite& sprite, AnimState state)
+{
+    sprite.currentRow = (int)state;
+
+    int numFrames = 1;
+
+    if (state == ANIM_IDLE || state == ANIM_RUN)
+        numFrames = sprite.columns;
+    else
+        numFrames = 1;
+
+    sprite.frameTimer += GetFrameTime();
+
+    if (sprite.frameTimer >= sprite.frameDuration)
+    {
+        sprite.frameTimer = 0.0f;
+        sprite.currentFrame++;
+
+        if (sprite.currentFrame >= numFrames)
+            sprite.currentFrame = 0;
+    }
+
+    if (numFrames == 1)
+        sprite.currentFrame = 0;
+
+    sprite.frameRec.x = (float)(sprite.currentFrame * sprite.frameWidth);
+    sprite.frameRec.y = (float)(sprite.currentRow * sprite.frameHeight);
+}
+
+void DrawAnimatedSpriteCentered(const AnimatedSprite& sprite, Vector2 centerPos, bool facingRight, Color tint)
+{
+    Rectangle source = sprite.frameRec;
+
+    if (!facingRight)
+    {
+        source.x += sprite.frameWidth;
+        source.width = -(float)sprite.frameWidth;
+    }
+
+    Vector2 drawPos = {
+        centerPos.x - sprite.frameWidth / 2.0f,
+        centerPos.y - sprite.frameHeight / 2.0f
+    };
+
+    DrawTextureRec(sprite.texture, source, drawPos, tint);
+}
+
+void UnloadAnimatedSprite(AnimatedSprite& sprite)
+{
+    if (sprite.texture.id != 0)
+    {
+        UnloadTexture(sprite.texture);
+        sprite.texture = {0};
+        
+    }
+}
+
+
 void PlayerStuff::PlayerMovement() {
 }

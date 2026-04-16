@@ -5,6 +5,7 @@
 #include <vector>
 #include <array>
 #include <string>
+#include <stdio.h>
 
 using json = nlohmann::json;
 
@@ -45,7 +46,23 @@ struct GameState
     std::vector<Rectangle>             spikeHitboxes;
     Rectangle exitDoorHitboxYin  = { 0 };
     Rectangle exitDoorHitboxYang = { 0 };
+
+    // ── Animation Stuff ─────────────────────────────────────────────────────
+
+    bool yingFacingRight = true;
+    bool yanFacingRight = true;
+    bool mergedFacingRight = true;
+
+    //Doors
+
+        bool       hasDoor   = false;
+        DoorData   currentDoor   = {};
  
+    // ── Shooter stuff ─────────────────────────────────────────────────────────
+
+        bool       hasShooter = false;
+        ShooterData currentShooter = {};
+
     // ── Lift ──────────────────────────────────────────────────────────────
     bool     hasLift    = false;
     LiftData currentLift = {};
