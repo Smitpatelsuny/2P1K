@@ -59,7 +59,6 @@
     {
       "id": 1,
       "name": "Level 1",
-      "asset": "C:/Users/dalma/projects/2P1K/src/assets/gamePlay2.jpg",
       "players": {
         "p1Start": {
           "x": 40,
@@ -298,6 +297,7 @@
           "width": 30,
           "height": 30
         }
+    
       },
       "platforms": [
         {
@@ -424,6 +424,7 @@
    
 
     },
+    
     {
       "id": 4,
       "name": "Level 4",

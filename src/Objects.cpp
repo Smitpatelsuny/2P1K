@@ -6,7 +6,7 @@
 
 using json = nlohmann::json;
 
-void levelLift(Vector2 Ying, Vector2 Yan, Vector2 obj3, int rad, LiftData& currentLift)
+void levelLift(Vector2 Ying, Vector2 Yan, Vector2 obj3, float rad, LiftData& currentLift)
 {
     
     DrawRectangleRec(currentLift.button, RED);
@@ -28,7 +28,7 @@ void levelLift(Vector2 Ying, Vector2 Yan, Vector2 obj3, int rad, LiftData& curre
     }
 }
 
-void LyftVertControls(Vector2& Ying, Vector2& Yan, Vector2& obj3, int rad,
+void LyftVertControls(Vector2& Ying, Vector2& Yan, Vector2& obj3, float rad,
                       Vector2& oldP1, Vector2& oldP2, Vector2& oldMerged,
                       bool& P1CanJump, bool& P2CanJump, bool& MergedCanJump,
                       float& Jumpspeed, float& Jumpspeed2, float& JumpspeedMerged,
@@ -216,7 +216,7 @@ bool CanMoveBox(BoxData& box, float dx, float dy, Rectangle platforms[], int pla
     return true;
 }
 
-void LyftHorControls(Vector2& Ying, Vector2& Yan, Vector2& obj3, int rad,
+void LyftHorControls(Vector2& Ying, Vector2& Yan, Vector2& obj3, float rad,
                      Vector2& oldP1, Vector2& oldP2, Vector2& oldMerged,
                      LiftData& currentLift, BoxData& box)
 {

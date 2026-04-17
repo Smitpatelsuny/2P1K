@@ -17,6 +17,7 @@ void GameState::LoadLevel(const json& data, int levelId)
     platforms.clear();
     spikes.clear();
     spikeHitboxes.clear();
+    lifts.clear();
     hasLift = false;                          
     hasBox  = false;                        
     currentBox = {};
@@ -68,17 +69,22 @@ void GameState::LoadLevel(const json& data, int levelId)
 
         // Lift 
         if (lvl.contains("lifts"))
+    {
+        for (const auto& l : lvl["lifts"])
         {
-            const auto& l = lvl["lifts"];
-            currentLift.rect   = { l["x"].get<float>(),    l["y"].get<float>(),
-                                   l["width"].get<float>(), l["height"].get<float>() };
-            currentLift.button = { l["button"]["x"].get<float>(), l["button"]["y"].get<float>(),
-                                   l["button"]["width"].get<float>(), l["button"]["height"].get<float>() };
-            currentLift.maxHeight = l["maxHeight"].get<float>();
-            currentLift.minHeight = l["minHeight"].get<float>();
-            currentLift.speed  = 0.5f;
-            hasLift = true;
-        }
+        LiftData ld;
+        ld.rect      = { l["x"].get<float>(),      l["y"].get<float>(),
+                         l["width"].get<float>(),   l["height"].get<float>() };
+        ld.button    = { l["button"]["x"].get<float>(), l["button"]["y"].get<float>(),
+                         l["button"]["width"].get<float>(), l["button"]["height"].get<float>() };
+        ld.maxHeight = l["maxHeight"].get<float>();
+        ld.minHeight = l["minHeight"].get<float>();
+        ld.speed     = 0.5f;
+        lifts.push_back(ld);
+        hasLift = true;
+        
+     }
+    }
 
     //Boxes
     if (lvl.contains("Boxes"))

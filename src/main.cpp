@@ -28,7 +28,7 @@ int main(void)
 
     json data;
     {
-        std::ifstream file("C:/Users/austi/projects/New2P1K/2P1K-2/src/Level.json");
+        std::ifstream file("C:/Users/dalma/projects/2P1K/src/Level.json");
         data = json::parse(file);
     }
 
@@ -36,8 +36,8 @@ int main(void)
 
     InitWindow(screenWidth, screenHeight, "All code test");
 
-    Texture2D background_menu = LoadTexture("C:/Users/austi/projects/New2P1K/2P1K-2/src/assets/background_menu.jpg");
-    Texture2D gamePlay2       = LoadTexture("C:/Users/austi/projects/New2P1K/2P1K-2/src/assets/gamePlay2.jpg");
+    Texture2D background_menu = LoadTexture("C:/Users/dalma/projects/2P1K/src/assets/background_menu.jpg");
+    Texture2D gamePlay2       = LoadTexture("C:/Users/dalma/projects/2P1K/src/assets/gamePlay2.jpg");
 
     AnimState yingState = ANIM_IDLE;
     AnimState yanState = ANIM_IDLE;
@@ -146,9 +146,10 @@ int main(void)
              if (gs.hasLift)
              {       
 
-                LyftHorControls(gs.Ying, gs.Yan, gs.obj3, gs.rad,
-                    oldP1, oldP2, oldMerged,
-                    gs.currentLift, gs.currentBox);   
+               for (auto& lift : gs.lifts)
+                    LyftHorControls(gs.Ying, gs.Yan, gs.obj3, gs.rad,
+                        oldP1, oldP2, oldMerged,
+                        lift, gs.currentBox);
 
              }
                 
@@ -175,11 +176,12 @@ int main(void)
                 }
                 if (gs.hasLift)
                 {
+                   for (auto& lift : gs.lifts)
                     LyftVertControls(gs.Ying, gs.Yan, gs.obj3, gs.rad,
                         oldP1, oldP2, oldMerged,
                         gs.P1CanJump, gs.P2CanJump, gs.MergedCanJump,
-                        gs.Jumpspeed, gs.Jumpspeed2, gs.JumpspeedMerged,
-                        gs.currentLift, gs.currentBox);
+                         gs.Jumpspeed, gs.Jumpspeed2, gs.JumpspeedMerged,
+                        lift, gs.currentBox);
                 }
              
        
@@ -335,7 +337,11 @@ int main(void)
                              gs.invincibility, gs.invincibilityTimer);
 
                 if (gs.hasLift)
-                    levelLift(gs.Ying, gs.Yan, gs.obj3, gs.rad, gs.currentLift);
+                {
+                    for (auto& lift : gs.lifts)
+                        levelLift(gs.Ying, gs.Yan, gs.obj3, gs.rad, lift);
+                }
+                   
 
                 if (gs.hasBox)
                 {

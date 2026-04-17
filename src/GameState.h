@@ -44,6 +44,7 @@ struct GameState
     std::vector<Rectangle>             platforms;
     std::vector<std::array<Vector2,3>> spikes;
     std::vector<Rectangle>             spikeHitboxes;
+    std::vector<LiftData>              lifts;
     Rectangle exitDoorHitboxYin  = { 0 };
     Rectangle exitDoorHitboxYang = { 0 };
 
@@ -65,7 +66,6 @@ struct GameState
 
     // ── Lift ──────────────────────────────────────────────────────────────
     bool     hasLift    = false;
-    LiftData currentLift = {};
 
     // ── Box ───────────────────────────────────────────────────────────────
     bool    hasBox    = false;      // <-- new
