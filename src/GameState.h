@@ -71,6 +71,16 @@ struct GameState
     bool    hasBox    = false;      // <-- new
     BoxData currentBox = {};  
 
+    // ── Sentry ───────────────────────────────────────────────────────────────
+    /*struct SentryData
+    {
+        Vector2 pos;            // current position
+        int startX;             // starting X (for returning)
+        int startY;             // starting Y
+        Rectangle smallSight;   // small detection radius
+        Rectangle largeSight;   // large detection radius
+    };*/
+
     // ── Methods ───────────────────────────────────────────────────────────
     void LoadLevel(const json& data, int levelId);
     void ResetJumpState();

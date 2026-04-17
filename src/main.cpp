@@ -342,18 +342,10 @@ int main(void)
 
                 ExitGame();
 
-                    death(gs.Ying, gs.Yan,
-                        gs.p1Spawn, gs.p2Spawn,
-                        gs.invincibility, gs.invincibilityTimer
-                      );
-                
+                InvisCountDown(gs.invincibility, gs.invincibilityTimer);
                 Restart(gs.Ying, gs.Yan, gs.obj3, gs.p1Spawn, gs.p2Spawn, gs.merged);
 
 
-                /*forceUnmerge(gs.Ying, gs.Yan, gs.obj3,
-                             gs.rad, gs.merged,
-                             gs.invincibility, gs.invincibilityTimer);
-*/
                 if (gs.hasLift)
                 {
                     for (auto& lift : gs.lifts)
@@ -372,9 +364,6 @@ int main(void)
             UpdateDoor(gs.Ying, gs.Yan, gs.obj3, gs.rad, gs.currentDoor);
         }
              
-        ////////////////////////////////////////////////////////////////////////////////////////
-           // DrawCircleV(gs.Ying, gs.rad, RED);
-            //DrawCircleV(gs.Yan, gs.rad, BLUE);
 /*IDk where else to put this, and it's 100% going to get lost here... but
 for the button on the left side for the rigth door {
           "x": 120,

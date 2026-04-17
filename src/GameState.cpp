@@ -23,7 +23,43 @@ void GameState::LoadLevel(const json& data, int levelId)
     currentBox = {};
     hasDoor    = false;
     currentDoor = {};
-    
+/*
+    sentries.clear();
+    hasSentry = false;
+
+    if (lvl.contains("Sentries"))
+    {
+        for (const auto& s : lvl["Sentries"])
+        {
+            SentryData sd;
+
+            sd.pos = {
+                s["x"].get<float>(),
+                s["y"].get<float>()
+            };
+
+            sd.startX = s["startX"].get<int>();
+            sd.startY = s["startY"].get<int>();
+
+            sd.smallSight = {
+                s["smallSight"]["x"].get<float>(),
+                s["smallSight"]["y"].get<float>(),
+                s["smallSight"]["width"].get<float>(),
+                s["smallSight"]["height"].get<float>()
+            };
+
+            sd.largeSight = {
+                s["largeSight"]["x"].get<float>(),
+                s["largeSight"]["y"].get<float>(),
+                s["largeSight"]["width"].get<float>(),
+                s["largeSight"]["height"].get<float>()
+            };
+
+            sentries.push_back(sd);
+            hasSentry = true;
+        }
+    }
+    */
 
     for (const auto& lvl : data["Level"])
     {
