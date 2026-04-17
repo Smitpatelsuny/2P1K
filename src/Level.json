@@ -528,7 +528,7 @@
           "x": 735,
           "y": 400,
           "width": 50,
-          "height": 0
+          "height": 10
         },
         {
           "label": "4thParkourOnRightWall",
@@ -548,13 +548,13 @@
           "label": "TopLeftPlatform",
           "x": 75,
           "y": 300,
-          "width": 50,
+          "width": 240,
           "height": 15
         },
         {
           "label": "Inner-LeftWall",
-          "x": 510,
-          "y": 500,
+          "x": 315,
+          "y": 250,
           "width": 15,
           "height": 430
         },
@@ -569,7 +569,7 @@
           "label": "Inner-rightUpperWall",
           "x": 660,
           "y": 250,
-          "width": 200,
+          "width": 15,
           "height": 250
         },
         {
@@ -580,6 +580,7 @@
           "height": 15
         }
       ],
+      "spikes": [],
       "Boxes": {
         "x": 100,
         "y": 350,
@@ -611,8 +612,8 @@
         "maxHeight": 500,
         "minHeight": 655,
         "button": {
-          "x": 120,
-          "y": 755,
+          "x": 580,
+          "y": 495,
           "width": 10,
           "height": 5
         }

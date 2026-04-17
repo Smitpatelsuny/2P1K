@@ -31,8 +31,6 @@ void PlayerMotor(Vector2 &player, int speedX)
 {
         if (IsKeyDown(KEY_D)) player.x += speedX;
         if (IsKeyDown(KEY_A)) player.x -= speedX;
-        
-         //DrawText(TextFormat("Speed is: %.1f", Jumpspeed), 10, 50, 20, DARKGRAY);
 }
 
 void Player2Motor(Vector2& player, int speedX)

@@ -9,8 +9,6 @@
 
 using json = nlohmann::json;
 
-
-
 //spike placement cheat sheet 
 /*
  //spike parameters: first vetice = (x of platform + 15, y of platform), 
@@ -28,7 +26,7 @@ int main(void)
 
     json data;
     {
-        std::ifstream file("C:/Users/dalma/projects/2P1K/src/Level.json");
+        std::ifstream file("C:/Users/austi/projects/New2P1K/2P1K-2/src/Level.json");
         data = json::parse(file);
     }
 
@@ -36,8 +34,8 @@ int main(void)
 
     InitWindow(screenWidth, screenHeight, "All code test");
 
-    Texture2D background_menu = LoadTexture("C:/Users/dalma/projects/2P1K/src/assets/background_menu.jpg");
-    Texture2D gamePlay2       = LoadTexture("C:/Users/dalma/projects/2P1K/src/assets/gamePlay2.jpg");
+    Texture2D background_menu = LoadTexture("C:/Users/austi/projects/New2P1K/2P1K-2/src/assets/background_menu.jpg");
+    Texture2D gamePlay2       = LoadTexture("C:/Users/austi/projects/New2P1K/2P1K-2/src/assets/gamePlay2.jpg");
 
     AnimState yingState = ANIM_IDLE;
     AnimState yanState = ANIM_IDLE;
@@ -45,15 +43,15 @@ int main(void)
     
     
        AnimatedSprite w_player = LoadAnimatedSprite(
-        "C:/Users/dalma/projects/2P1K/src/assets/player_w.png",
+        "C:/Users/austi/projects/New2P1K/2P1K-2/src/assets/player_w.png",
         1.5f, 3, 4, 0.15f);
 
      AnimatedSprite b_player = LoadAnimatedSprite(
-        "C:/Users/dalma/projects/2P1K/src/assets/Player_b.png",
+        "C:/Users/austi/projects/New2P1K/2P1K-2/src/assets/Player_b.png",
         1.5f, 3, 4, 0.15f);
 
     AnimatedSprite m_player = LoadAnimatedSprite(
-        "C:/Users/dalma/projects/2P1K/src/assets/player_m.png",
+        "C:/Users/austi/projects/New2P1K/2P1K-2/src/assets/player_m.png",
         1.5f, 3, 4, 0.15f);
 
     
@@ -72,6 +70,7 @@ int main(void)
 
     while (!WindowShouldClose())
     {
+        
         MergeObjects(gs.Ying, gs.Yan, gs.obj3, gs.rad, gs.merged, gs.invincibility, gs.Jumpspeed2, gs.Ejected);
 
         // ── Update ───────────────────────────────────────────────────────
@@ -107,9 +106,9 @@ int main(void)
             {
                 if (IsKeyPressed(KEY_P) ||
                     ExitDoors(gs.Ying, gs.Yan,
-                              gs.exitDoorHitboxYin, gs.exitDoorHitboxYang, gs.rad))
+                              gs.exitDoorHitboxYin, gs.exitDoorHitboxYang, gs.rad, gs.currentLevelId))
                 {
-                    gs.currentScreen = GameState::Screen::LEVSEL;
+                    gs.currentScreen = GameState::Screen::LEVSEL;  
                     break;
                 }
 
@@ -124,8 +123,6 @@ int main(void)
                     PlayerMotor(gs.Ying, 2);
                     Player2Motor(gs.Yan, 2);
                 }
-
-                
 
                 // Horizontal collisions
                 PlayerPlatformCollisions(gs.Ying, gs.rad,
@@ -147,8 +144,8 @@ int main(void)
              {       
 
                for (auto& lift : gs.lifts)
-                    LyftHorControls(gs.Ying, gs.Yan, gs.obj3, gs.rad,
-                        oldP1, oldP2, oldMerged,
+                LyftHorControls(gs.Ying, gs.Yan, gs.obj3, gs.rad,
+                    oldP1, oldP2, oldMerged,
                         lift, gs.currentBox);
 
              }
@@ -180,7 +177,7 @@ int main(void)
                     LyftVertControls(gs.Ying, gs.Yan, gs.obj3, gs.rad,
                         oldP1, oldP2, oldMerged,
                         gs.P1CanJump, gs.P2CanJump, gs.MergedCanJump,
-                         gs.Jumpspeed, gs.Jumpspeed2, gs.JumpspeedMerged,
+                        gs.Jumpspeed, gs.Jumpspeed2, gs.JumpspeedMerged,
                         lift, gs.currentBox);
                 }
              
@@ -266,9 +263,32 @@ int main(void)
         }
 
             } break;
-
-          
         }
+
+        for (const Rectangle& spike : gs.spikeHitboxes)
+        {
+            // Ying
+            if (CheckCollisionCircleRec(gs.Ying, gs.rad, spike) ||CheckCollisionCircleRec(gs.Yan, gs.rad, spike) )
+            {
+                death(gs.Ying, gs.Yan, gs.p1Spawn, gs.p2Spawn, gs.invincibility, gs.invincibilityTimer);
+                break;
+            }
+
+            // Yan
+            if (CheckCollisionCircleRec(gs.Yan, gs.rad, spike))
+            {
+                death(gs.Ying, gs.Yan, gs.p1Spawn, gs.p2Spawn, gs.invincibility, gs.invincibilityTimer);
+                break;
+            }
+                // Merged
+            if (gs.merged && CheckCollisionCircleRec(gs.obj3, gs.rad, spike))
+            {
+                forceUnmerge(gs.Ying, gs.Yan, gs.obj3, gs.rad, gs.merged, gs.invincibility, gs.invincibilityTimer);
+                break;
+            }
+        }
+
+
 
         // ── Draw ─────────────────────────────────────────────────────────
         BeginDrawing();
@@ -322,20 +342,18 @@ int main(void)
 
                 ExitGame();
 
-                death(gs.Ying, gs.Yan,
-                      gs.spikeHitboxes.data(), (int)gs.spikeHitboxes.size(),
-                      gs.rad, gs.deathOccured,
-                      gs.invincibility, gs.invincibilityTimer,
-                      gs.p1Spawn, gs.p2Spawn);
+                    death(gs.Ying, gs.Yan,
+                        gs.p1Spawn, gs.p2Spawn,
+                        gs.invincibility, gs.invincibilityTimer
+                      );
                 
                 Restart(gs.Ying, gs.Yan, gs.obj3, gs.p1Spawn, gs.p2Spawn, gs.merged);
 
 
-                forceUnmerge(gs.Ying, gs.Yan, gs.obj3,
-                             gs.spikeHitboxes.data(), (int)gs.spikeHitboxes.size(),
+                /*forceUnmerge(gs.Ying, gs.Yan, gs.obj3,
                              gs.rad, gs.merged,
                              gs.invincibility, gs.invincibilityTimer);
-
+*/
                 if (gs.hasLift)
                 {
                     for (auto& lift : gs.lifts)
@@ -354,9 +372,26 @@ int main(void)
             UpdateDoor(gs.Ying, gs.Yan, gs.obj3, gs.rad, gs.currentDoor);
         }
              
+        ////////////////////////////////////////////////////////////////////////////////////////
+           // DrawCircleV(gs.Ying, gs.rad, RED);
+            //DrawCircleV(gs.Yan, gs.rad, BLUE);
+/*IDk where else to put this, and it's 100% going to get lost here... but
+for the button on the left side for the rigth door {
+          "x": 120,
+          "y": 675,
+          "width": 10,
+          "height": 5
+    }
+*/
+
+
+
+
            if (!gs.merged)
             {
+                
                 DrawAnimatedSpriteCentered(w_player, gs.Ying, gs.yingFacingRight, WHITE);
+
                 DrawAnimatedSpriteCentered(b_player, gs.Yan, gs.yanFacingRight, WHITE);
             }
             else

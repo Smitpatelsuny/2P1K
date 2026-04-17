@@ -30,10 +30,11 @@ void GameState::LoadLevel(const json& data, int levelId)
         if (lvl["id"] != levelId) continue;
 
         // Spawns
-        p1Spawn = Ying = { lvl["players"]["p1Start"]["x"].get<float>(),
+        this -> p1Spawn = this -> Ying = { lvl["players"]["p1Start"]["x"].get<float>(),
                            lvl["players"]["p1Start"]["y"].get<float>() };
-        p2Spawn = Yan  = { lvl["players"]["p2Start"]["x"].get<float>(),
+        this -> p2Spawn = this -> Yan  = { lvl["players"]["p2Start"]["x"].get<float>(),
                            lvl["players"]["p2Start"]["y"].get<float>() };
+
 
         // Platforms
         for (const auto& p : lvl["platforms"])
