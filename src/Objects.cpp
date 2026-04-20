@@ -44,6 +44,21 @@ void LyftVertControls(Vector2& Ying, Vector2& Yan, Vector2& obj3, float rad,
     if (CheckCollisionCircleRec(Yan,  rad + 1, currentLift.rect)) Yan.y  -= currentLift.speed;
     if (CheckCollisionCircleRec(obj3, rad + 1, currentLift.rect)) obj3.y -= currentLift.speed;
 
+    box.prevY = box.y;
+
+}
+
+
+void LyftHorControls(Vector2& Ying, Vector2& Yan, Vector2& obj3, float rad,
+                     Vector2& oldP1, Vector2& oldP2, Vector2& oldMerged,
+                     LiftData& currentLift, BoxData& box)
+{
+    // Lift horizontal collision
+    PlayerPlatformCollisions(Ying, rad, &currentLift.rect, 1, Yan, obj3, oldP1, oldP2, oldMerged, box.rect);
+
+    box.prevX = box.x;
+    
+
 }
 
 void PlayerBoxHorizontalCollisions(Vector2& player, Vector2& ballPosition, Vector2& obj3,
@@ -216,15 +231,6 @@ bool CanMoveBox(BoxData& box, float dx, float dy, Rectangle platforms[], int pla
     return true;
 }
 
-void LyftHorControls(Vector2& Ying, Vector2& Yan, Vector2& obj3, float rad,
-                     Vector2& oldP1, Vector2& oldP2, Vector2& oldMerged,
-                     LiftData& currentLift, BoxData& box)
-{
-    // Lift horizontal collision
-    PlayerPlatformCollisions(Ying, rad, &currentLift.rect, 1, Yan, obj3, oldP1, oldP2, oldMerged, box.rect);
-
-}
-
 
 void UpdateDoor(Vector2 Ying, Vector2 Yan, Vector2 obj3, float rad, DoorData& ld)
 {
@@ -258,6 +264,139 @@ void UpdateDoor(Vector2 Ying, Vector2 Yan, Vector2 obj3, float rad, DoorData& ld
 }
 
 
+void UpdateShooter(ShooterData& shooter, Vector2& Ying, Vector2& Yan, Vector2& obj3,
+                   float rad, Rectangle platforms[], int platformCount,
+                   bool& merged, bool& invincibility, float& invincibilityTimer,
+                   bool& deathOccured, Vector2 p1Spawn, Vector2 p2Spawn)
+{
+    // Draw the shooter base
+    DrawRectangleRec(shooter.rect, DARKGRAY);
 
+    // Tick the shoot timer
+    shooter.timer += GetFrameTime();
 
+    // Spawn a new projectile when timer exceeds interval and none is active
+    if (shooter.timer >= shooter.interval && !shooter.active)
+    {
+        shooter.active       = true;
+        shooter.projectile.x = shooter.rect.x + shooter.rect.width  / 2
+                               - shooter.projectile.width / 2;
+        shooter.projectile.y = shooter.rect.y + shooter.rect.height;
+        shooter.timer        = 0.0f;
+    }
 
+    if (!shooter.active) return;
+
+    // Move projectile downward
+    shooter.projectile.y += shooter.speed;
+
+    // Draw projectile
+    DrawRectangleRec(shooter.projectile, RED);
+
+    // Deactivate on platform hit
+    for (int i = 0; i < platformCount; i++)
+    {
+        if (CheckCollisionRecs(shooter.projectile, platforms[i]))
+        {
+            shooter.active = false;
+            return;
+        }
+    }
+
+    if (invincibility) return;
+
+    // Hit unmerged players — respawn at level spawns
+    if (CheckCollisionCircleRec(Ying, rad, shooter.projectile) ||
+        CheckCollisionCircleRec(Yan,  rad, shooter.projectile))
+    {
+        Ying         = p1Spawn;
+        Yan          = p2Spawn;
+        deathOccured = true;
+        shooter.active = false;
+        return;
+    }
+
+    // Hit merged player — force unmerge with invincibility
+    if (CheckCollisionCircleRec(obj3, rad, shooter.projectile))
+    {
+        merged = false;
+        Ying.x = obj3.x - rad;
+        Ying.y = obj3.y;
+        Yan.x  = obj3.x + rad;
+        Yan.y  = obj3.y;
+        obj3   = { 0, 0 };
+
+        invincibility      = true;
+        invincibilityTimer = 1.0f;
+        shooter.active     = false;
+    }
+}
+
+// Helper to move sentry toward a target position
+static void MoveToward(Vector2& sentry, Vector2 target, float speed)
+{
+    if (sentry.x < target.x) sentry.x += speed;
+    else if (sentry.x > target.x) sentry.x -= speed;
+
+    if (sentry.y < target.y) sentry.y += speed;
+    else if (sentry.y > target.y) sentry.y -= speed;
+}
+
+void UpdateSentry(SentryData& sentry, Vector2& Ying, Vector2& Yan, Vector2& obj3,
+                  float rad, bool& merged, bool& invincibility,
+                  float& invincibilityTimer, bool& deathOccured,
+                  Vector2 p1Spawn, Vector2 p2Spawn)
+{
+       // Draw sight rectangles 
+    DrawRectangleRec(sentry.smallSight, Fade(YELLOW, 0.2f));
+    DrawRectangleRec(sentry.largeSight, Fade(ORANGE, 0.1f));
+
+    // Draw sentry
+    DrawCircleV(sentry.position, sentry.radius, YELLOW);
+
+    bool p1InSight  = CheckCollisionCircleRec(Ying, rad, sentry.smallSight) ||
+                      CheckCollisionCircleRec(Ying, rad, sentry.largeSight);
+    bool p2InSight  = CheckCollisionCircleRec(Yan,  rad, sentry.smallSight) ||
+                      CheckCollisionCircleRec(Yan,  rad, sentry.largeSight);
+    bool merInSight = CheckCollisionCircleRec(obj3, rad, sentry.smallSight) ||
+                      CheckCollisionCircleRec(obj3, rad, sentry.largeSight);
+
+    if (p1InSight || p2InSight || merInSight)
+    {
+        // Chase whichever player is in sight — priority: merged > p1 > p2
+        if (merInSight) MoveToward(sentry.position, obj3,  sentry.speed);
+        else if (p1InSight) MoveToward(sentry.position, Ying, sentry.speed);
+        else if (p2InSight) MoveToward(sentry.position, Yan,  sentry.speed);
+    }
+    else
+    {
+        // No player in sight — return to spawn
+        MoveToward(sentry.position, sentry.spawnPoint, sentry.speed);
+    }
+
+    if (invincibility) return;
+
+    // Hit unmerged players
+    if (CheckCollisionCircles(Ying, rad, sentry.position, sentry.radius) ||
+        CheckCollisionCircles(Yan,  rad, sentry.position, sentry.radius))
+    {
+        Ying         = p1Spawn;
+        Yan          = p2Spawn;
+        deathOccured = true;
+        return;
+    }
+
+    // Hit merged player — force unmerge
+    if (CheckCollisionCircles(obj3, rad, sentry.position, sentry.radius))
+    {
+        merged = false;
+        Ying.x = obj3.x - rad;
+        Ying.y = obj3.y;
+        Yan.x  = obj3.x + rad;
+        Yan.y  = obj3.y;
+        obj3   = { 0, 0 };
+
+        invincibility      = true;
+        invincibilityTimer = 1.0f;
+    }
+}

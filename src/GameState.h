@@ -45,6 +45,9 @@ struct GameState
     std::vector<std::array<Vector2,3>> spikes;
     std::vector<Rectangle>             spikeHitboxes;
     std::vector<LiftData>              lifts;
+    std::vector<ShooterData>           shooters;
+    std::vector<BoxData>               boxes;
+    std::vector<SentryData>            sentries;
     Rectangle exitDoorHitboxYin  = { 0 };
     Rectangle exitDoorHitboxYang = { 0 };
 
@@ -62,24 +65,19 @@ struct GameState
     // ── Shooter stuff ─────────────────────────────────────────────────────────
 
         bool       hasShooter = false;
-        ShooterData currentShooter = {};
+
 
     // ── Lift ──────────────────────────────────────────────────────────────
     bool     hasLift    = false;
 
     // ── Box ───────────────────────────────────────────────────────────────
-    bool    hasBox    = false;      // <-- new
-    BoxData currentBox = {};  
+    bool    hasBox    = false; 
+    Rectangle boxRect = boxes.empty() ? Rectangle{0, 0, 0, 0} : boxes[0].ToRect();
+
 
     // ── Sentry ───────────────────────────────────────────────────────────────
-    /*struct SentryData
-    {
-        Vector2 pos;            // current position
-        int startX;             // starting X (for returning)
-        int startY;             // starting Y
-        Rectangle smallSight;   // small detection radius
-        Rectangle largeSight;   // large detection radius
-    };*/
+   
+     bool    hasSentry = false;
 
     // ── Methods ───────────────────────────────────────────────────────────
     void LoadLevel(const json& data, int levelId);

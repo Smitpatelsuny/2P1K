@@ -26,7 +26,7 @@ int main(void)
 
     json data;
     {
-        std::ifstream file("C:/Users/austi/projects/New2P1K/2P1K-2/src/Level.json");
+        std::ifstream file("C:/Users/dalma/projects/2P1K/src/Level.json");
         data = json::parse(file);
     }
 
@@ -34,8 +34,8 @@ int main(void)
 
     InitWindow(screenWidth, screenHeight, "All code test");
 
-    Texture2D background_menu = LoadTexture("C:/Users/austi/projects/New2P1K/2P1K-2/src/assets/background_menu.jpg");
-    Texture2D gamePlay2       = LoadTexture("C:/Users/austi/projects/New2P1K/2P1K-2/src/assets/gamePlay2.jpg");
+    Texture2D background_menu = LoadTexture("C:/Users/dalma/projects/2P1K/src/assets/background_menu.jpg");
+    Texture2D gamePlay2       = LoadTexture("C:/Users/dalma/projects/2P1K/src/assets/gamePlay2.jpg");
 
     AnimState yingState = ANIM_IDLE;
     AnimState yanState = ANIM_IDLE;
@@ -43,15 +43,15 @@ int main(void)
     
     
        AnimatedSprite w_player = LoadAnimatedSprite(
-        "C:/Users/austi/projects/New2P1K/2P1K-2/src/assets/player_w.png",
+        "C:/Users/dalma/projects/2P1K/src/assets/player_w.png",
         1.5f, 3, 4, 0.15f);
 
      AnimatedSprite b_player = LoadAnimatedSprite(
-        "C:/Users/austi/projects/New2P1K/2P1K-2/src/assets/Player_b.png",
+        "C:/Users/dalma/projects/2P1K/src/assets/Player_b.png",
         1.5f, 3, 4, 0.15f);
 
     AnimatedSprite m_player = LoadAnimatedSprite(
-        "C:/Users/austi/projects/New2P1K/2P1K-2/src/assets/player_m.png",
+        "C:/Users/dalma/projects/2P1K/src/assets/player_m.png",
         1.5f, 3, 4, 0.15f);
 
     
@@ -125,60 +125,78 @@ int main(void)
                 }
 
                 // Horizontal collisions
-                PlayerPlatformCollisions(gs.Ying, gs.rad,
-                                         gs.platforms.data(), (int)gs.platforms.size(),
-                                         gs.Yan, gs.obj3, oldP1, oldP2, oldMerged, gs.currentBox.rect);
-                    
+                    PlayerPlatformCollisions(gs.Ying, gs.rad,
+                                             gs.platforms.data(), (int)gs.platforms.size(),
+                                             gs.Yan, gs.obj3, oldP1, oldP2, oldMerged, gs.boxRect);
+                
+
                 if (gs.hasDoor && !gs.currentDoor.switched)
                     gs.platforms.push_back(gs.currentDoor.doorClosed);
                 
                 if (gs.hasBox)
                 {
+                    for (auto& box : gs.boxes){
                     PlayerBoxHorizontalCollisions(gs.Ying, gs.Yan, gs.obj3,
-                                                 gs.rad, gs.currentBox,
+                                                 gs.rad, box,
                                                  gs.platforms.data(), (int)gs.platforms.size(),
                                                  oldP1, oldP2, oldMerged);
+                    }
                 }
                 
              if (gs.hasLift)
              {       
 
-               for (auto& lift : gs.lifts)
-                LyftHorControls(gs.Ying, gs.Yan, gs.obj3, gs.rad,
+               for (auto& lift : gs.lifts) {
+                    for(auto& box : gs.boxes){
+                    LyftHorControls(gs.Ying, gs.Yan, gs.obj3, gs.rad,
                     oldP1, oldP2, oldMerged,
-                        lift, gs.currentBox);
+                        lift, box);
 
-             }
+                     }
+              }
                 
+             }
                 // Vertical collisions
                 Jump(gs.Jumpspeed, gs.Jumpspeed2, gs.JumpspeedMerged,
                      gs.P1CanJump, gs.P2CanJump, gs.MergedCanJump,
                      gs.merged, gs.rad, gs.Ying, gs.Yan, gs.obj3, gs.Ejected);
 
-                PlayerJumpCollisions(gs.Ying, gs.Yan, gs.obj3, gs.rad,
+
+                    
+                     PlayerJumpCollisions(gs.Ying, gs.Yan, gs.obj3, gs.rad,
                                      gs.platforms.data(), (int)gs.platforms.size(),
                                      gs.P1CanJump, gs.P2CanJump, gs.MergedCanJump,
                                      gs.Jumpspeed, gs.Jumpspeed2, gs.JumpspeedMerged,
-                                     oldP1, oldP2, oldMerged, gs.currentBox.rect);
+                                     oldP1, oldP2, oldMerged, gs.boxRect);
+                
+               
         
                 if (gs.hasBox)
                 {
-                    PlayerBoxCollisions(gs.Ying, gs.rad, gs.Yan, gs.obj3,    // gravity only
+                    for (auto& box : gs.boxes){
+                        PlayerBoxCollisions(gs.Ying, gs.rad, gs.Yan, gs.obj3,    // gravity only
                         (int)gs.platforms.size(), gs.platforms.data(),
-                        gs.currentBox);
-                    PlayerBoxVerticalCollisions(gs.Ying, gs.Yan, gs.obj3, gs.rad, gs.currentBox,
+                        box);
+                        PlayerBoxVerticalCollisions(gs.Ying, gs.Yan, gs.obj3, gs.rad, box,
                                  gs.P1CanJump, gs.P2CanJump, gs.MergedCanJump,
                                  gs.Jumpspeed, gs.Jumpspeed2, gs.JumpspeedMerged,
                                  oldP1, oldP2, oldMerged);
+                    }
+                    
                 }
                 if (gs.hasLift)
                 {
                    for (auto& lift : gs.lifts)
-                    LyftVertControls(gs.Ying, gs.Yan, gs.obj3, gs.rad,
-                        oldP1, oldP2, oldMerged,
-                        gs.P1CanJump, gs.P2CanJump, gs.MergedCanJump,
-                        gs.Jumpspeed, gs.Jumpspeed2, gs.JumpspeedMerged,
-                        lift, gs.currentBox);
+                    {
+                        for (auto& box : gs.boxes)
+                        {
+                            LyftVertControls(gs.Ying, gs.Yan, gs.obj3, gs.rad,
+                                oldP1, oldP2, oldMerged,
+                                gs.P1CanJump, gs.P2CanJump, gs.MergedCanJump,
+                                gs.Jumpspeed, gs.Jumpspeed2, gs.JumpspeedMerged,
+                                lift, box);
+                        }
+                    }
                 }
              
        
@@ -288,7 +306,19 @@ int main(void)
             }
         }
 
-
+        if (gs.hasShooter)
+                for (auto& shooter : gs.shooters)
+                    UpdateShooter(shooter, gs.Ying, gs.Yan, gs.obj3,
+                   gs.rad, gs.platforms.data(), (int)gs.platforms.size(),
+                   gs.merged, gs.invincibility, gs.invincibilityTimer,
+                   gs.deathOccured, gs.p1Spawn, gs.p2Spawn);
+        
+        if(gs.hasSentry)
+            for (auto& sentry : gs.sentries)
+                UpdateSentry(sentry, gs.Ying, gs.Yan, gs.obj3,
+                  gs.rad, gs.merged, gs.invincibility,
+                  gs.invincibilityTimer, gs.deathOccured,
+                  gs.p1Spawn, gs.p2Spawn);
 
         // ── Draw ─────────────────────────────────────────────────────────
         BeginDrawing();
@@ -355,15 +385,36 @@ int main(void)
 
                 if (gs.hasBox)
                 {
-                    PlayerBoxCollisions(gs.Ying, gs.rad, gs.Yan, gs.obj3,    // gravity only
+                    for (auto& box : gs.boxes){
+                        PlayerBoxCollisions(gs.Ying, gs.rad, gs.Yan, gs.obj3,    // gravity only
                         (int)gs.platforms.size(), gs.platforms.data(),
-                        gs.currentBox);
+                        box);
+                    }
                 }
+                
 
         if (gs.hasDoor){
             UpdateDoor(gs.Ying, gs.Yan, gs.obj3, gs.rad, gs.currentDoor);
         }
+
+               if (gs.hasShooter){
+                    for (auto& shooter : gs.shooters)
+                    UpdateShooter(shooter, gs.Ying, gs.Yan, gs.obj3,
+                   gs.rad, gs.platforms.data(), (int)gs.platforms.size(),
+                   gs.merged, gs.invincibility, gs.invincibilityTimer,
+                   gs.deathOccured, gs.p1Spawn, gs.p2Spawn);
+               }
              
+                      
+        if(gs.hasSentry){
+            for (auto& sentry : gs.sentries)
+                UpdateSentry(sentry, gs.Ying, gs.Yan, gs.obj3,
+                  gs.rad, gs.merged, gs.invincibility,
+                  gs.invincibilityTimer, gs.deathOccured,
+                  gs.p1Spawn, gs.p2Spawn);
+        }
+            
+
 /*IDk where else to put this, and it's 100% going to get lost here... but
 for the button on the left side for the rigth door {
           "x": 120,

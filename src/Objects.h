@@ -19,6 +19,7 @@ struct BoxData {
     float gravSpeed;
     bool onGround = false;
     Rectangle ToRect() const { return { x, y, width, height }; }
+    float prevY = 0.0f;
 };
 
 struct DoorData {
@@ -44,6 +45,15 @@ struct ShooterData {
     float     interval   = 2.0f;
     float     timer      = 0.0f;   
     bool      active     = false;
+};
+
+struct SentryData {
+    Vector2   position    = { 0, 0 };
+    Vector2   spawnPoint  = { 0, 0 };  // where it returns to when idle
+    Rectangle smallSight  = { 0 };
+    Rectangle largeSight  = { 0 };
+    float     speed       = 0.5f;
+    float     radius      = 5.0f;
 };
 
 void levelLift(Vector2 Ying, Vector2 Yan, Vector2 obj3, float rad, LiftData& lift);
@@ -78,5 +88,19 @@ bool CanMoveBox(BoxData& box, float dx, float dy, Rectangle platforms[], int pla
 
 
 void UpdateDoor(Vector2 Ying, Vector2 Yan, Vector2 obj3, float rad, DoorData& ld);
+
+
+void UpdateShooter(ShooterData& shooter, Vector2& Ying, Vector2& Yan, Vector2& obj3,
+                   float rad, Rectangle platforms[], int platformCount,
+                   bool& merged, bool& invincibility, float& invincibilityTimer,
+                   bool& deathOccured, Vector2 p1Spawn, Vector2 p2Spawn);
+
+static void MoveToward(Vector2& sentry, Vector2 target, float speed);
+
+void UpdateSentry(SentryData& sentry, Vector2& Ying, Vector2& Yan, Vector2& obj3,
+                  float rad, bool& merged, bool& invincibility,
+                  float& invincibilityTimer, bool& deathOccured,
+                  Vector2 p1Spawn, Vector2 p2Spawn);
+
 
 #endif

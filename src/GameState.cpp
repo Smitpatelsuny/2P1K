@@ -18,48 +18,16 @@ void GameState::LoadLevel(const json& data, int levelId)
     spikes.clear();
     spikeHitboxes.clear();
     lifts.clear();
+    boxes.clear();
+    shooters.clear();
+    sentries.clear();
     hasLift = false;                          
     hasBox  = false;                        
-    currentBox = {};
     hasDoor    = false;
     currentDoor = {};
-/*
-    sentries.clear();
+    hasShooter = false;
     hasSentry = false;
 
-    if (lvl.contains("Sentries"))
-    {
-        for (const auto& s : lvl["Sentries"])
-        {
-            SentryData sd;
-
-            sd.pos = {
-                s["x"].get<float>(),
-                s["y"].get<float>()
-            };
-
-            sd.startX = s["startX"].get<int>();
-            sd.startY = s["startY"].get<int>();
-
-            sd.smallSight = {
-                s["smallSight"]["x"].get<float>(),
-                s["smallSight"]["y"].get<float>(),
-                s["smallSight"]["width"].get<float>(),
-                s["smallSight"]["height"].get<float>()
-            };
-
-            sd.largeSight = {
-                s["largeSight"]["x"].get<float>(),
-                s["largeSight"]["y"].get<float>(),
-                s["largeSight"]["width"].get<float>(),
-                s["largeSight"]["height"].get<float>()
-            };
-
-            sentries.push_back(sd);
-            hasSentry = true;
-        }
-    }
-    */
 
     for (const auto& lvl : data["Level"])
     {
@@ -126,14 +94,18 @@ void GameState::LoadLevel(const json& data, int levelId)
     //Boxes
     if (lvl.contains("Boxes"))
     {
-    const auto& b = lvl["Boxes"];
-        currentBox.x      = b["x"].get<float>();
-        currentBox.y      = b["y"].get<float>();
-        currentBox.width  = b["width"].get<float>();
-        currentBox.height = b["height"].get<float>();
-        currentBox.onGround  = false;
-        currentBox.gravSpeed = 0.0f;
+     for (const auto& b : lvl["Boxes"])
+     {
+        BoxData newBox;
+        newBox.x      = b["x"].get<float>();
+        newBox.y      = b["y"].get<float>();
+        newBox.width  = b["width"].get<float>();
+        newBox.height = b["height"].get<float>();
+        newBox.onGround  = false;
+        newBox.gravSpeed = 0.0f;
+        boxes.push_back(newBox);
         hasBox = true;
+    }
     }
 
     //Doors
@@ -182,6 +154,53 @@ void GameState::LoadLevel(const json& data, int levelId)
                                           d["frame"][i]["height"].get<float>() };
      hasDoor = true;
     }
+    
+    if (lvl.contains("Shooters"))
+    {
+        const auto& s = lvl["Shooters"];
+        for (const auto& sh : s)
+        {
+            ShooterData newShooter;
+            newShooter.rect       = { sh["rect"]["x"].get<float>(),
+                                      sh["rect"]["y"].get<float>(),
+                                      sh["rect"]["width"].get<float>(),
+                                      sh["rect"]["height"].get<float>() };
+            newShooter.projectile = { sh["projectile"]["x"].get<float>(),
+                                  sh["projectile"]["y"].get<float>(),
+                                  sh["projectile"]["width"].get<float>(),
+                                  sh["projectile"]["height"].get<float>() };
+            newShooter.speed    = sh["speed"].get<float>();
+            newShooter.interval = sh["interval"].get<float>();
+            newShooter.timer    = 0.0f;   // always reset on load
+            newShooter.active   = sh["active"].get<bool>();
+            shooters.push_back(newShooter);
+        }
+        hasShooter = true;
+    }
+
+
+    sentries.clear();
+if (lvl.contains("sentries"))
+{
+    for (const auto& s : lvl["sentries"])
+    {
+        SentryData sd;
+        sd.position   = { s["x"].get<float>(), s["y"].get<float>() };
+        sd.spawnPoint = sd.position;  // spawn = starting position
+        sd.speed      = s["speed"].get<float>();
+        sd.radius     = s["radius"].get<float>();
+        sd.smallSight = { s["smallSight"]["x"].get<float>(),
+                          s["smallSight"]["y"].get<float>(),
+                          s["smallSight"]["width"].get<float>(),
+                          s["smallSight"]["height"].get<float>() };
+        sd.largeSight = { s["largeSight"]["x"].get<float>(),
+                          s["largeSight"]["y"].get<float>(),
+                          s["largeSight"]["width"].get<float>(),
+                          s["largeSight"]["height"].get<float>() };
+        sentries.push_back(sd);
+    }
+    hasSentry = true;  
+}
 
         currentLevelId = levelId;
         ResetJumpState(); 
