@@ -82,4 +82,8 @@ struct GameState
     // ── Methods ───────────────────────────────────────────────────────────
     void LoadLevel(const json& data, int levelId);
     void ResetJumpState();
+    void ReloadLevel();
+    
+    private:
+    const json* levelData = nullptr; 
 };

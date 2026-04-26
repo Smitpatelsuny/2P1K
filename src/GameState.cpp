@@ -14,6 +14,7 @@ void GameState::ResetJumpState()
 
 void GameState::LoadLevel(const json& data, int levelId)
 {
+    levelData = &data;
     platforms.clear();
     spikes.clear();
     spikeHitboxes.clear();
@@ -80,6 +81,7 @@ void GameState::LoadLevel(const json& data, int levelId)
         LiftData ld;
         ld.rect      = { l["x"].get<float>(),      l["y"].get<float>(),
                          l["width"].get<float>(),   l["height"].get<float>() };
+        ld.startposition = { ld.rect.x, ld.rect.y };
         ld.button    = { l["button"]["x"].get<float>(), l["button"]["y"].get<float>(),
                          l["button"]["width"].get<float>(), l["button"]["height"].get<float>() };
         ld.maxHeight = l["maxHeight"].get<float>();
@@ -99,6 +101,7 @@ void GameState::LoadLevel(const json& data, int levelId)
         BoxData newBox;
         newBox.x      = b["x"].get<float>();
         newBox.y      = b["y"].get<float>();
+        newBox.startposition = { newBox.x, newBox.y };
         newBox.width  = b["width"].get<float>();
         newBox.height = b["height"].get<float>();
         newBox.onGround  = false;
@@ -206,4 +209,11 @@ if (lvl.contains("sentries"))
         ResetJumpState(); 
         break;
     }
+}
+
+
+void GameState::ReloadLevel()
+{
+    if (levelData == nullptr) return;
+    LoadLevel(*levelData, currentLevelId);
 }

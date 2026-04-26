@@ -10,6 +10,7 @@ struct LiftData {
     float maxHeight;
     float minHeight;
     float speed;
+     Vector2 startposition = { 0, 0 };
 };
 
 struct BoxData {
@@ -20,6 +21,7 @@ struct BoxData {
     bool onGround = false;
     Rectangle ToRect() const { return { x, y, width, height }; }
     float prevY = 0.0f;
+    Vector2 startposition = { 0, 0 };
 };
 
 struct DoorData {

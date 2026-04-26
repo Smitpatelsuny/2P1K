@@ -1,6 +1,7 @@
 #include "DeaStart.h" 
 #include <raymath.h> 
 #include <raylib.h>
+#include "Objects.h"
  
 
 
@@ -95,5 +96,7 @@ void Restart (Vector2 &player, Vector2 &player2, Vector2 &MergedPlayer, Vector2 
         player2 = p2spawn; 
         MergedPlayer = {0, 0}; 
         merged = false; 
+        
+
     }
 }
