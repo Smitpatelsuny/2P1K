@@ -95,13 +95,13 @@ void UpdateDoor(Vector2 Ying, Vector2 Yan, Vector2 obj3, float rad, DoorData& ld
 void UpdateShooter(ShooterData& shooter, Vector2& Ying, Vector2& Yan, Vector2& obj3,
                    float rad, Rectangle platforms[], int platformCount,
                    bool& merged, bool& invincibility, float& invincibilityTimer,
-                   bool& deathOccured, Vector2 p1Spawn, Vector2 p2Spawn);
+                   bool& restart, Vector2 p1Spawn, Vector2 p2Spawn);
 
 static void MoveToward(Vector2& sentry, Vector2 target, float speed);
 
 void UpdateSentry(SentryData& sentry, Vector2& Ying, Vector2& Yan, Vector2& obj3,
                   float rad, bool& merged, bool& invincibility,
-                  float& invincibilityTimer, bool& deathOccured,
+                  float& invincibilityTimer, bool& restart,
                   Vector2 p1Spawn, Vector2 p2Spawn);
 
 

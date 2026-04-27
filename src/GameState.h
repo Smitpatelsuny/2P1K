@@ -39,6 +39,7 @@ struct GameState
     bool  deathOccured       = false;
     bool  invincibility      = false;
     float invincibilityTimer = 1.0f;
+    bool restart          = false;
 
     // ── Level geometry ────────────────────────────────────────────────────
     std::vector<Rectangle>             platforms;
@@ -84,6 +85,6 @@ struct GameState
     void ResetJumpState();
     void ReloadLevel();
     
-    private:
+    
     const json* levelData = nullptr; 
 };

@@ -5,15 +5,13 @@
  
 
 
-void death(Vector2 &player, Vector2 &player2, Vector2 P1Spawn, Vector2 P2Spawn, bool &invincibility, float &invincibilityTimer) 
+void death(Vector2 &player, Vector2 &player2, Vector2 P1Spawn, Vector2 P2Spawn, bool &invincibility, float &invincibilityTimer, bool &restart) 
 {   
     if (invincibility)
     {
         return;
     }
-
-    player =  P1Spawn;
-    player2 = P2Spawn;
+    restart = true;
 }
 
 void forceUnmerge(Vector2 &player, Vector2 &player2, Vector2 &MergedPlayer, float &rad, bool &merged, bool &invincibility, float &invincibilityTimer)
@@ -88,7 +86,7 @@ void DeaStart::Initialize() {
 }
 
 
-void Restart (Vector2 &player, Vector2 &player2, Vector2 &MergedPlayer, Vector2 p1spawn, Vector2 p2spawn, bool &merged)  
+void Restart (Vector2 &player, Vector2 &player2, Vector2 &MergedPlayer, Vector2 p1spawn, Vector2 p2spawn, bool &merged, bool &restart)  
 { 
     if (IsKeyPressed(KEY_R))  
     {
@@ -96,6 +94,8 @@ void Restart (Vector2 &player, Vector2 &player2, Vector2 &MergedPlayer, Vector2 
         player2 = p2spawn; 
         MergedPlayer = {0, 0}; 
         merged = false; 
+
+        restart = true;
         
 
     }

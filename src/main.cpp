@@ -288,14 +288,14 @@ int main(void)
             // Ying
             if (CheckCollisionCircleRec(gs.Ying, gs.rad, spike) ||CheckCollisionCircleRec(gs.Yan, gs.rad, spike) )
             {
-                death(gs.Ying, gs.Yan, gs.p1Spawn, gs.p2Spawn, gs.invincibility, gs.invincibilityTimer);
+                death(gs.Ying, gs.Yan, gs.p1Spawn, gs.p2Spawn, gs.invincibility, gs.invincibilityTimer, gs.restart);
                 break;
             }
 
             // Yan
             if (CheckCollisionCircleRec(gs.Yan, gs.rad, spike))
             {
-                death(gs.Ying, gs.Yan, gs.p1Spawn, gs.p2Spawn, gs.invincibility, gs.invincibilityTimer);
+                death(gs.Ying, gs.Yan, gs.p1Spawn, gs.p2Spawn, gs.invincibility, gs.invincibilityTimer, gs.restart);
                 break;
             }
                 // Merged
@@ -311,13 +311,13 @@ int main(void)
                     UpdateShooter(shooter, gs.Ying, gs.Yan, gs.obj3,
                    gs.rad, gs.platforms.data(), (int)gs.platforms.size(),
                    gs.merged, gs.invincibility, gs.invincibilityTimer,
-                   gs.deathOccured, gs.p1Spawn, gs.p2Spawn);
+                   gs.restart, gs.p1Spawn, gs.p2Spawn);
         
         if(gs.hasSentry)
             for (auto& sentry : gs.sentries)
                 UpdateSentry(sentry, gs.Ying, gs.Yan, gs.obj3,
                   gs.rad, gs.merged, gs.invincibility,
-                  gs.invincibilityTimer, gs.deathOccured,
+                  gs.invincibilityTimer, gs.restart,
                   gs.p1Spawn, gs.p2Spawn);
 
         // ── Draw ─────────────────────────────────────────────────────────
@@ -373,9 +373,9 @@ int main(void)
                 ExitGame();
 
                 InvisCountDown(gs.invincibility, gs.invincibilityTimer);
-                Restart(gs.Ying, gs.Yan, gs.obj3, gs.p1Spawn, gs.p2Spawn, gs.merged);
+                Restart(gs.Ying, gs.Yan, gs.obj3, gs.p1Spawn, gs.p2Spawn, gs.merged, gs.restart);
 
-
+                
                 if (gs.hasLift)
                 {
                     for (auto& lift : gs.lifts)
@@ -402,7 +402,7 @@ int main(void)
                     UpdateShooter(shooter, gs.Ying, gs.Yan, gs.obj3,
                    gs.rad, gs.platforms.data(), (int)gs.platforms.size(),
                    gs.merged, gs.invincibility, gs.invincibilityTimer,
-                   gs.deathOccured, gs.p1Spawn, gs.p2Spawn);
+                   gs.restart, gs.p1Spawn, gs.p2Spawn);
                }
              
                       
@@ -410,7 +410,7 @@ int main(void)
             for (auto& sentry : gs.sentries)
                 UpdateSentry(sentry, gs.Ying, gs.Yan, gs.obj3,
                   gs.rad, gs.merged, gs.invincibility,
-                  gs.invincibilityTimer, gs.deathOccured,
+                  gs.invincibilityTimer, gs.restart,
                   gs.p1Spawn, gs.p2Spawn);
         }
             
@@ -424,7 +424,10 @@ for the button on the left side for the rigth door {
     }
 */
 
-
+        if(gs.restart){
+            gs.LoadLevel(*gs.levelData, gs.currentLevelId);
+            gs.restart = false;
+        }
 
 
            if (!gs.merged)

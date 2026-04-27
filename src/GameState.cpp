@@ -212,8 +212,3 @@ if (lvl.contains("sentries"))
 }
 
 
-void GameState::ReloadLevel()
-{
-    if (levelData == nullptr) return;
-    LoadLevel(*levelData, currentLevelId);
-}

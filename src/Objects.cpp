@@ -1,6 +1,7 @@
 #include "raylib.h"
 #include "Objects.h"
 #include "PlayerStuff.h"
+#include "DeaStart.h"
 #include <stdio.h>
 #include "json.hpp"
 
@@ -267,7 +268,7 @@ void UpdateDoor(Vector2 Ying, Vector2 Yan, Vector2 obj3, float rad, DoorData& ld
 void UpdateShooter(ShooterData& shooter, Vector2& Ying, Vector2& Yan, Vector2& obj3,
                    float rad, Rectangle platforms[], int platformCount,
                    bool& merged, bool& invincibility, float& invincibilityTimer,
-                   bool& deathOccured, Vector2 p1Spawn, Vector2 p2Spawn)
+                   bool& restart, Vector2 p1Spawn, Vector2 p2Spawn)
 {
     // Draw the shooter base
     DrawRectangleRec(shooter.rect, DARKGRAY);
@@ -309,9 +310,8 @@ void UpdateShooter(ShooterData& shooter, Vector2& Ying, Vector2& Yan, Vector2& o
     if (CheckCollisionCircleRec(Ying, rad, shooter.projectile) ||
         CheckCollisionCircleRec(Yan,  rad, shooter.projectile))
     {
-        Ying         = p1Spawn;
-        Yan          = p2Spawn;
-        deathOccured = true;
+        Restart(Ying, Yan, obj3, p1Spawn, p2Spawn, merged, restart);
+        restart = true;
         shooter.active = false;
         return;
     }
@@ -344,7 +344,7 @@ static void MoveToward(Vector2& sentry, Vector2 target, float speed)
 
 void UpdateSentry(SentryData& sentry, Vector2& Ying, Vector2& Yan, Vector2& obj3,
                   float rad, bool& merged, bool& invincibility,
-                  float& invincibilityTimer, bool& deathOccured,
+                  float& invincibilityTimer, bool& restart,
                   Vector2 p1Spawn, Vector2 p2Spawn)
 {
        // Draw sight rectangles 
@@ -380,9 +380,8 @@ void UpdateSentry(SentryData& sentry, Vector2& Ying, Vector2& Yan, Vector2& obj3
     if (CheckCollisionCircles(Ying, rad, sentry.position, sentry.radius) ||
         CheckCollisionCircles(Yan,  rad, sentry.position, sentry.radius))
     {
-        Ying         = p1Spawn;
-        Yan          = p2Spawn;
-        deathOccured = true;
+        Restart(Ying, Yan, obj3, p1Spawn, p2Spawn, merged, restart);
+        restart = true;
         return;
     }
 
