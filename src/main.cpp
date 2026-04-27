@@ -338,7 +338,7 @@ int main(void)
                 int startWidth = MeasureText("START", startSize);
                 DrawText("Ying and Yan",      150, 20,  80, WHITE);
                 DrawText("The Second Coming", 200, 100, 40, WHITE);
-                DrawRectangleRec(startbutton, GREEN);
+                DrawRectangleRec(startbutton, RED);
                 DrawText("START",
                     (int)(startbutton.x + startbutton.width  / 2 - startWidth / 2),
                     (int)(startbutton.y + startbutton.height / 2 - startSize  / 2),
