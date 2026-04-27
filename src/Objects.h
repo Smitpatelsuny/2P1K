@@ -70,11 +70,16 @@ void LyftVertControls(Vector2& Ying, Vector2& Yan, Vector2& obj3, float rad,
                       float& Jumpspeed, float& Jumpspeed2, float& JumpspeedMerged,
                       LiftData& lift, BoxData& box);
 
+
+void levelLiftWithBox(Vector2 Ying, Vector2 Yan, Vector2 obj3, float rad, LiftData& currentLift, BoxData& box);
+
 void PlayerBoxVerticalCollisions(Vector2& player, Vector2& ballPosition, Vector2& obj3,
                                   float rad, BoxData& box,
                                   bool& P1CanJump, bool& P2CanJump, bool& MergedCanJump,
                                   float& Jumpspeed, float& Jumpspeed2, float& JumpspeedMerged,
                                   Vector2& oldP1, Vector2& oldP2, Vector2& oldMerged);
+
+
 
 void PlayerBoxHorizontalCollisions(Vector2& player, Vector2& ballPosition, Vector2& obj3,
                                     float rad, BoxData& box,

@@ -376,8 +376,13 @@ int main(void)
                 Restart(gs.Ying, gs.Yan, gs.obj3, gs.p1Spawn, gs.p2Spawn, gs.merged, gs.restart);
 
                 
-                if (gs.hasLift)
+         if (gs.hasLift && gs.hasBox)
                 {
+                    for (auto& lift : gs.lifts)
+                        for (auto& box : gs.boxes){
+                        levelLiftWithBox(gs.Ying, gs.Yan, gs.obj3, gs.rad, lift, box);
+                        }
+                    }else if (gs.hasLift){
                     for (auto& lift : gs.lifts)
                         levelLift(gs.Ying, gs.Yan, gs.obj3, gs.rad, lift);
                 }

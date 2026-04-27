@@ -35,18 +35,49 @@ void LyftVertControls(Vector2& Ying, Vector2& Yan, Vector2& obj3, float rad,
                       float& Jumpspeed, float& Jumpspeed2, float& JumpspeedMerged,
                       LiftData& currentLift, BoxData& box)
 {
+   Rectangle liftRect = currentLift.rect;
+Rectangle boxRect  = box.ToRect();
+
     // Lift vertical collision + carry
+
     PlayerJumpCollisions(Ying, Yan, obj3, rad, &currentLift.rect, 1,
                          P1CanJump, P2CanJump, MergedCanJump,
                          Jumpspeed, Jumpspeed2, JumpspeedMerged,
                          oldP1, oldP2, oldMerged, box.rect);
 
-    if (CheckCollisionCircleRec(Ying, rad + 1, currentLift.rect)) Ying.y -= currentLift.speed;
-    if (CheckCollisionCircleRec(Yan,  rad + 1, currentLift.rect)) Yan.y  -= currentLift.speed;
-    if (CheckCollisionCircleRec(obj3, rad + 1, currentLift.rect)) obj3.y -= currentLift.speed;
 
-    box.prevY = box.y;
+    if (CheckCollisionCircleRec(Ying, rad + 1, liftRect)) Ying.y -= currentLift.speed;
+    if (CheckCollisionCircleRec(Yan,  rad + 1, liftRect)) Yan.y  -= currentLift.speed;
+    if (CheckCollisionCircleRec(obj3, rad + 1, liftRect)) obj3.y -= currentLift.speed;
 
+    auto preventPlayerUnderLift = [&](Vector2& p, Vector2& oldP)
+    {
+
+    //Players top edge
+    float playerTop = p.y - rad;
+
+    if ((playerTop < liftRect.y + liftRect.height) && (playerTop > liftRect.y + liftRect.height - 6) && (p.x > liftRect.x) && (p.x < liftRect.x + liftRect.width))
+    {
+        //Falls slightly faster than the lift moves
+        p.y = oldP.y + currentLift.speed * 2;
+    }
+    };
+
+    preventPlayerUnderLift(Ying, oldP1);
+    preventPlayerUnderLift(Yan, oldP2);
+    preventPlayerUnderLift(obj3, oldMerged);
+
+if((boxRect.y + boxRect.height > liftRect.y) && (boxRect.y < liftRect.y) && CheckCollisionRecs(boxRect, liftRect))
+{
+    box.y = liftRect.y - box.height;
+    if (CheckCollisionCircleRec(Ying, rad + 1, boxRect)) Ying.y -= currentLift.speed;
+    if (CheckCollisionCircleRec(Yan,  rad + 1, boxRect)) Yan.y  -= currentLift.speed;
+    if (CheckCollisionCircleRec(obj3, rad + 1, boxRect)) obj3.y -= currentLift.speed;
+
+    box.gravSpeed = 0.0f;
+    box.onGround  = true;
+
+}
 }
 
 
@@ -60,6 +91,30 @@ void LyftHorControls(Vector2& Ying, Vector2& Yan, Vector2& obj3, float rad,
     box.prevX = box.x;
     
 
+}
+
+void levelLiftWithBox(Vector2 Ying, Vector2 Yan, Vector2 obj3, float rad, LiftData& currentLift, BoxData& box)
+{
+
+    DrawRectangleRec(currentLift.button, RED);
+    DrawRectangleRec(currentLift.rect, GRAY);
+
+ 
+
+    if (CheckCollisionCircleRec(Ying, rad, currentLift.button) || 
+        CheckCollisionCircleRec(Yan,  rad, currentLift.button) || 
+        CheckCollisionCircleRec(obj3, rad, currentLift.button) ||
+        CheckCollisionRecs(box.ToRect(), currentLift.button))
+
+    {
+        if (currentLift.rect.y < currentLift.maxHeight)
+            currentLift.rect.y += currentLift.speed;
+    }
+    else
+    {
+        if (currentLift.rect.y > currentLift.minHeight)
+            currentLift.rect.y -= currentLift.speed;
+    }
 }
 
 void PlayerBoxHorizontalCollisions(Vector2& player, Vector2& ballPosition, Vector2& obj3,

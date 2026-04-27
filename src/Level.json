@@ -549,11 +549,11 @@
         "sentries": [
     {
     "x": 580,
-    "y": 470,
+    "y": 430,
     "speed": 0.5,
     "radius": 5,
-    "smallSight": { "x": 550, "y": 440, "width": 60,  "height": 60  },
-    "largeSight":  { "x": 500, "y": 390, "width": 160, "height": 160 }
+    "smallSight": { "x": 550, "y": 400, "width": 60,  "height": 60  },
+    "largeSight":  { "x": 500, "y": 350, "width": 160, "height": 160 }
     }
     ]
     },
