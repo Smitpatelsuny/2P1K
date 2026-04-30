@@ -297,13 +297,13 @@
       "exitDoors": {
         "yin": {
           "x": 370,
-          "y": 625,
+          "y": 645,
           "width": 30,
           "height": 30
         },
         "yang": {
           "x": 450,
-          "y": 625,
+          "y": 645,
           "width": 30,
           "height": 30
         }
@@ -487,8 +487,8 @@
       "Boxes": [
         {
           "label": "firstbox",
-            "x": 100,
-            "y": 350,
+            "x": 400,
+            "y": 480,
             "width": 30,
             "height": 30
         }
@@ -512,11 +512,11 @@
       {
         "Label": "MiddleLift",
         "x": 325,
-        "y": 500,
-        "width": 200,
+        "y": 499,
+        "width": 185,
         "height": 15,
         "maxHeight": 655,
-        "minHeight": 500,
+        "minHeight": 499,
         "button": {
           "x": 580,
           "y": 495,
@@ -526,23 +526,25 @@
       }
     ],
 
-         "Shooters": [
+         "VerticalShooters": [
         {
-          "label": "shooter1",
+          "label": "v1",
           "rect":         { "x": 690, "y": 0,  "width": 40, "height": 20 },
           "projectile":   { "x": 690, "y": 20, "width": 20, "height": 20 },
           "speed":        3.0,
           "interval":     2.0,
-          "active":       false
+          "active":       false,
+          "direction":     1.0 
 
         },
         {
-          "label": "shooter2",
+          "label": "v2",
           "rect":         { "x": 30, "y": 400,  "width": 40, "height": 20 },
           "projectile":   { "x": 30, "y": 420, "width": 20, "height": 20 },
           "speed":        1.5,
           "interval":     2.0,
-          "active":       false
+          "active":       false,
+          "direction":     1.0
         }
       ],
 
@@ -573,14 +575,14 @@
       },
       "exitDoors": {
         "yin": {
-          "x": 10,
-          "y": 280,
+          "x": 760,
+          "y": 750,
           "width": 30,
           "height": 30
         },
         "yang": {
-          "x": 760,
-          "y": 280,
+          "x": 10,
+          "y": 750,
           "width": 30,
           "height": 30
         }
@@ -615,16 +617,49 @@
           "height": 15
         }
       ],
-      "Shooters": [
+      "VerticalShooters": [
         {
-          "label": "shooter1",
+          "label": "v1",
           "rect":         { "x": 380, "y": 0,  "width": 40, "height": 20 },
           "projectile":   { "x": 390, "y": 20, "width": 20, "height": 20 },
           "speed":        3.0,
           "interval":     2.0,
-          "active":       false
-
+          "active":       false,
+          "direction":     1.0 
+        },
+        {
+          "label": "v2",
+          "rect":         { "x": 200, "y": 780,  "width": 40, "height": 20 },
+          "projectile":   { "x": 210, "y": 760, "width": 20, "height": 20 },
+          "speed":        3.0,
+          "interval":     2.0,
+          "active":       false,
+          "direction":     -1.0
         }
+
+    
+      ],
+      "HorizontalShooters": [
+        {
+          "label": "h1",
+          "rect":         { "x": 0, "y": 400,  "width": 20, "height": 40 },
+          "projectile":   { "x": 20, "y": 380, "width": 20, "height": 20 },
+          "speed":        3.0,
+          "interval":     2.0,
+          "active":       false,
+          "direction":     1.0
+
+        },
+        {
+          "label": "h2",
+          "rect":         { "x": 780, "y": 200,  "width": 20, "height": 40 },
+          "projectile":   { "x": 760, "y": 180, "width": 20, "height": 20 },
+          "speed":        3.0,
+          "interval":     2.0,
+          "active":       false,
+          "direction":     -1.0
+        }
+
       ],
 
     "sentries": [
@@ -655,13 +690,13 @@
       "exitDoors": {
         "yin": {
           "x": 10,
-          "y": 280,
+          "y": 780,
           "width": 30,
           "height": 30
         },
         "yang": {
           "x": 760,
-          "y": 280,
+          "y": 780,
           "width": 30,
           "height": 30
         }

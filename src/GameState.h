@@ -46,7 +46,8 @@ struct GameState
     std::vector<std::array<Vector2,3>> spikes;
     std::vector<Rectangle>             spikeHitboxes;
     std::vector<LiftData>              lifts;
-    std::vector<ShooterData>           shooters;
+    std::vector<ShooterData>           vshooters;
+    std::vector<ShooterData>           hshooters;
     std::vector<BoxData>               boxes;
     std::vector<SentryData>            sentries;
     Rectangle exitDoorHitboxYin  = { 0 };
@@ -65,7 +66,9 @@ struct GameState
  
     // ── Shooter stuff ─────────────────────────────────────────────────────────
 
-        bool       hasShooter = false;
+        bool       hasVerticalShooter = false;
+        bool       hasHorizontalShooter = false;
+    
 
 
     // ── Lift ──────────────────────────────────────────────────────────────

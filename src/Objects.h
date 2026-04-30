@@ -47,6 +47,7 @@ struct ShooterData {
     float     interval   = 2.0f;
     float     timer      = 0.0f;   
     bool      active     = false;
+    float     direction  = 1.0f; // 1 for right/down, -1 for left/up
 };
 
 struct SentryData {
@@ -97,7 +98,12 @@ bool CanMoveBox(BoxData& box, float dx, float dy, Rectangle platforms[], int pla
 void UpdateDoor(Vector2 Ying, Vector2 Yan, Vector2 obj3, float rad, DoorData& ld);
 
 
-void UpdateShooter(ShooterData& shooter, Vector2& Ying, Vector2& Yan, Vector2& obj3,
+void UpdateVerticalShooter(ShooterData& shooter, Vector2& Ying, Vector2& Yan, Vector2& obj3,
+                   float rad, Rectangle platforms[], int platformCount,
+                   bool& merged, bool& invincibility, float& invincibilityTimer,
+                   bool& restart, Vector2 p1Spawn, Vector2 p2Spawn);
+
+void UpdateHorizontalShooter(ShooterData& shooter, Vector2& Ying, Vector2& Yan, Vector2& obj3,
                    float rad, Rectangle platforms[], int platformCount,
                    bool& merged, bool& invincibility, float& invincibilityTimer,
                    bool& restart, Vector2 p1Spawn, Vector2 p2Spawn);

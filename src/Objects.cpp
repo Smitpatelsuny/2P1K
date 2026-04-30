@@ -102,7 +102,7 @@ void levelLiftWithBox(Vector2 Ying, Vector2 Yan, Vector2 obj3, float rad, LiftDa
  
 
     if (CheckCollisionCircleRec(Ying, rad, currentLift.button) || 
-        CheckCollisionCircleRec(Yan,  rad, currentLift.button) || 
+        CheckCollisionCircleRec(Yan,  rad, currentLift.button) ||
         CheckCollisionCircleRec(obj3, rad, currentLift.button) ||
         CheckCollisionRecs(box.ToRect(), currentLift.button))
 
@@ -320,7 +320,7 @@ void UpdateDoor(Vector2 Ying, Vector2 Yan, Vector2 obj3, float rad, DoorData& ld
 }
 
 
-void UpdateShooter(ShooterData& shooter, Vector2& Ying, Vector2& Yan, Vector2& obj3,
+void UpdateVerticalShooter(ShooterData& shooter, Vector2& Ying, Vector2& Yan, Vector2& obj3,
                    float rad, Rectangle platforms[], int platformCount,
                    bool& merged, bool& invincibility, float& invincibilityTimer,
                    bool& restart, Vector2 p1Spawn, Vector2 p2Spawn)
@@ -337,14 +337,93 @@ void UpdateShooter(ShooterData& shooter, Vector2& Ying, Vector2& Yan, Vector2& o
         shooter.active       = true;
         shooter.projectile.x = shooter.rect.x + shooter.rect.width  / 2
                                - shooter.projectile.width / 2;
-        shooter.projectile.y = shooter.rect.y + shooter.rect.height;
+        if (shooter.direction > 0){
+             shooter.projectile.y = shooter.rect.y + shooter.rect.height;
+        } // down
+        else {
+            shooter.projectile.y = shooter.rect.y - shooter.projectile.height;
+        }// up
         shooter.timer        = 0.0f;
     }
 
     if (!shooter.active) return;
 
-    // Move projectile downward
-    shooter.projectile.y += shooter.speed;
+    // Move projectile vertically
+    shooter.projectile.y += shooter.speed * shooter.direction; // direction is 1 for down, -1 for up
+
+    // Draw projectile
+    DrawRectangleRec(shooter.projectile, RED);
+
+    // Deactivate on platform hit
+    for (int i = 0; i < platformCount; i++)
+    {
+        if (CheckCollisionRecs(shooter.projectile, platforms[i]))
+        {
+            shooter.active = false;
+            return;
+        }
+    }
+
+    if (invincibility) return;
+
+    // Hit unmerged players — respawn at level spawns
+    if (CheckCollisionCircleRec(Ying, rad, shooter.projectile) ||
+        CheckCollisionCircleRec(Yan,  rad, shooter.projectile))
+    {
+        Restart(Ying, Yan, obj3, p1Spawn, p2Spawn, merged, restart);
+        restart = true;
+        shooter.active = false;
+        return;
+    }
+
+    // Hit merged player — force unmerge with invincibility
+    if (CheckCollisionCircleRec(obj3, rad, shooter.projectile))
+    {
+        merged = false;
+        Ying.x = obj3.x - rad;
+        Ying.y = obj3.y;
+        Yan.x  = obj3.x + rad;
+        Yan.y  = obj3.y;
+        obj3   = { 0, 0 };
+
+        invincibility      = true;
+        invincibilityTimer = 1.0f;
+        shooter.active     = false;
+    }
+}
+
+void UpdateHorizontalShooter(ShooterData& shooter, Vector2& Ying, Vector2& Yan, Vector2& obj3,
+                   float rad, Rectangle platforms[], int platformCount,
+                   bool& merged, bool& invincibility, float& invincibilityTimer,
+                   bool& restart, Vector2 p1Spawn, Vector2 p2Spawn)
+{
+    // Draw the shooter base
+    DrawRectangleRec(shooter.rect, DARKGRAY);
+
+    // Tick the shoot timer
+    shooter.timer += GetFrameTime();
+
+    // Spawn a new projectile when timer exceeds interval and none is active
+    if (shooter.timer >= shooter.interval && !shooter.active)
+    {
+        shooter.active       = true;
+        if (shooter.direction > 0){
+             shooter.projectile.x = shooter.rect.x + shooter.rect.width;
+        } // right
+        else {
+            shooter.projectile.x = shooter.rect.x - shooter.projectile.width;
+        }// left
+            
+    shooter.projectile.y = shooter.rect.y + (shooter.rect.height / 2)
+                           - (shooter.projectile.height / 2);
+    shooter.timer = 0.0f;
+        shooter.timer        = 0.0f;
+    }
+
+    if (!shooter.active) return;
+
+    // Move projectile sideways
+    shooter.projectile.x += shooter.speed * shooter.direction; // direction is set in level editor — 1 for right, -1 for left
 
     // Draw projectile
     DrawRectangleRec(shooter.projectile, RED);

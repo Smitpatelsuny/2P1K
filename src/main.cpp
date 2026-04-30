@@ -306,9 +306,16 @@ int main(void)
             }
         }
 
-        if (gs.hasShooter)
-                for (auto& shooter : gs.shooters)
-                    UpdateShooter(shooter, gs.Ying, gs.Yan, gs.obj3,
+        if (gs.hasVerticalShooter)
+                for (auto& shooter : gs.vshooters)
+                    UpdateVerticalShooter(shooter, gs.Ying, gs.Yan, gs.obj3,
+                   gs.rad, gs.platforms.data(), (int)gs.platforms.size(),
+                   gs.merged, gs.invincibility, gs.invincibilityTimer,
+                   gs.restart, gs.p1Spawn, gs.p2Spawn);
+
+        if (gs.hasHorizontalShooter)
+                for (auto& shooter : gs.hshooters)
+                    UpdateHorizontalShooter(shooter, gs.Ying, gs.Yan, gs.obj3,
                    gs.rad, gs.platforms.data(), (int)gs.platforms.size(),
                    gs.merged, gs.invincibility, gs.invincibilityTimer,
                    gs.restart, gs.p1Spawn, gs.p2Spawn);
@@ -402,13 +409,22 @@ int main(void)
             UpdateDoor(gs.Ying, gs.Yan, gs.obj3, gs.rad, gs.currentDoor);
         }
 
-               if (gs.hasShooter){
-                    for (auto& shooter : gs.shooters)
-                    UpdateShooter(shooter, gs.Ying, gs.Yan, gs.obj3,
-                   gs.rad, gs.platforms.data(), (int)gs.platforms.size(),
-                   gs.merged, gs.invincibility, gs.invincibilityTimer,
-                   gs.restart, gs.p1Spawn, gs.p2Spawn);
-               }
+               if (gs.hasVerticalShooter){
+                    for (auto& shooter : gs.vshooters)
+                        UpdateVerticalShooter(shooter, gs.Ying, gs.Yan, gs.obj3,
+                       gs.rad, gs.platforms.data(), (int)gs.platforms.size(),
+                       gs.merged, gs.invincibility, gs.invincibilityTimer,
+                       gs.restart, gs.p1Spawn, gs.p2Spawn);
+                   }
+               
+            if (gs.hasHorizontalShooter){
+                        for (auto& shooter : gs.hshooters){ 
+                            UpdateHorizontalShooter(shooter, gs.Ying, gs.Yan, gs.obj3,
+                        gs.rad, gs.platforms.data(), (int)gs.platforms.size(),
+                        gs.merged, gs.invincibility, gs.invincibilityTimer,
+                        gs.restart, gs.p1Spawn, gs.p2Spawn);
+                        }
+                    }
              
                       
         if(gs.hasSentry){
@@ -476,3 +492,4 @@ for the button on the left side for the rigth door {
     return 0;
     
 }
+
