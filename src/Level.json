@@ -615,61 +615,210 @@
           "y": 0,
           "width": 800,
           "height": 15
+        },
+        {
+          "label": "MiddleDivider",
+          "x": 300,
+          "y": 180,
+          "width": 200,
+          "height": 620
+        },
+        {
+          "label": "Left1stPlatform",
+          "x": 200,
+          "y": 685,
+          "width": 120,
+          "height": 15
+        },
+        {
+          "label": "Left2ndPlatform",
+          "x": 0,
+          "y": 575,
+          "width": 120,
+          "height": 15
+        },
+        {
+          "label": "Left3rdPlatform",
+          "x": 200,
+          "y": 465,
+          "width": 120,
+          "height": 15
+
+        },
+        {
+           "label": "Left4thPlatform",
+          "x": 0,
+          "y": 355,
+          "width": 120,
+          "height": 15
+        },
+        {
+          "label": "Left5thPlatform",
+          "x": 200,
+          "y": 245,
+          "width": 120,
+          "height": 15
+        },
+        {
+          "label": "Right1stPlatform",
+          "x": 480,
+          "y": 685,
+          "width": 120,
+          "height": 15
+        },
+        {
+          "label": "Right2ndPlatform",
+          "x": 680,
+          "y": 575,
+          "width": 120,
+          "height": 15
+        },
+        {
+          "label": "Right3rdPlatform",
+          "x": 480,
+          "y": 465,
+          "width": 120,
+          "height": 15
+        },
+        {
+           "label": "Right4thPlatform",
+          "x": 680,
+          "y": 355,
+          "width": 120,
+          "height": 15
+        },
+        {
+          "label": "Right5thPlatform",
+          "x": 480,
+          "y": 245,
+          "width": 120,
+          "height": 15
         }
       ],
       "VerticalShooters": [
-        {
-          "label": "v1",
-          "rect":         { "x": 380, "y": 0,  "width": 40, "height": 20 },
-          "projectile":   { "x": 390, "y": 20, "width": 20, "height": 20 },
+       {
+          "label": "vleft",
+          "rect":         { "x": 140, "y": 0,  "width": 40, "height": 20 },
+          "projectile":   { "x": 140, "y": 20, "width": 20, "height": 20 },
           "speed":        3.0,
-          "interval":     2.0,
+          "interval":     5.0,
           "active":       false,
-          "direction":     1.0 
-        },
-        {
-          "label": "v2",
-          "rect":         { "x": 200, "y": 780,  "width": 40, "height": 20 },
-          "projectile":   { "x": 210, "y": 760, "width": 20, "height": 20 },
+          "direction":     1.0
+       },
+       {
+          "label": "vright",
+          "rect":         { "x": 620, "y": 0,  "width": 40, "height": 20 },
+          "projectile":   { "x": 620, "y": 20, "width": 20, "height": 20 },
           "speed":        3.0,
-          "interval":     2.0,
+          "interval":     5.0,
           "active":       false,
-          "direction":     -1.0
-        }
+          "direction":     1.0
+       }
 
     
       ],
       "HorizontalShooters": [
         {
-          "label": "h1",
-          "rect":         { "x": 0, "y": 400,  "width": 20, "height": 40 },
-          "projectile":   { "x": 20, "y": 380, "width": 20, "height": 20 },
-          "speed":        3.0,
-          "interval":     2.0,
+          "label": "hleft1",
+          "rect":         { "x": 0, "y": 635,  "width": 20, "height": 40 },
+          "projectile":   { "x": 20, "y": 635, "width": 20, "height": 20 },
+          "speed":        0.5,
+          "interval":     2.5,
           "active":       false,
           "direction":     1.0
-
         },
         {
-          "label": "h2",
-          "rect":         { "x": 780, "y": 200,  "width": 20, "height": 40 },
-          "projectile":   { "x": 760, "y": 180, "width": 20, "height": 20 },
-          "speed":        3.0,
-          "interval":     2.0,
+          "label": "hleft2",
+          "rect":         { "x": 295, "y": 525,  "width": 20, "height": 40 },
+          "projectile":   { "x": 275, "y": 525, "width": 20, "height": 20 },
+          "speed":        0.5,
+          "interval":     3.5,
+          "active":       false,
+          "direction":     -1.0
+        },
+        {
+          "label": "hleft3",
+          "rect":         { "x": 0, "y": 415,  "width": 20, "height": 40 },
+          "projectile":   { "x": 20, "y": 415, "width": 20, "height": 20 },
+          "speed":        0.5,
+          "interval":     4.5,
+          "active":       false,
+          "direction":     1.0
+        },
+        {
+          "label": "hleft4",
+          "rect":         { "x": 295, "y": 305,  "width": 20, "height": 40 },
+          "projectile":   { "x": 275, "y": 305, "width": 20, "height": 20 },
+          "speed":        0.5,
+          "interval":     5.5,
+          "active":       false,
+          "direction":     -1.0
+        },
+        {
+           "label": "hleft5",
+          "rect":         { "x": 0, "y": 195,  "width": 20, "height": 40 },
+          "projectile":   { "x": 20, "y": 195, "width": 20, "height": 20 },
+          "speed":        0.5,
+          "interval":     6.5,
+          "active":       false,
+          "direction":     1.0
+        },
+        {
+          "label": "hright1",
+          "rect":         { "x": 780, "y": 635,  "width": 20, "height": 40 },
+          "projectile":   { "x": 760, "y": 635, "width": 20, "height": 20 },
+          "speed":        0.5,
+          "interval":     2.5,
+          "active":       false,
+          "direction":     -1.0
+        },
+        {
+          "label": "hright2",
+          "rect":         { "x": 485, "y": 525,  "width": 20, "height": 40 },
+          "projectile":   { "x": 505, "y": 525, "width": 20, "height": 20 },
+          "speed":        0.5,
+          "interval":     3.5,
+          "active":       false,
+          "direction":     1.0
+        },
+        {
+          "label": "hright3",
+          "rect":         { "x": 780, "y": 415,  "width": 20, "height": 40 },
+          "projectile":   { "x": 760, "y": 415, "width": 20, "height": 20 },
+          "speed":        0.5,
+          "interval":     4.5,
+          "active":       false,
+          "direction":     -1.0
+        },
+        {
+             "label": "hright4",
+          "rect":         { "x": 485, "y": 305,  "width": 20, "height": 40 },
+          "projectile":   { "x": 505, "y": 305, "width": 20, "height": 20 },
+          "speed":        0.5,
+          "interval":     5.5,
+          "active":       false,
+          "direction":     1.0
+        },
+        {
+          "label": "hright5",
+          "rect":         { "x": 780, "y": 195,  "width": 20, "height": 40 },
+          "projectile":   { "x": 760, "y": 195, "width": 20, "height": 20 },
+          "speed":        0.5,
+          "interval":     6.5,
           "active":       false,
           "direction":     -1.0
         }
-
+       
       ],
 
     "sentries": [
     {
     "x": 400,
-    "y": 700,
+    "y": 100,
     "speed": 0.5,
     "radius": 5,
-    "smallSight": { "x": 370, "y": 670, "width": 60,  "height": 60  },
-    "largeSight":  { "x": 320, "y": 620, "width": 160, "height": 160 }
+    "smallSight": { "x": 370, "y": 70, "width": 60,  "height": 60  },
+    "largeSight":  { "x": 320, "y": 20, "width": 160, "height": 160 }
     }
     ]
     },
