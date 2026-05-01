@@ -557,6 +557,14 @@
     "smallSight": { "x": 550, "y": 400, "width": 60,  "height": 60  },
     "largeSight":  { "x": 500, "y": 350, "width": 160, "height": 160 }
     }
+    ],
+      "glassPlatforms": [
+    {
+      "x": 315,
+      "y": 250,
+      "width": 160,
+      "height": 10
+    }
     ]
     },
 
