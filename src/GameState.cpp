@@ -23,6 +23,7 @@ void GameState::LoadLevel(const json& data, int levelId)
     vshooters.clear();
     hshooters.clear();
     sentries.clear();
+    glassPlatforms.clear();
     hasLift = false;                          
     hasBox  = false;                        
     hasDoor    = false;
@@ -30,6 +31,7 @@ void GameState::LoadLevel(const json& data, int levelId)
     hasVerticalShooter = false;
     hasHorizontalShooter = false;
     hasSentry = false;
+    hasGlassPlatforms = false;
 
 
     for (const auto& lvl : data["Level"])
@@ -229,6 +231,20 @@ if (lvl.contains("sentries"))
         sentries.push_back(sd);
     }
     hasSentry = true;  
+}
+
+if (lvl.contains("glassPlatforms"))
+{
+    for (const auto& g : lvl["glassPlatforms"])
+    {
+        GlassPlatformData gp;
+        gp.rect        = { g["x"].get<float>(),     g["y"].get<float>(),
+                           g["width"].get<float>(),  g["height"].get<float>() };
+        gp.broken      = false;
+        gp.breakTimer  = 0.0f;
+        glassPlatforms.push_back(gp);
+    }
+     hasGlassPlatforms = true;
 }
 
         currentLevelId = levelId;

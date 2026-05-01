@@ -533,3 +533,68 @@ void UpdateSentry(SentryData& sentry, Vector2& Ying, Vector2& Yan, Vector2& obj3
         invincibilityTimer = 1.0f;
     }
 }
+
+
+void UpdateGlassPlatform(GlassPlatformData& gp, Vector2& Ying, Vector2& Yan,
+                          Vector2& obj3, float rad, bool merged)
+{
+    if (gp.broken)
+    {
+        if (gp.breakTimer > 0.0f)
+            gp.breakTimer -= GetFrameTime();
+        return;
+    }
+
+    bool mergedOnGlass = merged &&
+                         CheckCollisionCircleRec(obj3, rad + 1, gp.rect) &&
+                         obj3.y < gp.rect.y;
+
+    // testing on unmerged players if needed — currently only breaks from merged player
+    // bool p1OnGlass = CheckCollisionCircleRec(Ying, rad, gp.rect) && Ying.y < gp.rect.y;
+    // bool p2OnGlass = CheckCollisionCircleRec(Yan,  rad, gp.rect) && Yan.y  < gp.rect.y;
+
+    if (mergedOnGlass)
+    {
+        gp.broken     = true;
+        gp.breakTimer = 3.0f;
+    }
+}
+
+void DrawGlassPlatform(GlassPlatformData& gp)
+{
+    if (gp.broken)
+    {
+        if (gp.breakTimer > 0.0f)
+        {
+            float alpha = gp.breakTimer / 3.0f;
+            Color brokenColor = { 173, 216, 230, (unsigned char)(alpha * 255) };
+            float a = 3.0f - gp.breakTimer;
+
+            Rectangle frags[] = {
+                { gp.rect.x,       gp.rect.y + a * 60.0f, 35, 8 },
+                { gp.rect.x + 40,  gp.rect.y + a * 80.0f, 35, 8 },
+                { gp.rect.x + 80,  gp.rect.y + a * 70.0f, 35, 8 },
+                { gp.rect.x + 120, gp.rect.y + a * 90.0f, 35, 8 },
+                { gp.rect.x + 160, gp.rect.y + a * 65.0f, 35, 8 }
+            };
+
+            for (int i = 0; i < 5; i++)
+                DrawRectangleRec(frags[i], brokenColor);
+        }
+        return;
+    }
+
+    // Draw intact glass
+    Color glassColor = { 173, 216, 230, 150 };
+    Color shineColor = { 255, 255, 255, 200 };
+
+    DrawRectangleRec(gp.rect, glassColor);
+
+    Rectangle shine = gp.rect;
+    shine.height = 3;
+    DrawRectangleRec(shine, shineColor);
+
+    DrawRectangleLinesEx(gp.rect, 1.0f, { 135, 206, 235, 200 });
+}
+
+

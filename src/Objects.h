@@ -59,6 +59,12 @@ struct SentryData {
     float     radius      = 5.0f;
 };
 
+struct GlassPlatformData {
+    Rectangle rect       = { 0 };
+    bool      broken     = false;
+    float     breakTimer = 0.0f;
+};
+
 void levelLift(Vector2 Ying, Vector2 Yan, Vector2 obj3, float rad, LiftData& lift);
 
 void LyftHorControls(Vector2& Ying, Vector2& Yan, Vector2& obj3, float rad,
@@ -115,5 +121,8 @@ void UpdateSentry(SentryData& sentry, Vector2& Ying, Vector2& Yan, Vector2& obj3
                   float& invincibilityTimer, bool& restart,
                   Vector2 p1Spawn, Vector2 p2Spawn);
 
+void UpdateGlassPlatform(GlassPlatformData& gp, Vector2& Ying, Vector2& Yan,
+                          Vector2& obj3, float rad, bool merged);
+void DrawGlassPlatform(GlassPlatformData& gp);
 
 #endif

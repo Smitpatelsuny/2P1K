@@ -50,6 +50,7 @@ struct GameState
     std::vector<ShooterData>           hshooters;
     std::vector<BoxData>               boxes;
     std::vector<SentryData>            sentries;
+    std::vector<GlassPlatformData> glassPlatforms;
     Rectangle exitDoorHitboxYin  = { 0 };
     Rectangle exitDoorHitboxYang = { 0 };
 
@@ -82,6 +83,9 @@ struct GameState
     // ── Sentry ───────────────────────────────────────────────────────────────
    
      bool    hasSentry = false;
+
+// ── Glass ───────────────────────────────────────────────────────────────
+     bool    hasGlassPlatforms = false;
 
     // ── Methods ───────────────────────────────────────────────────────────
     void LoadLevel(const json& data, int levelId);

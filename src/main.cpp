@@ -124,6 +124,15 @@ int main(void)
                     Player2Motor(gs.Yan, 2);
                 }
 
+                if (gs.hasGlassPlatforms)
+                {
+                    for (auto& gp : gs.glassPlatforms){
+                        if (!gp.broken){
+                            gs.platforms.push_back(gp.rect);
+                        }
+                    }
+                }
+ 
                 // Horizontal collisions
                     PlayerPlatformCollisions(gs.Ying, gs.rad,
                                              gs.platforms.data(), (int)gs.platforms.size(),
@@ -169,7 +178,16 @@ int main(void)
                                      gs.Jumpspeed, gs.Jumpspeed2, gs.JumpspeedMerged,
                                      oldP1, oldP2, oldMerged, gs.boxRect);
                 
-               
+                    if (gs.hasGlassPlatforms){
+                             for (int i = 0; i < (int)gs.glassPlatforms.size(); i++){
+                              if (!gs.glassPlatforms[i].broken){
+                                     gs.platforms.pop_back();
+                              }
+                               
+                        }
+                    }
+                       
+  
         
                 if (gs.hasBox)
                 {
@@ -279,6 +297,13 @@ int main(void)
         if (gs.hasDoor){
             UpdateDoor(gs.Ying, gs.Yan, gs.obj3, gs.rad, gs.currentDoor);
         }
+
+          if (gs.hasGlassPlatforms){
+            for (auto& gp : gs.glassPlatforms){
+                UpdateGlassPlatform(gp, gs.Ying, gs.Yan, gs.obj3, gs.rad, gs.merged);
+            }
+        }
+    
 
             } break;
         }
@@ -407,6 +432,13 @@ int main(void)
 
         if (gs.hasDoor){
             UpdateDoor(gs.Ying, gs.Yan, gs.obj3, gs.rad, gs.currentDoor);
+        }
+
+        if ((gs.hasGlassPlatforms)){
+            for (auto& gp : gs.glassPlatforms) {
+                    DrawGlassPlatform(gp);
+                    UpdateGlassPlatform(gp, gs.Ying, gs.Yan, gs.obj3, gs.rad, gs.merged);
+            }
         }
 
                if (gs.hasVerticalShooter){
