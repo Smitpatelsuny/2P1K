@@ -2,6 +2,7 @@
 #include "PlayerStuff.h"
 #include <stdio.h>
 #include "Objects.h"
+#include <vector>
 
 //smit commit
 
@@ -160,29 +161,28 @@ void MergeObjects(Vector2& obj1, Vector2& obj2, Vector2& obj3, float& radius1, b
     }
 }
 
-void PlayerPlatformCollisions(Vector2& player, int rad, Rectangle platforms[], int platformCount, Vector2& ballPosition, Vector2& obj3, Vector2& oldP1, Vector2& oldP2, Vector2& oldMerged, Rectangle box)
+void PlayerPlatformCollisions(Vector2& player, int rad, Rectangle platforms[], int platformCount, Vector2& ballPosition, Vector2& obj3, Vector2& oldP1, Vector2& oldP2, Vector2& oldMerged, const std::vector<BoxData>& box)
 {
     for (int i = 0; i < platformCount; i++) {
-            if (CheckCollisionCircleRec(player, rad, platforms[i]) || CheckCollisionCircleRec(player, rad-0.1, box)) {
+        for (const auto& b : box)
+        {
+            Rectangle boxRect = b.ToRect();
+
+            if (CheckCollisionCircleRec(player, rad, platforms[i]) || CheckCollisionCircleRec(player, rad-0.1, boxRect)) {
                 player.x = oldP1.x;//go back to old position
                 break;
             }
-        }
-        
-        for (int i = 0; i < platformCount; i++) {
-            if (CheckCollisionCircleRec(ballPosition, rad, platforms[i]) || CheckCollisionCircleRec(ballPosition, rad-0.1, box)) {
+            if (CheckCollisionCircleRec(ballPosition, rad, platforms[i]) || CheckCollisionCircleRec(ballPosition, rad-0.1, boxRect)) {
                 ballPosition.x = oldP2.x; //go back to old position
                 break;
             }
-        }
 
-         for (int i = 0; i < platformCount; i++) {
-            if (CheckCollisionCircleRec(obj3, rad, platforms[i]) || CheckCollisionCircleRec(obj3, rad-0.1, box)) {
+            if (CheckCollisionCircleRec(obj3, rad, platforms[i]) || CheckCollisionCircleRec(obj3, rad-0.1, boxRect)) {
                 obj3.x = oldMerged.x;//go back to old position
                 break;
             }
-        }
-        
+        }    
+    }  
 }
 
 void PlayerJumpCollisions(Vector2& player, Vector2& ballPosition, Vector2& obj3, float rad, Rectangle platforms[], int platformCount, bool& P1CanJump, bool& P2CanJump, bool& MergedCanJump, float& Jumpspeed, float& Jumpspeed2, float& JumpspeedMerged, Vector2& oldP1, Vector2& oldP2, Vector2& oldMerged, Rectangle box)

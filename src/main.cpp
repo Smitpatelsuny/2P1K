@@ -23,19 +23,20 @@ int main(void)
 {
     const int screenWidth  = 800;
     const int screenHeight = 800;
+    bool paused = false;
 
     json data;
     {
-        std::ifstream file("C:/Users/dalma/projects/2P1K/src/Level.json");
+        std::ifstream file("src/Level.json");
         data = json::parse(file);
     }
 
     GameState gs;   
 
-    InitWindow(screenWidth, screenHeight, "All code test");
+    InitWindow(screenWidth, screenHeight, "Ying and Yan; The Second Coming");
 
-    Texture2D background_menu = LoadTexture("C:/Users/dalma/projects/2P1K/src/assets/background_menu.jpg");
-    Texture2D gamePlay2       = LoadTexture("C:/Users/dalma/projects/2P1K/src/assets/gamePlay2.jpg");
+    Texture2D background_menu = LoadTexture("assets/background_menu.jpg");
+    Texture2D gamePlay2       = LoadTexture("assets/gamePlay2.jpg");
 
     AnimState yingState = ANIM_IDLE;
     AnimState yanState = ANIM_IDLE;
@@ -43,15 +44,15 @@ int main(void)
     
     
        AnimatedSprite w_player = LoadAnimatedSprite(
-        "C:/Users/dalma/projects/2P1K/src/assets/player_w.png",
+        "assets/player_w.png",
         1.5f, 3, 4, 0.15f);
 
      AnimatedSprite b_player = LoadAnimatedSprite(
-        "C:/Users/dalma/projects/2P1K/src/assets/Player_b.png",
+        "assets/Player_b.png",
         1.5f, 3, 4, 0.15f);
 
     AnimatedSprite m_player = LoadAnimatedSprite(
-        "C:/Users/dalma/projects/2P1K/src/assets/player_m.png",
+        "assets/player_m.png",
         1.5f, 3, 4, 0.15f);
 
     
@@ -73,8 +74,22 @@ int main(void)
         
         MergeObjects(gs.Ying, gs.Yan, gs.obj3, gs.rad, gs.merged, gs.invincibility, gs.Jumpspeed2, gs.Ejected);
 
+        // Global pause toggle
+        if (IsKeyPressed(KEY_Q) && gs.currentScreen == GameState::Screen::GAMEPLAY)
+        {
+            paused = !paused;
+        }
+        if (paused && IsKeyPressed(KEY_W))
+        {
+            gs.currentScreen = GameState::Screen::LEVSEL;
+            paused = false;
+        }
+
+
+
+
         // ── Update ───────────────────────────────────────────────────────
-        switch (gs.currentScreen)
+       switch (gs.currentScreen)
         {
             case GameState::Screen::TITLE:
             {
@@ -104,11 +119,12 @@ int main(void)
 
             case GameState::Screen::GAMEPLAY:
             {
-                if (IsKeyPressed(KEY_P) ||
-                    ExitDoors(gs.Ying, gs.Yan,
-                              gs.exitDoorHitboxYin, gs.exitDoorHitboxYang, gs.rad, gs.currentLevelId))
+                // Skip gameplay if paused
+                if (paused) break;
+
+                if (ExitDoors(gs.Ying, gs.Yan, gs.exitDoorHitboxYin, gs.exitDoorHitboxYang, gs.rad, gs.currentLevelId))
                 {
-                    gs.currentScreen = GameState::Screen::LEVSEL;  
+                    gs.currentScreen = GameState::Screen::LEVSEL;
                     break;
                 }
 
@@ -125,164 +141,116 @@ int main(void)
                 }
 
                 // Horizontal collisions
-                    PlayerPlatformCollisions(gs.Ying, gs.rad,
-                                             gs.platforms.data(), (int)gs.platforms.size(),
-                                             gs.Yan, gs.obj3, oldP1, oldP2, oldMerged, gs.boxRect);
-                
+                PlayerPlatformCollisions(gs.Ying, gs.rad,
+                                 gs.platforms.data(), (int)gs.platforms.size(),
+                                 gs.Yan, gs.obj3, oldP1, oldP2, oldMerged, gs.boxes);
 
                 if (gs.hasDoor && !gs.currentDoor.switched)
                     gs.platforms.push_back(gs.currentDoor.doorClosed);
-                
+
                 if (gs.hasBox)
                 {
                     for (auto& box : gs.boxes){
-                    PlayerBoxHorizontalCollisions(gs.Ying, gs.Yan, gs.obj3,
-                                                 gs.rad, box,
-                                                 gs.platforms.data(), (int)gs.platforms.size(),
-                                                 oldP1, oldP2, oldMerged);
+                        PlayerBoxHorizontalCollisions(gs.Ying, gs.Yan, gs.obj3,
+                                              gs.rad, box,
+                                              gs.platforms.data(), (int)gs.platforms.size(),
+                                              oldP1, oldP2, oldMerged);
                     }
                 }
-                
-             if (gs.hasLift)
-             {       
 
-               for (auto& lift : gs.lifts) {
-                    for(auto& box : gs.boxes){
-                    LyftHorControls(gs.Ying, gs.Yan, gs.obj3, gs.rad,
-                    oldP1, oldP2, oldMerged,
-                        lift, box);
-
-                     }
-              }
-                
-             }
-                // Vertical collisions
-                Jump(gs.Jumpspeed, gs.Jumpspeed2, gs.JumpspeedMerged,
-                     gs.P1CanJump, gs.P2CanJump, gs.MergedCanJump,
-                     gs.merged, gs.rad, gs.Ying, gs.Yan, gs.obj3, gs.Ejected);
-
-
-                    
-                     PlayerJumpCollisions(gs.Ying, gs.Yan, gs.obj3, gs.rad,
-                                     gs.platforms.data(), (int)gs.platforms.size(),
-                                     gs.P1CanJump, gs.P2CanJump, gs.MergedCanJump,
-                                     gs.Jumpspeed, gs.Jumpspeed2, gs.JumpspeedMerged,
-                                     oldP1, oldP2, oldMerged, gs.boxRect);
-                
-               
-        
-                if (gs.hasBox)
-                {
-                    for (auto& box : gs.boxes){
-                        PlayerBoxCollisions(gs.Ying, gs.rad, gs.Yan, gs.obj3,    // gravity only
-                        (int)gs.platforms.size(), gs.platforms.data(),
-                        box);
-                        PlayerBoxVerticalCollisions(gs.Ying, gs.Yan, gs.obj3, gs.rad, box,
-                                 gs.P1CanJump, gs.P2CanJump, gs.MergedCanJump,
-                                 gs.Jumpspeed, gs.Jumpspeed2, gs.JumpspeedMerged,
-                                 oldP1, oldP2, oldMerged);
-                    }
-                    
-                }
                 if (gs.hasLift)
                 {
-                   for (auto& lift : gs.lifts)
+                    for (auto& lift : gs.lifts) {
+                        for (auto& box : gs.boxes){
+                            LyftHorControls(gs.Ying, gs.Yan, gs.obj3, gs.rad,
+                                    oldP1, oldP2, oldMerged,
+                                    lift, box);
+                        }
+                    }
+                }
+
+                // Vertical collisions
+                Jump(gs.Jumpspeed, gs.Jumpspeed2, gs.JumpspeedMerged,
+                    gs.P1CanJump, gs.P2CanJump, gs.MergedCanJump,
+                    gs.merged, gs.rad, gs.Ying, gs.Yan, gs.obj3, gs.Ejected);
+
+                PlayerJumpCollisions(gs.Ying, gs.Yan, gs.obj3, gs.rad,
+                             gs.platforms.data(), (int)gs.platforms.size(),
+                             gs.P1CanJump, gs.P2CanJump, gs.MergedCanJump,
+                             gs.Jumpspeed, gs.Jumpspeed2, gs.JumpspeedMerged,
+                             oldP1, oldP2, oldMerged, gs.boxRect);
+
+                if (gs.hasBox)
+                {
+                    for (auto& box : gs.boxes){
+                        PlayerBoxCollisions(gs.Ying, gs.rad, gs.Yan, gs.obj3,
+                                    (int)gs.platforms.size(), gs.platforms.data(),
+                                    box);
+                        PlayerBoxVerticalCollisions(gs.Ying, gs.Yan, gs.obj3, gs.rad, box,
+                                            gs.P1CanJump, gs.P2CanJump, gs.MergedCanJump,
+                                            gs.Jumpspeed, gs.Jumpspeed2, gs.JumpspeedMerged,
+                                            oldP1, oldP2, oldMerged);
+                    }
+                }
+
+                if (gs.hasLift)
+                {
+                for (auto& lift : gs.lifts)
                     {
                         for (auto& box : gs.boxes)
                         {
                             LyftVertControls(gs.Ying, gs.Yan, gs.obj3, gs.rad,
-                                oldP1, oldP2, oldMerged,
-                                gs.P1CanJump, gs.P2CanJump, gs.MergedCanJump,
-                                gs.Jumpspeed, gs.Jumpspeed2, gs.JumpspeedMerged,
-                                lift, box);
+                                     oldP1, oldP2, oldMerged,
+                                     gs.P1CanJump, gs.P2CanJump, gs.MergedCanJump,
+                                     gs.Jumpspeed, gs.Jumpspeed2, gs.JumpspeedMerged,
+                                     lift, box);
                         }
                     }
                 }
-             
-       
-            if (!gs.merged)
-            {
-                if (IsKeyDown(KEY_D))
-                    gs.yingFacingRight = true;
-                if (IsKeyDown(KEY_A))
-                    gs.yingFacingRight = false;
 
-                if (IsKeyDown(KEY_RIGHT))
-                    gs.yanFacingRight = true;
-                if (IsKeyDown(KEY_LEFT))
-                    gs.yanFacingRight = false;
+                // Spike / death checks
+                for (const Rectangle& spike : gs.spikeHitboxes)
+                {
+                    if (CheckCollisionCircleRec(gs.Ying, gs.rad, spike) ||
+                    CheckCollisionCircleRec(gs.Yan, gs.rad, spike))
+                    {
+                        death(gs.Ying, gs.Yan, gs.p1Spawn, gs.p2Spawn,
+                            gs.invincibility, gs.invincibilityTimer, gs.restart);
+                        break;
+                    }
 
-                if (!gs.P1CanJump)
-                {
-                    if (gs.Jumpspeed > 0)
-                        yingState = ANIM_JUMP;
-                    else
-                        yingState = ANIM_FALL;
-                }
-                else if (IsKeyDown(KEY_A) || IsKeyDown(KEY_D))
-                {
-                    yingState = ANIM_RUN;
-                }
-                else
-                {
-                    yingState = ANIM_IDLE;
+                    if (gs.merged && CheckCollisionCircleRec(gs.obj3, gs.rad, spike))
+                    {
+                        forceUnmerge(gs.Ying, gs.Yan, gs.obj3, gs.rad,
+                             gs.merged, gs.invincibility, gs.invincibilityTimer);
+                        break;
+                    }
                 }
 
-                if (!gs.P2CanJump)
-                {
-                    if (gs.Jumpspeed2 > 0)
-                        yanState = ANIM_JUMP;
-                    else
-                        yanState = ANIM_FALL;
+                if (gs.hasShooter)
+                    for (auto& shooter : gs.shooters)
+                        UpdateShooter(shooter, gs.Ying, gs.Yan, gs.obj3,
+                              gs.rad, gs.platforms.data(), (int)gs.platforms.size(),
+                              gs.merged, gs.invincibility, gs.invincibilityTimer,
+                              gs.restart, gs.p1Spawn, gs.p2Spawn);
+
+                if (gs.hasSentry)
+                    for (auto& sentry : gs.sentries)
+                        UpdateSentry(sentry, gs.Ying, gs.Yan, gs.obj3,
+                             gs.rad, gs.merged, gs.invincibility,
+                             gs.invincibilityTimer, gs.restart,
+                             gs.p1Spawn, gs.p2Spawn);
+
+                if (gs.hasDoor && !gs.currentDoor.switched)
+                    gs.platforms.pop_back();
+
+                if (gs.hasDoor){
+                    UpdateDoor(gs.Ying, gs.Yan, gs.obj3, gs.rad, gs.currentDoor);
                 }
-                else if (IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_RIGHT))
-                {
-                    yanState = ANIM_RUN;
-                }
-                else
-                {
-                    yanState = ANIM_IDLE;
-                }
+            } break;   
+        }   
 
-                UpdateAnimatedSprite(w_player, yingState);
-                UpdateAnimatedSprite(b_player, yanState);
-            }
-            else
-            {
-                if (IsKeyDown(KEY_D))
-                    gs.mergedFacingRight = true;
-                if (IsKeyDown(KEY_A))
-                    gs.mergedFacingRight = false;
-
-                if (!gs.MergedCanJump)
-                {
-                    if (gs.JumpspeedMerged > 0)
-                        mergedState = ANIM_JUMP;
-                    else
-                        mergedState = ANIM_FALL;
-                }
-                else if (IsKeyDown(KEY_A) || IsKeyDown(KEY_D))
-                {
-                    mergedState = ANIM_RUN;
-                }
-                else
-                {
-                    mergedState = ANIM_IDLE;
-                }
-
-                UpdateAnimatedSprite(m_player, mergedState);
-            }
-
-        if (gs.hasDoor && !gs.currentDoor.switched)
-                gs.platforms.pop_back();
-
-        if (gs.hasDoor){
-            UpdateDoor(gs.Ying, gs.Yan, gs.obj3, gs.rad, gs.currentDoor);
-        }
-
-            } break;
-        }
-
+        /*
         for (const Rectangle& spike : gs.spikeHitboxes)
         {
             // Ying
@@ -304,6 +272,7 @@ int main(void)
                 forceUnmerge(gs.Ying, gs.Yan, gs.obj3, gs.rad, gs.merged, gs.invincibility, gs.invincibilityTimer);
                 break;
             }
+            
         }
 
         if (gs.hasShooter)
@@ -318,8 +287,21 @@ int main(void)
                 UpdateSentry(sentry, gs.Ying, gs.Yan, gs.obj3,
                   gs.rad, gs.merged, gs.invincibility,
                   gs.invincibilityTimer, gs.restart,
-                  gs.p1Spawn, gs.p2Spawn);
-
+                  gs.p1Spawn, gs.p2Spawn);*/
+/*
+        if (IsKeyPressed(KEY_Q) && gs.currentScreen == GameState::Screen::GAMEPLAY)
+        {
+            paused = !paused;
+            if (paused) {
+                gs.currentScreen = GameState::Screen::PAUSE;
+            }
+        }
+        else if (IsKeyPressed(KEY_Q) && gs.currentScreen == GameState::Screen::PAUSE)
+        {
+            paused = false;
+            gs.currentScreen = GameState::Screen::GAMEPLAY;
+        }
+*/
         // ── Draw ─────────────────────────────────────────────────────────
         BeginDrawing();
 
@@ -364,6 +346,25 @@ int main(void)
 
             case GameState::Screen::GAMEPLAY:
             {
+                
+                if (paused)
+                {
+                    DrawRectangle(0, 0, screenWidth, screenHeight, (Color){0, 0, 0, 180});
+
+                    int titleSize = 60;
+                    int titleWidth = MeasureText("PAUSED", titleSize);
+                    DrawText("PAUSED", screenWidth/2 - titleWidth/2, 200, titleSize, WHITE);
+
+                    int instrSize = 20;
+                    int instrWidth = MeasureText("Press Q or R to resume", instrSize);
+                    DrawText("Press Q or R to resume", screenWidth/2 - instrWidth/2, 350, instrSize, LIGHTGRAY);
+
+                    int instr2Width = MeasureText("Press W to return to level select", instrSize);
+                    DrawText("Press W to return to level select", screenWidth/2 - instr2Width/2, 400, instrSize, LIGHTGRAY);
+
+                    break;
+                }
+
                 ClearBackground(SKYBLUE);
                 DrawTexturePro(gamePlay2,
                     { 0, 0, (float)gamePlay2.width, (float)gamePlay2.height },
@@ -409,7 +410,6 @@ int main(void)
                    gs.merged, gs.invincibility, gs.invincibilityTimer,
                    gs.restart, gs.p1Spawn, gs.p2Spawn);
                }
-             
                       
         if(gs.hasSentry){
             for (auto& sentry : gs.sentries)
@@ -456,13 +456,17 @@ for the button on the left side for the rigth door {
 
                 DrawRectangleRec(gs.exitDoorHitboxYin,  GREEN);
                 DrawRectangleRec(gs.exitDoorHitboxYang, GREEN);
+
             } break;
 
-            default: break;
-        }
 
+            default: break;
+             
+        }
         EndDrawing();
+       
     }
+
 
 
     UnloadAnimatedSprite(w_player);

@@ -12,7 +12,7 @@ using json = nlohmann::json;
 struct GameState
 {
     // ── Screen ────────────────────────────────────────────────────────────
-    enum class Screen { TITLE, LEVSEL, GAMEPLAY };
+    enum class Screen { TITLE, LEVSEL, GAMEPLAY, PAUSE };
     Screen currentScreen = Screen::TITLE;
     int    currentLevelId = -1;
 
