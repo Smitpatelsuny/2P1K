@@ -3,6 +3,7 @@
 
 #include <raylib.h>
 #include <raymath.h>
+#include <vector>
 
 struct LiftData {
     Rectangle rect;
@@ -69,7 +70,7 @@ void levelLift(Vector2 Ying, Vector2 Yan, Vector2 obj3, float rad, LiftData& lif
 
 void LyftHorControls(Vector2& Ying, Vector2& Yan, Vector2& obj3, float rad,
                      Vector2& oldP1, Vector2& oldP2, Vector2& oldMerged,
-                     LiftData& lift, BoxData& box);
+                     LiftData& lift, const std::vector<BoxData>& box);
 
 void LyftVertControls(Vector2& Ying, Vector2& Yan, Vector2& obj3, float rad,
                       Vector2& oldP1, Vector2& oldP2, Vector2& oldMerged,

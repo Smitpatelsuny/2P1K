@@ -141,6 +141,10 @@ void MergeObjects(Vector2& obj1, Vector2& obj2, Vector2& obj3, float& radius1, b
             obj3.x = (obj1.x + obj2.x) / 2;
             obj3.y = (obj1.y + obj2.y) / 2;
             merged = true;
+            obj1.x = 0;
+            obj1.y = 0;
+            obj2.x = 0;
+            obj2.y = 0;
         }
     }
     else{
@@ -170,16 +174,16 @@ void PlayerPlatformCollisions(Vector2& player, int rad, Rectangle platforms[], i
 
             if (CheckCollisionCircleRec(player, rad, platforms[i]) || CheckCollisionCircleRec(player, rad-0.1, boxRect)) {
                 player.x = oldP1.x;//go back to old position
-                break;
+               
             }
             if (CheckCollisionCircleRec(ballPosition, rad, platforms[i]) || CheckCollisionCircleRec(ballPosition, rad-0.1, boxRect)) {
                 ballPosition.x = oldP2.x; //go back to old position
-                break;
+               
             }
 
             if (CheckCollisionCircleRec(obj3, rad, platforms[i]) || CheckCollisionCircleRec(obj3, rad-0.1, boxRect)) {
                 obj3.x = oldMerged.x;//go back to old position
-                break;
+               
             }
         }    
     }  
