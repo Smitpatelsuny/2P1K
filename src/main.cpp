@@ -24,6 +24,8 @@ int main(void)
     const int screenWidth  = 800;
     const int screenHeight = 800;
     bool paused = false;
+    int window = 2;
+    Vector2 mouse = GetMousePosition();
 
     json data;
     {
@@ -33,7 +35,10 @@ int main(void)
 
     GameState gs;   
 
-    InitWindow(screenWidth, screenHeight, "Ying and Yan; The Second Coming");
+    InitWindow(1000, 800, "Ying & Yan the Second Coming");
+
+    RenderTexture2D target = LoadRenderTexture(screenWidth, screenHeight);
+
 
     Texture2D background_menu = LoadTexture("assets/background_menu.jpg");
     Texture2D gamePlay2       = LoadTexture("assets/gamePlay2.jpg");
@@ -48,14 +53,12 @@ int main(void)
         1.5f, 3, 4, 0.15f);
 
      AnimatedSprite b_player = LoadAnimatedSprite(
-        "assets/Player_b.png",
+        "C:/Users/austi/projects/New2P1K/2P1K-2/assets/Player_b.png",
         1.5f, 3, 4, 0.15f);
 
     AnimatedSprite m_player = LoadAnimatedSprite(
         "assets/player_m.png",
         1.5f, 3, 4, 0.15f);
-
-    
     
 
     Rectangle startbutton = { 250, 220, 300, 40 };
@@ -68,14 +71,35 @@ int main(void)
     };
 
     SetTargetFPS(60);
+      if(true) ToggleFullscreen();
 
     while (!WindowShouldClose())
     {
-        
+            // Compute scale + offsets
+    float scaleX = (float)GetScreenWidth()  / screenWidth;
+    float scaleY = (float)GetScreenHeight() / screenHeight;
+    float scale  = fmin(scaleX, scaleY);
+
+    // Smooth scaling fix: prevent fractional rounding clipping
+    scale = floorf(scale * 100.0f) / 100.0f;
+
+    
+    float drawWidth  = screenWidth  * scale;
+    float drawHeight = screenHeight * scale;
+
+    float offsetX = (GetScreenWidth()  - drawWidth)  * 0.5f;
+    float offsetY = (GetScreenHeight() - drawHeight) * 0.5f;
+
+    // Convert mouse to GAME SPACE
+    Vector2 mouse = GetMousePosition();
+    float gameX = (mouse.x - offsetX) / scale;
+    float gameY = (mouse.y - offsetY) / scale;
+
+
         MergeObjects(gs.Ying, gs.Yan, gs.obj3, gs.rad, gs.merged, gs.invincibility, gs.Jumpspeed2, gs.Ejected);
 
         // Global pause toggle
-        if (IsKeyPressed(KEY_Q) && gs.currentScreen == GameState::Screen::GAMEPLAY)
+        if(IsKeyPressed(KEY_Q) && gs.currentScreen == GameState::Screen::GAMEPLAY)
         {
             paused = !paused;
         }
@@ -85,6 +109,7 @@ int main(void)
             paused = false;
         }
 
+      
 
 
 
@@ -94,21 +119,21 @@ int main(void)
             case GameState::Screen::TITLE:
             {
                 if (IsGestureDetected(GESTURE_TAP) &&
-                    CheckCollisionPointRec(GetMousePosition(), startbutton))
+                    CheckCollisionPointRec({gameX, gameY}, startbutton))
                     gs.currentScreen = GameState::Screen::LEVSEL;
             } break;
 
             case GameState::Screen::LEVSEL:
             {
                 if (IsGestureDetected(GESTURE_TAP) &&
-                    CheckCollisionPointRec(GetMousePosition(), backbutton))
+                    CheckCollisionPointRec({gameX, gameY}, backbutton))
                 {
                     gs.currentScreen = GameState::Screen::TITLE;
                 }
                 for (int i = 0; i < 4; i++)
                 {
                     if (IsGestureDetected(GESTURE_TAP) &&
-                        CheckCollisionPointRec(GetMousePosition(), levelselectbuttons[i]))
+                        CheckCollisionPointRec({gameX, gameY}, levelselectbuttons[i]))
                     {
                         gs.LoadLevel(data, i + 1);
                         gs.currentScreen = GameState::Screen::GAMEPLAY;
@@ -116,6 +141,7 @@ int main(void)
                     }
                 }
             } break;
+            
 
             case GameState::Screen::GAMEPLAY:
             {
@@ -140,6 +166,15 @@ int main(void)
                     Player2Motor(gs.Yan, 2);
                 }
 
+                if (gs.hasGlassPlatforms)
+                {
+                    for (auto& gp : gs.glassPlatforms){
+                        if (!gp.broken){
+                            gs.platforms.push_back(gp.rect);
+                        }
+                    }
+                }
+ 
                 // Horizontal collisions
                 PlayerPlatformCollisions(gs.Ying, gs.rad,
                                  gs.platforms.data(), (int)gs.platforms.size(),
@@ -161,25 +196,35 @@ int main(void)
                 if (gs.hasLift)
                 {
                     for (auto& lift : gs.lifts) {
-                        for (auto& box : gs.boxes){
                             LyftHorControls(gs.Ying, gs.Yan, gs.obj3, gs.rad,
                                     oldP1, oldP2, oldMerged,
-                                    lift, box);
-                        }
+                                    lift, gs.boxes);                      
                     }
                 }
 
                 // Vertical collisions
                 Jump(gs.Jumpspeed, gs.Jumpspeed2, gs.JumpspeedMerged,
-                    gs.P1CanJump, gs.P2CanJump, gs.MergedCanJump,
-                    gs.merged, gs.rad, gs.Ying, gs.Yan, gs.obj3, gs.Ejected);
+                     gs.P1CanJump, gs.P2CanJump, gs.MergedCanJump,
+                     gs.merged, gs.rad, gs.Ying, gs.Yan, gs.obj3, gs.Ejected);
 
-                PlayerJumpCollisions(gs.Ying, gs.Yan, gs.obj3, gs.rad,
-                             gs.platforms.data(), (int)gs.platforms.size(),
-                             gs.P1CanJump, gs.P2CanJump, gs.MergedCanJump,
-                             gs.Jumpspeed, gs.Jumpspeed2, gs.JumpspeedMerged,
-                             oldP1, oldP2, oldMerged, gs.boxRect);
 
+                    
+                     PlayerJumpCollisions(gs.Ying, gs.Yan, gs.obj3, gs.rad,
+                                     gs.platforms.data(), (int)gs.platforms.size(),
+                                     gs.P1CanJump, gs.P2CanJump, gs.MergedCanJump,
+                                     gs.Jumpspeed, gs.Jumpspeed2, gs.JumpspeedMerged,
+                                     oldP1, oldP2, oldMerged, gs.boxRect);
+                                     
+                    if (gs.hasGlassPlatforms){
+                             for (int i = 0; i < (int)gs.glassPlatforms.size(); i++){
+                              if (!gs.glassPlatforms[i].broken){
+                                     gs.platforms.pop_back();
+                              }
+                               
+                        }
+                    }     
+               
+        
                 if (gs.hasBox)
                 {
                     for (auto& box : gs.boxes){
@@ -192,6 +237,97 @@ int main(void)
                                             oldP1, oldP2, oldMerged);
                     }
                 }
+
+            if (!gs.merged)
+            {
+                if (IsKeyDown(KEY_D))
+                    gs.yingFacingRight = true;
+                if (IsKeyDown(KEY_A))
+                    gs.yingFacingRight = false;
+
+                if (IsKeyDown(KEY_RIGHT))
+                    gs.yanFacingRight = true;
+                if (IsKeyDown(KEY_LEFT))
+                    gs.yanFacingRight = false;
+
+                if (!gs.P1CanJump)
+                {
+                    if (gs.Jumpspeed > 0)
+                        yingState = ANIM_JUMP;
+                    else
+                        yingState = ANIM_FALL;
+                }
+                else if (IsKeyDown(KEY_A) || IsKeyDown(KEY_D))
+                {
+                    yingState = ANIM_RUN;
+                }
+                else
+                {
+                    yingState = ANIM_IDLE;
+                }
+
+                if (!gs.P2CanJump)
+                {
+                    if (gs.Jumpspeed2 > 0)
+                        yanState = ANIM_JUMP;
+                    else
+                        yanState = ANIM_FALL;
+                }
+                else if (IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_RIGHT))
+                {
+                    yanState = ANIM_RUN;
+                }
+                else
+                {
+                    yanState = ANIM_IDLE;
+                }
+
+                UpdateAnimatedSprite(w_player, yingState);
+                UpdateAnimatedSprite(b_player, yanState);
+            }
+            else
+            {
+                if (IsKeyDown(KEY_D))
+                    gs.mergedFacingRight = true;
+                if (IsKeyDown(KEY_A))
+                    gs.mergedFacingRight = false;
+
+                if (!gs.MergedCanJump)
+                {
+                    if (gs.JumpspeedMerged > 0)
+                        mergedState = ANIM_JUMP;
+                    else
+                        mergedState = ANIM_FALL;
+                }
+                else if (IsKeyDown(KEY_A) || IsKeyDown(KEY_D))
+                {
+                    mergedState = ANIM_RUN;
+                }
+                else
+                {
+                    mergedState = ANIM_IDLE;
+                }
+
+                UpdateAnimatedSprite(m_player, mergedState);
+            }
+
+               /*  if (gs.hasVerticalShooter){
+                    for (auto& shooter : gs.vshooters)
+                        UpdateVerticalShooter(shooter, gs.Ying, gs.Yan, gs.obj3,
+                       gs.rad, gs.platforms.data(), (int)gs.platforms.size(),
+                       gs.merged, gs.invincibility, gs.invincibilityTimer,
+                       gs.restart, gs.p1Spawn, gs.p2Spawn);
+                   }
+               
+            if (gs.hasHorizontalShooter){
+                        for (auto& shooter : gs.hshooters){ 
+                            UpdateHorizontalShooter(shooter, gs.Ying, gs.Yan, gs.obj3,
+                        gs.rad, gs.platforms.data(), (int)gs.platforms.size(),
+                        gs.merged, gs.invincibility, gs.invincibilityTimer,
+                        gs.restart, gs.p1Spawn, gs.p2Spawn);
+                        }
+                    }*/
+             
 
                 if (gs.hasLift)
                 {
@@ -227,13 +363,6 @@ int main(void)
                     }
                 }
 
-                if (gs.hasShooter)
-                    for (auto& shooter : gs.shooters)
-                        UpdateShooter(shooter, gs.Ying, gs.Yan, gs.obj3,
-                              gs.rad, gs.platforms.data(), (int)gs.platforms.size(),
-                              gs.merged, gs.invincibility, gs.invincibilityTimer,
-                              gs.restart, gs.p1Spawn, gs.p2Spawn);
-
                 if (gs.hasSentry)
                     for (auto& sentry : gs.sentries)
                         UpdateSentry(sentry, gs.Ying, gs.Yan, gs.obj3,
@@ -244,132 +373,115 @@ int main(void)
                 if (gs.hasDoor && !gs.currentDoor.switched)
                     gs.platforms.pop_back();
 
-                if (gs.hasDoor){
-                    UpdateDoor(gs.Ying, gs.Yan, gs.obj3, gs.rad, gs.currentDoor);
-                }
-            } break;   
-        }   
-
-        /*
-        for (const Rectangle& spike : gs.spikeHitboxes)
-        {
-            // Ying
-            if (CheckCollisionCircleRec(gs.Ying, gs.rad, spike) ||CheckCollisionCircleRec(gs.Yan, gs.rad, spike) )
-            {
-                death(gs.Ying, gs.Yan, gs.p1Spawn, gs.p2Spawn, gs.invincibility, gs.invincibilityTimer, gs.restart);
-                break;
-            }
-
-            // Yan
-            if (CheckCollisionCircleRec(gs.Yan, gs.rad, spike))
-            {
-                death(gs.Ying, gs.Yan, gs.p1Spawn, gs.p2Spawn, gs.invincibility, gs.invincibilityTimer, gs.restart);
-                break;
-            }
-                // Merged
-            if (gs.merged && CheckCollisionCircleRec(gs.obj3, gs.rad, spike))
-            {
-                forceUnmerge(gs.Ying, gs.Yan, gs.obj3, gs.rad, gs.merged, gs.invincibility, gs.invincibilityTimer);
-                break;
-            }
-            
+        if (gs.hasDoor){
+            UpdateDoor(gs.Ying, gs.Yan, gs.obj3, gs.rad, gs.currentDoor);
         }
 
-        if (gs.hasShooter)
-                for (auto& shooter : gs.shooters)
-                    UpdateShooter(shooter, gs.Ying, gs.Yan, gs.obj3,
-                   gs.rad, gs.platforms.data(), (int)gs.platforms.size(),
-                   gs.merged, gs.invincibility, gs.invincibilityTimer,
-                   gs.restart, gs.p1Spawn, gs.p2Spawn);
+          if (gs.hasGlassPlatforms){
+            for (auto& gp : gs.glassPlatforms){
+                UpdateGlassPlatform(gp, gs.Ying, gs.Yan, gs.obj3, gs.rad, gs.merged);
+            }
+        }
+    
+
+            } break;
+        }
+
         
-        if(gs.hasSentry)
-            for (auto& sentry : gs.sentries)
-                UpdateSentry(sentry, gs.Ying, gs.Yan, gs.obj3,
-                  gs.rad, gs.merged, gs.invincibility,
-                  gs.invincibilityTimer, gs.restart,
-                  gs.p1Spawn, gs.p2Spawn);*/
-/*
-        if (IsKeyPressed(KEY_Q) && gs.currentScreen == GameState::Screen::GAMEPLAY)
-        {
-            paused = !paused;
-            if (paused) {
-                gs.currentScreen = GameState::Screen::PAUSE;
+          if (gs.hasGlassPlatforms){
+            for (auto& gp : gs.glassPlatforms){
+                UpdateGlassPlatform(gp, gs.Ying, gs.Yan, gs.obj3, gs.rad, gs.merged);
             }
         }
-        else if (IsKeyPressed(KEY_Q) && gs.currentScreen == GameState::Screen::PAUSE)
-        {
-            paused = false;
-            gs.currentScreen = GameState::Screen::GAMEPLAY;
-        }
-*/
+    
         // ── Draw ─────────────────────────────────────────────────────────
-        BeginDrawing();
+        BeginTextureMode(target);
+        ClearBackground(BLACK);
+
 
         switch (gs.currentScreen)
+{
+    case GameState::Screen::TITLE:
+    {
+        // Background (drawn in GAME SPACE)
+        
+        if (background_menu.width > 0)
         {
-            case GameState::Screen::TITLE:
-            {
-                ClearBackground(BLACK);
-                if (background_menu.width > 0)
-                    DrawTexturePro(background_menu,
-                        { 0, 0, (float)background_menu.width, (float)background_menu.height },
-                        { 0, 0, (float)screenWidth, (float)screenHeight },
-                        { 0, 0 }, 0.0f, WHITE);
+            DrawTexturePro(
+                background_menu,
+                { 0, 0, (float)background_menu.width, (float)background_menu.height },
+                { 0, 0, (float)screenWidth, (float)screenHeight },   
+                { 0, 0 }, 0.0f, WHITE
+            );
+        }
 
-                int startSize  = 20;
-                int startWidth = MeasureText("START", startSize);
-                DrawText("Ying and Yan",      150, 20,  80, WHITE);
-                DrawText("The Second Coming", 200, 100, 40, WHITE);
-                DrawRectangleRec(startbutton, RED);
-                DrawText("START",
-                    (int)(startbutton.x + startbutton.width  / 2 - startWidth / 2),
-                    (int)(startbutton.y + startbutton.height / 2 - startSize  / 2),
-                    startSize, LIGHTGRAY);
-            } break;
+        // UI (GAME SPACE)
+        int startSize  = 20;
+        int startWidth = MeasureText("START", startSize);
 
-            case GameState::Screen::LEVSEL:
-            {
-                DrawRectangle(0, 0, screenWidth, screenHeight, BLACK);
-                DrawText("LEVEL SELECT", 150, 40, 60, WHITE);
-                for (int i = 0; i < 4; i++)
-                {
-                    DrawRectangleRec(levelselectbuttons[i], DARKGRAY);
-                    char label[8];
-                    snprintf(label, sizeof(label), "Lv %d", i + 1);
-                    DrawText(label,
-                        (int)(levelselectbuttons[i].x + 20),
-                        (int)(levelselectbuttons[i].y + 15),
-                        20, WHITE);
-                }
-                DrawRectangleRec(backbutton, WHITE);
-            } break;
+        DrawText("Ying and Yan",      150, 20,  80, WHITE);
+        DrawText("The Second Coming", 200, 100, 40, WHITE);
 
-            case GameState::Screen::GAMEPLAY:
-            {
-                
-                if (paused)
-                {
-                    DrawRectangle(0, 0, screenWidth, screenHeight, (Color){0, 0, 0, 180});
+        DrawRectangleRec(startbutton, RED);
+        DrawText("START",
+            (int)(startbutton.x + startbutton.width  / 2 - startWidth / 2),
+            (int)(startbutton.y + startbutton.height / 2 - startSize  / 2),
+            startSize, LIGHTGRAY);
 
-                    int titleSize = 60;
-                    int titleWidth = MeasureText("PAUSED", titleSize);
-                    DrawText("PAUSED", screenWidth/2 - titleWidth/2, 200, titleSize, WHITE);
+    }
+    break;
 
-                    int instrSize = 20;
-                    int instrWidth = MeasureText("Press Q or R to resume", instrSize);
-                    DrawText("Press Q or R to resume", screenWidth/2 - instrWidth/2, 350, instrSize, LIGHTGRAY);
+    case GameState::Screen::LEVSEL:
+    {
+        DrawRectangle(0, 0, screenWidth, screenHeight, BLACK);
 
-                    int instr2Width = MeasureText("Press W to return to level select", instrSize);
-                    DrawText("Press W to return to level select", screenWidth/2 - instr2Width/2, 400, instrSize, LIGHTGRAY);
+        DrawText("LEVEL SELECT", 150, 40, 60, WHITE);
 
-                    break;
-                }
+        for (int i = 0; i < 4; i++)
+        {
+            DrawRectangleRec(levelselectbuttons[i], DARKGRAY);
 
-                ClearBackground(SKYBLUE);
-                DrawTexturePro(gamePlay2,
-                    { 0, 0, (float)gamePlay2.width, (float)gamePlay2.height },
-                    { 0, 0, (float)screenWidth, (float)screenHeight },
-                    { 0, 0 }, 0.0f, WHITE);
+            char label[8];
+            snprintf(label, sizeof(label), "Lv %d", i + 1);
+
+            DrawText(label,
+                (int)(levelselectbuttons[i].x + 20),
+                (int)(levelselectbuttons[i].y + 15),
+                20, WHITE);
+        }
+
+        DrawRectangleRec(backbutton, WHITE);
+    }
+    break;
+
+    case GameState::Screen::GAMEPLAY:
+    {
+        if (paused)
+        {
+            DrawRectangle(0, 0, screenWidth, screenHeight, (Color){0,0,0,180});
+
+            int titleSize = 60;
+            int titleWidth = MeasureText("PAUSED", titleSize);
+            DrawText("PAUSED", screenWidth/2 - titleWidth/2, 200, titleSize, WHITE);
+
+            int instrSize = 20;
+            int instrWidth = MeasureText("Press Q or R to resume", instrSize);
+            DrawText("Press Q or R to resume", screenWidth/2 - instrWidth/2, 350, instrSize, LIGHTGRAY);
+
+            int instr2Width = MeasureText("Press W to return to level select", instrSize);
+            DrawText("Press W to return to level select", screenWidth/2 - instr2Width/2, 400, instrSize, LIGHTGRAY);
+
+            break;
+        }
+
+        // Gameplay background (GAME SPACE)
+        DrawTexturePro(
+            gamePlay2,
+            { 0, 0, (float)gamePlay2.width, (float)gamePlay2.height },
+            { 0, 0, (float)screenWidth, (float)screenHeight },
+            { 0, 0 }, 0.0f, WHITE
+        );
+
 
                 ExitGame();
 
@@ -403,14 +515,43 @@ int main(void)
             UpdateDoor(gs.Ying, gs.Yan, gs.obj3, gs.rad, gs.currentDoor);
         }
 
-               if (gs.hasShooter){
-                    for (auto& shooter : gs.shooters)
-                    UpdateShooter(shooter, gs.Ying, gs.Yan, gs.obj3,
-                   gs.rad, gs.platforms.data(), (int)gs.platforms.size(),
-                   gs.merged, gs.invincibility, gs.invincibilityTimer,
-                   gs.restart, gs.p1Spawn, gs.p2Spawn);
+        if ((gs.hasGlassPlatforms)){
+            for (auto& gp : gs.glassPlatforms) {
+                    DrawGlassPlatform(gp);
+                    UpdateGlassPlatform(gp, gs.Ying, gs.Yan, gs.obj3, gs.rad, gs.merged);
+            }
+        }
+
+               if (gs.hasVerticalShooter){
+                    for (auto& shooter : gs.vshooters)
+                        UpdateVerticalShooter(shooter, gs.Ying, gs.Yan, gs.obj3,
+                       gs.rad, gs.platforms.data(), (int)gs.platforms.size(),
+                       gs.merged, gs.invincibility, gs.invincibilityTimer,
+                       gs.restart, gs.p1Spawn, gs.p2Spawn);
+                   }
+               
+            if (gs.hasHorizontalShooter){
+                        for (auto& shooter : gs.hshooters){ 
+                            UpdateHorizontalShooter(shooter, gs.Ying, gs.Yan, gs.obj3,
+                        gs.rad, gs.platforms.data(), (int)gs.platforms.size(),
+                        gs.merged, gs.invincibility, gs.invincibilityTimer,
+                        gs.restart, gs.p1Spawn, gs.p2Spawn);
+                        }
+                    }
+             
+               if(gs.hasVerticalShooter){
+                for(auto& vertShoot : gs.vshooters){
+                    DrawRectangleRec(vertShoot.rect, DARKGRAY);
+                }
                }
-                      
+
+               if(gs.hasHorizontalShooter){
+                for(auto& horShoot : gs.hshooters){
+                    DrawRectangleRec(horShoot.rect, DARKGRAY);
+                }
+               }
+        
+
         if(gs.hasSentry){
             for (auto& sentry : gs.sentries)
                 UpdateSentry(sentry, gs.Ying, gs.Yan, gs.obj3,
@@ -447,7 +588,6 @@ for the button on the left side for the rigth door {
                 DrawAnimatedSpriteCentered(m_player, gs.obj3, gs.mergedFacingRight, WHITE);
             }
 
-             
                 for (const auto& p : gs.platforms)
                     DrawRectangleRec(p, DARKGRAY);
 
@@ -463,9 +603,25 @@ for the button on the left side for the rigth door {
             default: break;
              
         }
-        EndDrawing();
-       
+        EndTextureMode();
+
+        
+        
+// Nudge to avoid bottom clipping
+Rectangle src = { 0, 0, (float)target.texture.width, -(float)target.texture.height };
+Rectangle dst = {
+    offsetX,
+    offsetY,
+    drawWidth,
+    drawHeight - 30   // <- shave 1 pixel off the bottom
+};
+
+DrawTexturePro(target.texture, src, dst, { 0, 0 }, 0.0f, WHITE);
+
+EndDrawing();
+
     }
+
 
 
 
@@ -480,3 +636,4 @@ for the button on the left side for the rigth door {
     return 0;
     
 }
+

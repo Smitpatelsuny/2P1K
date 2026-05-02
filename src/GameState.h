@@ -12,7 +12,7 @@ using json = nlohmann::json;
 struct GameState
 {
     // ── Screen ────────────────────────────────────────────────────────────
-    enum class Screen { TITLE, LEVSEL, GAMEPLAY, PAUSE };
+    enum class Screen { TITLE, LEVSEL, GAMEPLAY};
     Screen currentScreen = Screen::TITLE;
     int    currentLevelId = -1;
 
@@ -46,9 +46,11 @@ struct GameState
     std::vector<std::array<Vector2,3>> spikes;
     std::vector<Rectangle>             spikeHitboxes;
     std::vector<LiftData>              lifts;
-    std::vector<ShooterData>           shooters;
+    std::vector<ShooterData>           vshooters;
+    std::vector<ShooterData>           hshooters;
     std::vector<BoxData>               boxes;
     std::vector<SentryData>            sentries;
+    std::vector<GlassPlatformData> glassPlatforms;
     Rectangle exitDoorHitboxYin  = { 0 };
     Rectangle exitDoorHitboxYang = { 0 };
 
@@ -65,7 +67,9 @@ struct GameState
  
     // ── Shooter stuff ─────────────────────────────────────────────────────────
 
-        bool       hasShooter = false;
+        bool       hasVerticalShooter = false;
+        bool       hasHorizontalShooter = false;
+    
 
 
     // ── Lift ──────────────────────────────────────────────────────────────
@@ -79,6 +83,9 @@ struct GameState
     // ── Sentry ───────────────────────────────────────────────────────────────
    
      bool    hasSentry = false;
+
+// ── Glass ───────────────────────────────────────────────────────────────
+     bool    hasGlassPlatforms = false;
 
     // ── Methods ───────────────────────────────────────────────────────────
     void LoadLevel(const json& data, int levelId);

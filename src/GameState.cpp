@@ -20,14 +20,18 @@ void GameState::LoadLevel(const json& data, int levelId)
     spikeHitboxes.clear();
     lifts.clear();
     boxes.clear();
-    shooters.clear();
+    vshooters.clear();
+    hshooters.clear();
     sentries.clear();
+    glassPlatforms.clear();
     hasLift = false;                          
     hasBox  = false;                        
     hasDoor    = false;
     currentDoor = {};
-    hasShooter = false;
+    hasVerticalShooter = false;
+    hasHorizontalShooter = false;
     hasSentry = false;
+    hasGlassPlatforms = false;
 
 
     for (const auto& lvl : data["Level"])
@@ -158,9 +162,9 @@ void GameState::LoadLevel(const json& data, int levelId)
      hasDoor = true;
     }
     
-    if (lvl.contains("Shooters"))
+    if (lvl.contains("VerticalShooters"))
     {
-        const auto& s = lvl["Shooters"];
+        const auto& s = lvl["VerticalShooters"];
         for (const auto& sh : s)
         {
             ShooterData newShooter;
@@ -176,13 +180,37 @@ void GameState::LoadLevel(const json& data, int levelId)
             newShooter.interval = sh["interval"].get<float>();
             newShooter.timer    = 0.0f;   // always reset on load
             newShooter.active   = sh["active"].get<bool>();
-            shooters.push_back(newShooter);
+             newShooter.direction = sh["direction"].get<float>();
+            vshooters.push_back(newShooter);
         }
-        hasShooter = true;
+        hasVerticalShooter = true;
     }
 
 
-    sentries.clear();
+    if (lvl.contains("HorizontalShooters"))
+    {
+        const auto& s = lvl["HorizontalShooters"];
+        for (const auto& sh : s)
+        {
+            ShooterData newShooter;
+            newShooter.rect       = { sh["rect"]["x"].get<float>(),
+                                      sh["rect"]["y"].get<float>(),
+                                      sh["rect"]["width"].get<float>(),
+                                      sh["rect"]["height"].get<float>() };
+            newShooter.projectile = { sh["projectile"]["x"].get<float>(),
+                                  sh["projectile"]["y"].get<float>(),
+                                  sh["projectile"]["width"].get<float>(),
+                                  sh["projectile"]["height"].get<float>() };
+            newShooter.speed    = sh["speed"].get<float>();
+            newShooter.interval = sh["interval"].get<float>();
+            newShooter.timer    = 0.0f;   // always reset on load
+            newShooter.active   = sh["active"].get<bool>();
+            newShooter.direction = sh["direction"].get<float>();
+            hshooters.push_back(newShooter);
+        }
+        hasHorizontalShooter = true;
+    }
+
 if (lvl.contains("sentries"))
 {
     for (const auto& s : lvl["sentries"])
@@ -203,6 +231,20 @@ if (lvl.contains("sentries"))
         sentries.push_back(sd);
     }
     hasSentry = true;  
+}
+
+if (lvl.contains("glassPlatforms"))
+{
+    for (const auto& g : lvl["glassPlatforms"])
+    {
+        GlassPlatformData gp;
+        gp.rect        = { g["x"].get<float>(),     g["y"].get<float>(),
+                           g["width"].get<float>(),  g["height"].get<float>() };
+        gp.broken      = false;
+        gp.breakTimer  = 0.0f;
+        glassPlatforms.push_back(gp);
+    }
+     hasGlassPlatforms = true;
 }
 
         currentLevelId = levelId;

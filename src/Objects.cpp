@@ -43,57 +43,98 @@ void LyftVertControls(Vector2& Ying, Vector2& Yan, Vector2& obj3, float rad,
 {
     Rectangle liftRect = currentLift.rect;
     Rectangle boxRect  = box.ToRect();
+    Rectangle newBoxRect = box.ToRect();
+    Rectangle liftTop = {liftRect.x, liftRect.y, liftRect.width, 4.0f };
+    Rectangle liftTopForBox = {liftRect.x, liftRect.y - 1, liftRect.width, 4.0f };
 
     // Lift vertical collision + carry
-
     PlayerJumpCollisions(Ying, Yan, obj3, rad, &currentLift.rect, 1,
                          P1CanJump, P2CanJump, MergedCanJump,
                          Jumpspeed, Jumpspeed2, JumpspeedMerged,
-                         oldP1, oldP2, oldMerged, box.rect);
+                         oldP1, oldP2, oldMerged, boxRect);
 
 
     if (CheckCollisionCircleRec(Ying, rad + 1, liftRect)) Ying.y -= currentLift.speed;
     if (CheckCollisionCircleRec(Yan,  rad + 1, liftRect)) Yan.y  -= currentLift.speed;
     if (CheckCollisionCircleRec(obj3, rad + 1, liftRect)) obj3.y -= currentLift.speed;
-/*
-    auto preventPlayerUnderLift = [&](Vector2& p, Vector2& oldP)
+
+    //Bottom of lift colliosions 
+   auto preventPlayerUnderLift = [&](Vector2& p, Vector2& oldP)
+{
+    float playerTop     = p.y - rad;
+    float oldPlayerTop  = oldP.y - rad;
+    float liftBottom    = liftRect.y + liftRect.height;
+    bool horizontalOverlap = (p.x + rad > liftRect.x) && (p.x - rad < liftRect.x + liftRect.width);
+
+    //lift is moving up
+    bool movingUp = p.y < oldP.y;
+
+    if (movingUp &&
+        oldPlayerTop > liftBottom &&
+        playerTop <= liftBottom &&
+        horizontalOverlap)
     {
-        float playerTop = p.y - rad;
+        p.y = oldP.y;
 
-        if((playerTop < liftRect.y + liftRect.height) && (p.x + rad > liftRect.x) && (p.x - rad < liftRect.x + liftRect.width))
-        {
-            p.y = oldP.y;
+        if (&p == &Ying)      Jumpspeed = 0.0f;
+        if (&p == &Yan)       Jumpspeed2 = 0.0f;
+        if (&p == &obj3)      JumpspeedMerged = 0.0f;
 
-            if(&p == &Ying) Jumpspeed = 0.0f;
-            if(&p == &Yan) Jumpspeed2 = 0.0f;
-            if(&p == &obj3) JumpspeedMerged = 0.0f;
-        }
-    };
+        return;
+    }
 
+    //Lift is moving down
+    if ((CheckCollisionCircleRec(Ying, rad, currentLift.button) || CheckCollisionCircleRec(Yan,  rad, currentLift.button) || CheckCollisionCircleRec(obj3, rad, currentLift.button)) > 0 &&   
+        (p.y - rad) < liftBottom &&          
+        horizontalOverlap && 
+        movingUp &&
+        (CheckCollisionCircleRec(p, rad, liftRect)))
+    {
+        p.y += currentLift.speed * 5;
+
+        if (&p == &Ying)      Jumpspeed = -currentLift.speed;
+        if (&p == &Yan)       Jumpspeed2 = -currentLift.speed;
+        if (&p == &obj3)      JumpspeedMerged = -currentLift.speed;
+
+        return;
+    }
+};
 
     preventPlayerUnderLift(Ying, oldP1);
     preventPlayerUnderLift(Yan, oldP2);
-    preventPlayerUnderLift(obj3, oldMerged);*/
+    preventPlayerUnderLift(obj3, oldMerged);
 
-    if((boxRect.y + boxRect.height > liftRect.y) && (boxRect.y < liftRect.y) && CheckCollisionRecs(boxRect, liftRect))
-    {
-        box.y = liftRect.y - box.height;
-        if (CheckCollisionCircleRec(Ying, rad + 1, boxRect)) Ying.y -= currentLift.speed;
-        if (CheckCollisionCircleRec(Yan,  rad + 1, boxRect)) Yan.y  -= currentLift.speed;
-        if (CheckCollisionCircleRec(obj3, rad + 1, boxRect)) obj3.y -= currentLift.speed;
+   // Box riding on lift (more forgiving)
+float boxBottom = newBoxRect.y + newBoxRect.height;
 
-        box.gravSpeed = 0.0f;
-        box.onGround  = true;
-    }
+bool touchingTop =
+    CheckCollisionRecs(newBoxRect, liftTopForBox) &&
+    boxBottom >= liftRect.y - 4.0f &&
+    boxBottom <= liftRect.y + 8.0f;   // tolerance band
+
+if (touchingTop)
+{
+    box.y = liftRect.y - box.height;
+
+    newBoxRect = box.ToRect();
+
+    if (CheckCollisionCircleRec(Ying, rad, newBoxRect)) Ying.y -= currentLift.speed;
+    if (CheckCollisionCircleRec(Yan,  rad, newBoxRect)) Yan.y  -= currentLift.speed;
+    if (CheckCollisionCircleRec(obj3, rad, newBoxRect)) obj3.y -= currentLift.speed;
+
+    box.gravSpeed = 0.0f;
+    box.onGround  = true;
+}
+
 }
 
 
 void LyftHorControls(Vector2& Ying, Vector2& Yan, Vector2& obj3, float rad,
                      Vector2& oldP1, Vector2& oldP2, Vector2& oldMerged,
-                     LiftData& currentLift, BoxData& box)
+                     LiftData& currentLift, const std::vector<BoxData>& box)
 {
     // Lift horizontal collision
-   // PlayerPlatformCollisions(Ying, rad, &currentLift.rect, 1, Yan, obj3, oldP1, oldP2, oldMerged, box.rect);
+   PlayerPlatformCollisions(Ying, rad, &currentLift.rect, 1, Yan, obj3, oldP1, oldP2, oldMerged, box);
 }
 
 void levelLiftWithBox(Vector2 Ying, Vector2 Yan, Vector2 obj3, float rad, LiftData& currentLift, BoxData& box)
@@ -101,8 +142,6 @@ void levelLiftWithBox(Vector2 Ying, Vector2 Yan, Vector2 obj3, float rad, LiftDa
 
     DrawRectangleRec(currentLift.button, RED);
     DrawRectangleRec(currentLift.rect, GRAY);
-
- 
 
     if (CheckCollisionCircleRec(Ying, rad, currentLift.button) ||
         CheckCollisionCircleRec(Yan,  rad, currentLift.button) ||
@@ -130,10 +169,19 @@ void PlayerBoxHorizontalCollisions(Vector2& player, Vector2& ballPosition, Vecto
                                     Rectangle platforms[], int platformCount,
                                     Vector2& oldP1, Vector2& oldP2, Vector2& oldMerged)
 {
-    box.prevX = box.x;
-
+    
     Rectangle boxRect = box.ToRect();
     float boxTop = boxRect.y;
+
+    Rectangle pushZone = {
+    boxRect.x - rad - 8,            // extend left
+    boxRect.y - rad * 0.5f,     // extend upward slightly
+    boxRect.width + rad * 3,    // extend right
+    boxRect.height + rad        // extend downward slightly
+};
+
+    box.prevX = box.x;
+
 
     // Check directly: is the player's bottom edge sitting at the box top?
     // Use a small tolerance band instead of relying on old positions
@@ -149,7 +197,7 @@ void PlayerBoxHorizontalCollisions(Vector2& player, Vector2& ballPosition, Vecto
     bool mergedOnTop = isOnTop(obj3);
 
     // Push logic — only if hitting the side, not standing on top
-    if (CheckCollisionCircleRec(player, rad, boxRect) && !p1OnTop)
+    if(CheckCollisionPointRec({player.x, player.y}, pushZone) && !p1OnTop)
     {
         float dir = (player.x < box.x) ? 2.0f : -2.0f;
         if (CanMoveBox(box, dir, 0, platforms, platformCount))
@@ -158,7 +206,7 @@ void PlayerBoxHorizontalCollisions(Vector2& player, Vector2& ballPosition, Vecto
             player.x = oldP1.x;
     }
 
-    if (CheckCollisionCircleRec(ballPosition, rad, boxRect) && !p2OnTop)
+    if(CheckCollisionPointRec({ballPosition.x, ballPosition.y}, pushZone) && !p2OnTop)
     {
         float dir = (ballPosition.x < box.x) ? 2.0f : -2.0f;
         if (CanMoveBox(box, dir, 0, platforms, platformCount))
@@ -167,7 +215,7 @@ void PlayerBoxHorizontalCollisions(Vector2& player, Vector2& ballPosition, Vecto
             ballPosition.x = oldP2.x;
     }
 
-    if (CheckCollisionCircleRec(obj3, rad, boxRect) && !mergedOnTop)
+    if(CheckCollisionPointRec({obj3.x, obj3.y}, pushZone) && !mergedOnTop)
     {
         float dir = (obj3.x < box.x) ? 2.0f : -2.0f;
         if (CanMoveBox(box, dir, 0, platforms, platformCount))
@@ -283,17 +331,40 @@ void PlayerBoxCollisions(Vector2& player, float rad,
     }
 }
 
-bool CanMoveBox(BoxData& box, float dx, float dy, Rectangle platforms[], int platformCount)
+bool CanMoveBox(BoxData& box, float dx, float dy,
+                Rectangle platforms[], int platformCount)
 {
-    Rectangle moved = { box.x + dx, box.y + dy, box.width, box.height };
+    // 1. First, correct tiny vertical overlaps (so it doesn’t get micro-stuck)
     for (int i = 0; i < platformCount; i++)
-        if (CheckCollisionRecs(moved, platforms[i]))
+    {
+        Rectangle p = platforms[i];
+
+        bool horizontallyOverlapping =
+            (box.x + box.width > p.x) &&
+            (box.x < p.x + p.width);
+
+        float boxBottom = box.y + box.height;
+
+        if (horizontallyOverlapping &&
+            boxBottom > p.y &&
+            boxBottom < p.y + 6.0f)   // small tolerance
         {
-            return false;
+            box.y = p.y - box.height;
         }
-            
+    }
+
+    // 2. Now test the *moved* box against platforms
+    Rectangle moved = { box.x + dx, box.y + dy, box.width, box.height };
+
+    for (int i = 0; i < platformCount; i++)
+    {
+        if (CheckCollisionRecs(moved, platforms[i]))
+            return false;
+    }
+
     return true;
 }
+
 
 
 void UpdateDoor(Vector2 Ying, Vector2 Yan, Vector2 obj3, float rad, DoorData& ld)
@@ -328,7 +399,77 @@ void UpdateDoor(Vector2 Ying, Vector2 Yan, Vector2 obj3, float rad, DoorData& ld
 }
 
 
-void UpdateShooter(ShooterData& shooter, Vector2& Ying, Vector2& Yan, Vector2& obj3,
+void UpdateVerticalShooter(ShooterData& shooter, Vector2& Ying, Vector2& Yan, Vector2& obj3,
+                   float rad, Rectangle platforms[], int platformCount,
+                   bool& merged, bool& invincibility, float& invincibilityTimer,
+                   bool& restart, Vector2 p1Spawn, Vector2 p2Spawn)
+{
+
+    // Tick the shoot timer
+    shooter.timer += GetFrameTime();
+
+    // Spawn a new projectile when timer exceeds interval and none is active
+    if (shooter.timer >= shooter.interval && !shooter.active)
+    {
+        shooter.active       = true;
+        shooter.projectile.x = shooter.rect.x + shooter.rect.width  / 2
+                               - shooter.projectile.width / 2;
+        if (shooter.direction > 0){
+             shooter.projectile.y = shooter.rect.y + shooter.rect.height;
+        } // down
+        else {
+            shooter.projectile.y = shooter.rect.y - shooter.projectile.height;
+        }// up
+        shooter.timer        = 0.0f;
+    }
+
+    if (!shooter.active) return;
+
+    // Move projectile vertically
+    shooter.projectile.y += shooter.speed * shooter.direction; // direction is 1 for down, -1 for up
+
+    // Draw projectile
+    DrawRectangleRec(shooter.projectile, RED);
+
+    // Deactivate on platform hit
+    for (int i = 0; i < platformCount; i++)
+    {
+        if (CheckCollisionRecs(shooter.projectile, platforms[i]))
+        {
+            shooter.active = false;
+            return;
+        }
+    }
+
+    if (invincibility) return;
+
+    // Hit unmerged players — respawn at level spawns
+    if (CheckCollisionCircleRec(Ying, rad, shooter.projectile) ||
+        CheckCollisionCircleRec(Yan,  rad, shooter.projectile))
+    {
+        Restart(Ying, Yan, obj3, p1Spawn, p2Spawn, merged, restart);
+        restart = true;
+        shooter.active = false;
+        return;
+    }
+
+    // Hit merged player — force unmerge with invincibility
+    if (CheckCollisionCircleRec(obj3, rad, shooter.projectile))
+    {
+        merged = false;
+        Ying.x = obj3.x - rad;
+        Ying.y = obj3.y;
+        Yan.x  = obj3.x + rad;
+        Yan.y  = obj3.y;
+        obj3   = { 0, 0 };
+
+        invincibility      = true;
+        invincibilityTimer = 1.0f;
+        shooter.active     = false;
+    }
+}
+
+void UpdateHorizontalShooter(ShooterData& shooter, Vector2& Ying, Vector2& Yan, Vector2& obj3,
                    float rad, Rectangle platforms[], int platformCount,
                    bool& merged, bool& invincibility, float& invincibilityTimer,
                    bool& restart, Vector2 p1Spawn, Vector2 p2Spawn)
@@ -343,16 +484,23 @@ void UpdateShooter(ShooterData& shooter, Vector2& Ying, Vector2& Yan, Vector2& o
     if (shooter.timer >= shooter.interval && !shooter.active)
     {
         shooter.active       = true;
-        shooter.projectile.x = shooter.rect.x + shooter.rect.width  / 2
-                               - shooter.projectile.width / 2;
-        shooter.projectile.y = shooter.rect.y + shooter.rect.height;
+        if (shooter.direction > 0){
+             shooter.projectile.x = shooter.rect.x + shooter.rect.width;
+        } // right
+        else {
+            shooter.projectile.x = shooter.rect.x - shooter.projectile.width;
+        }// left
+            
+    shooter.projectile.y = shooter.rect.y + (shooter.rect.height / 2)
+                           - (shooter.projectile.height / 2);
+    shooter.timer = 0.0f;
         shooter.timer        = 0.0f;
     }
 
     if (!shooter.active) return;
 
-    // Move projectile downward
-    shooter.projectile.y += shooter.speed;
+    // Move projectile sideways
+    shooter.projectile.x += shooter.speed * shooter.direction; // direction is set in level editor — 1 for right, -1 for left
 
     // Draw projectile
     DrawRectangleRec(shooter.projectile, RED);
@@ -462,3 +610,68 @@ void UpdateSentry(SentryData& sentry, Vector2& Ying, Vector2& Yan, Vector2& obj3
         invincibilityTimer = 1.0f;
     }
 }
+
+
+void UpdateGlassPlatform(GlassPlatformData& gp, Vector2& Ying, Vector2& Yan,
+                          Vector2& obj3, float rad, bool merged)
+{
+    if (gp.broken)
+    {
+        if (gp.breakTimer > 0.0f)
+            gp.breakTimer -= GetFrameTime();
+        return;
+    }
+
+    bool mergedOnGlass = merged &&
+                         CheckCollisionCircleRec(obj3, rad + 1, gp.rect) &&
+                         obj3.y < gp.rect.y;
+
+    // testing on unmerged players if needed — currently only breaks from merged player
+    // bool p1OnGlass = CheckCollisionCircleRec(Ying, rad, gp.rect) && Ying.y < gp.rect.y;
+    // bool p2OnGlass = CheckCollisionCircleRec(Yan,  rad, gp.rect) && Yan.y  < gp.rect.y;
+
+    if (mergedOnGlass)
+    {
+        gp.broken     = true;
+        gp.breakTimer = 3.0f;
+    }
+}
+
+void DrawGlassPlatform(GlassPlatformData& gp)
+{
+    if (gp.broken)
+    {
+        if (gp.breakTimer > 0.0f)
+        {
+            float alpha = gp.breakTimer / 3.0f;
+            Color brokenColor = { 173, 216, 230, (unsigned char)(alpha * 255) };
+            float a = 3.0f - gp.breakTimer;
+
+            Rectangle frags[] = {
+                { gp.rect.x,       gp.rect.y + a * 60.0f, 35, 8 },
+                { gp.rect.x + 40,  gp.rect.y + a * 80.0f, 35, 8 },
+                { gp.rect.x + 80,  gp.rect.y + a * 70.0f, 35, 8 },
+                { gp.rect.x + 120, gp.rect.y + a * 90.0f, 35, 8 },
+                { gp.rect.x + 160, gp.rect.y + a * 65.0f, 35, 8 }
+            };
+
+            for (int i = 0; i < 5; i++)
+                DrawRectangleRec(frags[i], brokenColor);
+        }
+        return;
+    }
+
+    // Draw intact glass
+    Color glassColor = { 173, 216, 230, 150 };
+    Color shineColor = { 255, 255, 255, 200 };
+
+    DrawRectangleRec(gp.rect, glassColor);
+
+    Rectangle shine = gp.rect;
+    shine.height = 3;
+    DrawRectangleRec(shine, shineColor);
+
+    DrawRectangleLinesEx(gp.rect, 1.0f, { 135, 206, 235, 200 });
+}
+
+
