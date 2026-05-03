@@ -56,7 +56,6 @@
   },
   "Level": [
     {
-<<<<<<< HEAD
       "id": 1,
       "name": "Tutorial",
     "players": {
@@ -167,8 +166,6 @@
     ] 
    },
     {
-=======
->>>>>>> 2b5a552a69a9cf903b87bd6492b4f855a05af381
       "id": 2,
       "name": "Level 1",
       "players": {
@@ -1437,11 +1434,7 @@
             "label": "sentry1",
             "x": 200,
             "y": 360,
-<<<<<<< HEAD
             "speed": 0.75,
-=======
-            "speed": 0.5,
->>>>>>> 2b5a552a69a9cf903b87bd6492b4f855a05af381
             "radius": 5,
             "smallSight": { "x": 170, "y": 330, "width": 60,  "height": 60  },
             "largeSight":  { "x": 120, "y": 280, "width": 160, "height": 160 }
@@ -1450,11 +1443,7 @@
             "label": "sentry2",
             "x": 100,
             "y": 560,
-<<<<<<< HEAD
             "speed": 0.75,
-=======
-            "speed": 0.5,
->>>>>>> 2b5a552a69a9cf903b87bd6492b4f855a05af381
             "radius": 5,
             "smallSight": { "x": 70, "y": 530, "width": 60,  "height": 60  },
             "largeSight":  { "x": 20, "y": 480, "width": 160, "height": 160 }
@@ -1463,18 +1452,12 @@
             "label": "sentry3",
             "x": 200,
             "y": 760,
-<<<<<<< HEAD
             "speed": 0.75,
-=======
-            "speed": 0.5,
->>>>>>> 2b5a552a69a9cf903b87bd6492b4f855a05af381
             "radius": 5,
             "smallSight": { "x": 170, "y": 730, "width": 60,  "height": 60  },
             "largeSight":  { "x": 120, "y": 680, "width": 160, "height": 160 }
           }
         ]
-<<<<<<< HEAD
-=======
    },
    {
       "id": 1,
@@ -1585,7 +1568,6 @@
       ], 
       "sentries": [
     ] 
->>>>>>> 2b5a552a69a9cf903b87bd6492b4f855a05af381
    }
   ]
 }
