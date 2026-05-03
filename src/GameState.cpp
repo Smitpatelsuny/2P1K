@@ -251,6 +251,10 @@ if (lvl.contains("glassPlatforms"))
         ResetJumpState(); 
         break;
     }
+<<<<<<< HEAD
 };
 
 
+=======
+}
+>>>>>>> 2b5a552a69a9cf903b87bd6492b4f855a05af381

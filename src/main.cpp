@@ -23,7 +23,11 @@ int main(void)
 {
     const int screenWidth  = 800;
     const int screenHeight = 800;
+<<<<<<< HEAD
      int frameTimer = 0;
+=======
+    int frameTimer = 0;
+>>>>>>> 2b5a552a69a9cf903b87bd6492b4f855a05af381
     bool paused = false;
     int window = 2;
     Vector2 mouse = GetMousePosition();
@@ -73,7 +77,7 @@ int main(void)
     };
 
     SetTargetFPS(60);
-    //if(true) ToggleFullscreen();
+    if(true) ToggleFullscreen();
 
     while (!WindowShouldClose())
     {
@@ -320,8 +324,13 @@ int main(void)
 
                 UpdateAnimatedSprite(m_player, mergedState);
             }
+<<<<<<< HEAD
            
                 if (gs.hasLift)
+=======
+    
+    if (gs.hasLift)
+>>>>>>> 2b5a552a69a9cf903b87bd6492b4f855a05af381
                 {
                 for (auto& lift : gs.lifts)
                     {
@@ -354,8 +363,25 @@ int main(void)
                         break;
                     }
                 }
+<<<<<<< HEAD
            
 
+=======
+/*
+                if (gs.hasSentry)
+                    for (auto& sentry : gs.sentries)
+                        UpdateSentry(sentry, gs.Ying, gs.Yan, gs.obj3,
+                             gs.rad, gs.merged, gs.invincibility,
+                             gs.invincibilityTimer, gs.restart,
+                             gs.p1Spawn, gs.p2Spawn);
+*/
+                if (gs.hasDoor && !gs.currentDoor.switched)
+                    gs.platforms.pop_back();
+
+        if (gs.hasDoor){
+            UpdateDoor(gs.Ying, gs.Yan, gs.obj3, gs.rad, gs.currentDoor);
+        }
+>>>>>>> 2b5a552a69a9cf903b87bd6492b4f855a05af381
 
         
           if (gs.hasGlassPlatforms){
@@ -374,7 +400,7 @@ int main(void)
                 UpdateGlassPlatform(gp, gs.Ying, gs.Yan, gs.obj3, gs.rad, gs.merged);
             }
         }
-    
+
         // ── Draw ─────────────────────────────────────────────────────────
         BeginTextureMode(target);
         ClearBackground(BLACK);
@@ -411,7 +437,10 @@ int main(void)
 
         DrawText("Made by Austin Henderson, Arturo Almanzar, Alexandra Payne, Smit Patel", 10, 770, 20, WHITE);
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2b5a552a69a9cf903b87bd6492b4f855a05af381
     }
     break;
 
@@ -467,6 +496,7 @@ int main(void)
         );
 
 
+
                 ExitGame();
 
                 InvisCountDown(gs.invincibility, gs.invincibilityTimer);
@@ -483,7 +513,7 @@ int main(void)
                     for (auto& lift : gs.lifts)
                         levelLift(gs.Ying, gs.Yan, gs.obj3, gs.rad, lift);
                 }
-                   
+
 
                 if (gs.hasBox)
                 {
@@ -584,9 +614,16 @@ for the button on the left side for the rigth door {
                 DrawRectangleRec(gs.exitDoorHitboxYin,  GREEN);
                 DrawRectangleRec(gs.exitDoorHitboxYang, GREEN);
 
+<<<<<<< HEAD
                     if(gs.currentLevelId == 1){
                     TutText(gs.Ying, gs.Yan, gs.obj3, frameTimer);
                 }
+=======
+                if(gs.currentLevelId == 1){
+                    TutText(gs.Ying, gs.Yan, gs.obj3, frameTimer);
+                }
+    
+>>>>>>> 2b5a552a69a9cf903b87bd6492b4f855a05af381
 
             } break;
 
@@ -612,8 +649,6 @@ DrawTexturePro(target.texture, src, dst, { 0, 0 }, 0.0f, WHITE);
 EndDrawing();
 
     }
-
-
 
 
     UnloadAnimatedSprite(w_player);

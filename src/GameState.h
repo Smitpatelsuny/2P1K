@@ -94,6 +94,5 @@ struct GameState
     void ResetJumpState();
     void ReloadLevel();
     
-    
     const json* levelData = nullptr; 
 };

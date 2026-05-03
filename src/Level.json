@@ -56,6 +56,7 @@
   },
   "Level": [
     {
+<<<<<<< HEAD
       "id": 1,
       "name": "Tutorial",
     "players": {
@@ -166,6 +167,8 @@
     ] 
    },
     {
+=======
+>>>>>>> 2b5a552a69a9cf903b87bd6492b4f855a05af381
       "id": 2,
       "name": "Level 1",
       "players": {
@@ -1434,7 +1437,11 @@
             "label": "sentry1",
             "x": 200,
             "y": 360,
+<<<<<<< HEAD
             "speed": 0.75,
+=======
+            "speed": 0.5,
+>>>>>>> 2b5a552a69a9cf903b87bd6492b4f855a05af381
             "radius": 5,
             "smallSight": { "x": 170, "y": 330, "width": 60,  "height": 60  },
             "largeSight":  { "x": 120, "y": 280, "width": 160, "height": 160 }
@@ -1443,7 +1450,11 @@
             "label": "sentry2",
             "x": 100,
             "y": 560,
+<<<<<<< HEAD
             "speed": 0.75,
+=======
+            "speed": 0.5,
+>>>>>>> 2b5a552a69a9cf903b87bd6492b4f855a05af381
             "radius": 5,
             "smallSight": { "x": 70, "y": 530, "width": 60,  "height": 60  },
             "largeSight":  { "x": 20, "y": 480, "width": 160, "height": 160 }
@@ -1452,12 +1463,129 @@
             "label": "sentry3",
             "x": 200,
             "y": 760,
+<<<<<<< HEAD
             "speed": 0.75,
+=======
+            "speed": 0.5,
+>>>>>>> 2b5a552a69a9cf903b87bd6492b4f855a05af381
             "radius": 5,
             "smallSight": { "x": 170, "y": 730, "width": 60,  "height": 60  },
             "largeSight":  { "x": 120, "y": 680, "width": 160, "height": 160 }
           }
         ]
+<<<<<<< HEAD
+=======
+   },
+   {
+      "id": 1,
+      "name": "Tutorial",
+    "players": {
+        "p1Start": {
+          "x": 40,
+          "y": 764
+        },
+        "p2Start": {
+          "x": 760,
+          "y": 764
+        },
+        "obj3": {
+          "x": 0,
+          "y": 0
+        }
+      },
+      "exitDoors": {
+        "yin": {
+          "x": 30,
+          "y": 380,
+          "width": 30,
+          "height": 30
+        },
+        "yang": {
+          "x": 740,
+          "y": 380,
+          "width": 30,
+          "height": 30
+        }
+      },
+      "platforms": [
+        {
+          "label": "floor",
+          "x": 0,
+          "y": 785,
+          "width": 800,
+          "height": 15
+        },
+        {
+          "label": "leftWall",
+          "x": 0,
+          "y": 0,
+          "width": 15,
+          "height": 800
+        },
+        {
+          "label": "rightWall",
+          "x": 785,
+          "y": 0,
+          "width": 15,
+          "height": 800
+        },
+        {
+          "label": "ceiling",
+          "x": 0,
+          "y": 0,
+          "width": 800,
+          "height": 15
+        },
+        {
+          "label": "MiddlePlatform",
+          "x": 300,
+          "y": 675,
+          "width": 200,
+          "height": 150
+        },
+        {
+          "label": "MiddleFLoatingPlatform",
+          "x": 350,
+          "y": 575,
+          "width": 100,
+          "height": 15
+        },
+        {
+          "label": "RightDoorPlatform",
+          "x": 500,
+          "y": 410,
+          "width": 300,
+          "height": 15
+        },
+        {
+          "label": "LeftFLoatingPlatform",
+          "x": 200,
+          "y": 475,
+          "width": 50,
+          "height": 15
+        },
+        {
+          "label": "LeftDoorPlatform",
+          "x": 0,
+          "y": 410,
+          "width": 100,
+          "height": 15
+        }
+      ],
+      "spikes": [],
+      "lifts":[],
+        "Boxes": [
+          {
+          "label": "firstbox",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        }
+      ], 
+      "sentries": [
+    ] 
+>>>>>>> 2b5a552a69a9cf903b87bd6492b4f855a05af381
    }
   ]
 }

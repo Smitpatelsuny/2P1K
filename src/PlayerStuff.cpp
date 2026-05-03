@@ -349,3 +349,32 @@ void TutText(Vector2 Ying, Vector2 Yan, Vector2 obj3, int& framesCounter){
 void PlayerStuff::PlayerMovement() {
 }
 
+<<<<<<< HEAD
+=======
+void TutText(Vector2 Ying, Vector2 Yan, Vector2 obj3, int& framesCounter){
+    const char YingMovement[128] = "You are Ying,\nYou use A, & D to move\nand W to jump";
+    const char YanMovement[128] = "You are Yan,\nYou use the arrow keys\nto move and jump";
+    const char Merge[248] = "When Ying and Yan overlap press space to merge,\nUse A & D to move, and Up arrow to jump\nIn this merged state, you'll be heavy and have decreased\njump height but you'll be able to take another hit";
+    const char MergeJump[128] = "If Yan holds jump while you unmerge\nin air, he'll get extra height";
+    const char Door[128] = "To complete the level both players\nwill have to get to their respective doors";
+
+    if (Ying.x < 300 && Ying.y > 700 && Yan.x > 500 && Yan.y > 700)
+    {
+        DrawText(TextSubtext(YingMovement, 0, framesCounter/10), 25, 650, 12, WHITE);
+        DrawText(TextSubtext(YanMovement, 0, framesCounter/10), 625, 650, 12, WHITE);
+    }else if(Ying.y < 700 && Yan.y < 700 && Yan.y != 0 && Ying.y > 550 && Yan.y > 550){
+        DrawText(TextSubtext(Merge, 0, framesCounter/10), 250, 200, 12, WHITE);
+    }else if(obj3.x != 0){
+        DrawText(TextSubtext(MergeJump, 0, framesCounter/10), 250, 250, 12, WHITE);
+    }else if(Yan.y < 450){
+        DrawText(TextSubtext(Door, 0, framesCounter/10), 250, 250, 12, WHITE);
+    }else{
+        framesCounter = 0; 
+        return;
+    } 
+
+    if(IsKeyPressed(KEY_SPACE)) framesCounter = 0;
+    framesCounter += 4;
+}
+
+>>>>>>> 2b5a552a69a9cf903b87bd6492b4f855a05af381
