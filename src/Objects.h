@@ -35,9 +35,15 @@ struct DoorData {
     Rectangle spriteOn     = { 0 };
 
     // Door
-    Rectangle doorClosed   = { 0 };
-    Rectangle doorOpen     = { 0 };
-    Rectangle doorFrame[2] = { { 0 }, { 0 } };
+      Rectangle rect;
+     float maxHeight;
+    float minHeight;
+    float speed;
+     Vector2 startposition = { 0, 0 };
+     float startY = 0.0f;
+     float endY = 0.0f;
+     float direction = 1.0f; // 1 for turn on left side, -1 for turn on right side
+  
 };
 
 
@@ -103,6 +109,11 @@ bool CanMoveBox(BoxData& box, float dx, float dy, Rectangle platforms[], int pla
 
 
 void UpdateDoor(Vector2 Ying, Vector2 Yan, Vector2 obj3, float rad, DoorData& ld);
+
+
+void DoorHorCollisions(Vector2& Ying, Vector2& Yan, Vector2& obj3, float rad,
+                     Vector2& oldP1, Vector2& oldP2, Vector2& oldMerged,
+                     DoorData& currentDoor, const std::vector<BoxData>& box);
 
 
 void UpdateVerticalShooter(ShooterData& shooter, Vector2& Ying, Vector2& Yan, Vector2& obj3,
