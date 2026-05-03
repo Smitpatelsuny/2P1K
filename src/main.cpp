@@ -71,7 +71,7 @@ int main(void)
     };
 
     SetTargetFPS(60);
-    //if(true) ToggleFullscreen();
+    if(true) ToggleFullscreen();
 
     while (!WindowShouldClose())
     {
@@ -427,6 +427,8 @@ int main(void)
             (int)(startbutton.x + startbutton.width  / 2 - startWidth / 2),
             (int)(startbutton.y + startbutton.height / 2 - startSize  / 2),
             startSize, LIGHTGRAY);
+
+        DrawText("Made by Austin Henderson, Arturo Almanzar, Alexandra Payne, Smit Patel", 10, 770, 20, WHITE);
 
     }
     break;
