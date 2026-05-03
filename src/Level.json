@@ -56,7 +56,7 @@
   },
   "Level": [
     {
-      "id": 1,
+      "id": 2,
       "name": "Level 1",
       "players": {
         "p1Start": {
@@ -282,7 +282,7 @@
     
     },
         {
-      "id": 2,
+      "id": 3,
       "name": "Level 2",
       "players": {
         "p1Start": {
@@ -569,7 +569,7 @@
     },
 
     {
-      "id": 3,
+      "id": 4,
       "name": "Level 3",
       "players": {
         "p1Start": {
@@ -842,7 +842,7 @@
     },
 
      {
-      "id": 4,
+      "id": 5,
       "name": "Level 4",
       "players": {
         "p1Start": {
@@ -1132,29 +1132,6 @@
             "width": 30,
             "height": 15
           }
-        },
-        {
-          "label": "middleSpike1",
-          "vertices": [
-            {
-              "x": 585,
-              "y": 600
-            },
-            {
-              "x": 605,
-              "y": 580
-            },
-            {
-              "x": 625,
-              "y": 600
-            }
-          ],
-          "hitbox": {
-            "x": 590,
-            "y": 585,
-            "width": 30,
-            "height": 15
-          }
         }
         
       ],
@@ -1201,7 +1178,248 @@
           "height": 15
         
     }
-    ]  
+    ],
+    "HorizontalShooters" :[
+        {
+          "label": "hmiddle1",
+          "rect":         { "x": 300, "y": 560,  "width": 20, "height": 40 },
+          "projectile":   { "x": 320, "y": 560, "width": 20, "height": 20 },
+          "speed":        30.0,
+          "interval":     0.5,
+          "active":       false,
+          "direction":     1.0
+        },
+        {
+             "label": "hmiddle2",
+          "rect":         { "x": 300, "y": 560,  "width": 20, "height": 40 },
+          "projectile":   { "x": 320, "y": 560, "width": 20, "height": 20 },
+          "speed":        30.0,
+          "interval":     0.6,
+          "active":       false,
+          "direction":     1.0
+        },
+        {
+          "label": "hbottomTop1",
+          "rect":         { "x": 300, "y": 660,  "width": 20, "height": 40 },
+          "projectile":   { "x": 320, "y": 660, "width": 20, "height": 20 },
+          "speed":        30.0,
+          "interval":     0.5,
+          "active":       false,
+          "direction":     1.0
+        },
+        {
+             "label": "hbottomTop2",
+          "rect":         { "x": 300, "y": 660,  "width": 20, "height": 40 },
+          "projectile":   { "x": 320, "y": 660, "width": 20, "height": 20 },
+          "speed":        30.0,
+          "interval":     0.6,
+          "active":       false,
+          "direction":     1.0
+        },
+        {
+          "label": "hbottomMiddle1",
+          "rect":         { "x": 300, "y":700, "width": 20, "height": 40 },
+          "projectile":   { "x": 320, "y": 700, "width": 20, "height": 20 },
+          "speed":        30.0,
+          "interval":     0.5,
+          "active":       false,
+          "direction":     1.0
+        },
+        {
+             "label": "hbottomMiddle2",
+          "rect":         { "x": 300, "y": 700, "width": 20, "height": 40 },
+          "projectile":   { "x": 320, "y": 700, "width": 20, "height": 20 },
+          "speed":        30.0,
+          "interval":     0.6,
+          "active":       false,
+          "direction":     1.0
+        },
+             {
+          "label": "hbottomBottom1",
+          "rect":         { "x": 300, "y":740, "width": 20, "height": 40 },
+          "projectile":   { "x": 320, "y": 740, "width": 20, "height": 20 },
+          "speed":        30.0,
+          "interval":     0.5,
+          "active":       false,
+          "direction":     1.0
+        },
+        {
+             "label": "hbottomBottom2",
+          "rect":         { "x": 300, "y": 740, "width": 20, "height": 40 },
+          "projectile":   { "x": 320, "y": 740, "width": 20, "height": 20 },
+          "speed":        30.0,
+          "interval":     0.6,
+          "active":       false,
+          "direction":     1.0
+        },
+             {
+             "label": "hOverglass",
+          "rect":         { "x": 300, "y":340, "width": 20, "height": 40 },
+          "projectile":   { "x": 320, "y": 340, "width": 20, "height": 20 },
+          "speed":       10.0,
+          "interval":     3.0,
+          "active":       false,
+          "direction":     1.0
+        },
+        {
+              "label": "htopleft1",
+            "rect":         { "x": 780, "y": 140, "width": 20, "height": 40 },
+            "projectile":   { "x": 760, "y": 140, "width": 20, "height": 20 },
+            "speed":       10.0,
+            "interval":     4.0,
+            "active":       false,
+            "direction":    -1.0
+        },
+        {
+           "label": "htopleft2",
+            "rect":         { "x": 780, "y": 50, "width": 20, "height": 40 },
+            "projectile":   { "x": 760, "y": 50, "width": 20, "height": 20 },
+            "speed":       10.0,
+            "interval":     4.0,
+            "active":       false,
+            "direction":    -1.0
+        }
+        
+       ],
+        "sentries": [
+          {
+            "label": "sentry1",
+            "x": 200,
+            "y": 360,
+            "speed": 0.5,
+            "radius": 5,
+            "smallSight": { "x": 170, "y": 330, "width": 60,  "height": 60  },
+            "largeSight":  { "x": 120, "y": 280, "width": 160, "height": 160 }
+          },
+          {
+            "label": "sentry2",
+            "x": 100,
+            "y": 560,
+            "speed": 0.5,
+            "radius": 5,
+            "smallSight": { "x": 70, "y": 530, "width": 60,  "height": 60  },
+            "largeSight":  { "x": 20, "y": 480, "width": 160, "height": 160 }
+          },
+          {
+            "label": "sentry3",
+            "x": 200,
+            "y": 760,
+            "speed": 0.5,
+            "radius": 5,
+            "smallSight": { "x": 170, "y": 730, "width": 60,  "height": 60  },
+            "largeSight":  { "x": 120, "y": 680, "width": 160, "height": 160 }
+          }
+        ]
+   },
+   {
+      "id": 1,
+      "name": "Tutorial",
+    "players": {
+        "p1Start": {
+          "x": 40,
+          "y": 764
+        },
+        "p2Start": {
+          "x": 760,
+          "y": 764
+        },
+        "obj3": {
+          "x": 0,
+          "y": 0
+        }
+      },
+      "exitDoors": {
+        "yin": {
+          "x": 30,
+          "y": 380,
+          "width": 30,
+          "height": 30
+        },
+        "yang": {
+          "x": 740,
+          "y": 380,
+          "width": 30,
+          "height": 30
+        }
+      },
+      "platforms": [
+        {
+          "label": "floor",
+          "x": 0,
+          "y": 785,
+          "width": 800,
+          "height": 15
+        },
+        {
+          "label": "leftWall",
+          "x": 0,
+          "y": 0,
+          "width": 15,
+          "height": 800
+        },
+        {
+          "label": "rightWall",
+          "x": 785,
+          "y": 0,
+          "width": 15,
+          "height": 800
+        },
+        {
+          "label": "ceiling",
+          "x": 0,
+          "y": 0,
+          "width": 800,
+          "height": 15
+        },
+        {
+          "label": "MiddlePlatform",
+          "x": 300,
+          "y": 675,
+          "width": 200,
+          "height": 150
+        },
+        {
+          "label": "MiddleFLoatingPlatform",
+          "x": 350,
+          "y": 575,
+          "width": 100,
+          "height": 15
+        },
+        {
+          "label": "RightDoorPlatform",
+          "x": 500,
+          "y": 410,
+          "width": 300,
+          "height": 15
+        },
+        {
+          "label": "LeftFLoatingPlatform",
+          "x": 200,
+          "y": 475,
+          "width": 50,
+          "height": 15
+        },
+        {
+          "label": "LeftDoorPlatform",
+          "x": 0,
+          "y": 410,
+          "width": 100,
+          "height": 15
+        }
+      ],
+      "spikes": [],
+      "lifts":[],
+        "Boxes": [
+          {
+          "label": "firstbox",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        }
+      ], 
+      "sentries": [
+    ] 
    }
   ]
 }

@@ -23,6 +23,7 @@ int main(void)
 {
     const int screenWidth  = 800;
     const int screenHeight = 800;
+    int frameTimer = 0;
     bool paused = false;
     int window = 2;
     Vector2 mouse = GetMousePosition();
@@ -68,6 +69,7 @@ int main(void)
         { 270, 200, 100, 50 },
         { 390, 200, 100, 50 },
         { 510, 200, 100, 50 },
+        { 330, 275, 100, 50},
     };
 
     SetTargetFPS(60);
@@ -130,7 +132,7 @@ int main(void)
                 {
                     gs.currentScreen = GameState::Screen::TITLE;
                 }
-                for (int i = 0; i < 4; i++)
+                for (int i = 0; i < 5; i++)
                 {
                     if (IsGestureDetected(GESTURE_TAP) &&
                         CheckCollisionPointRec({gameX, gameY}, levelselectbuttons[i]))
@@ -310,26 +312,8 @@ int main(void)
 
                 UpdateAnimatedSprite(m_player, mergedState);
             }
-            /*
-                 if (gs.hasVerticalShooter){
-                    for (auto& shooter : gs.vshooters)
-                        UpdateVerticalShooter(shooter, gs.Ying, gs.Yan, gs.obj3,
-                       gs.rad, gs.platforms.data(), (int)gs.platforms.size(),
-                       gs.merged, gs.invincibility, gs.invincibilityTimer,
-                       gs.restart, gs.p1Spawn, gs.p2Spawn);
-                   }
-               
-            if (gs.hasHorizontalShooter){
-                        for (auto& shooter : gs.hshooters){ 
-                            UpdateHorizontalShooter(shooter, gs.Ying, gs.Yan, gs.obj3,
-                        gs.rad, gs.platforms.data(), (int)gs.platforms.size(),
-                        gs.merged, gs.invincibility, gs.invincibilityTimer,
-                        gs.restart, gs.p1Spawn, gs.p2Spawn);
-                        }
-                    }
-             
-            */
-                if (gs.hasLift)
+    
+    if (gs.hasLift)
                 {
                 for (auto& lift : gs.lifts)
                     {
@@ -362,14 +346,14 @@ int main(void)
                         break;
                     }
                 }
-
+/*
                 if (gs.hasSentry)
                     for (auto& sentry : gs.sentries)
                         UpdateSentry(sentry, gs.Ying, gs.Yan, gs.obj3,
                              gs.rad, gs.merged, gs.invincibility,
                              gs.invincibilityTimer, gs.restart,
                              gs.p1Spawn, gs.p2Spawn);
-
+*/
                 if (gs.hasDoor && !gs.currentDoor.switched)
                     gs.platforms.pop_back();
 
@@ -393,7 +377,7 @@ int main(void)
                 UpdateGlassPlatform(gp, gs.Ying, gs.Yan, gs.obj3, gs.rad, gs.merged);
             }
         }
-    
+
         // ── Draw ─────────────────────────────────────────────────────────
         BeginTextureMode(target);
         ClearBackground(BLACK);
@@ -439,7 +423,7 @@ int main(void)
 
         DrawText("LEVEL SELECT", 150, 40, 60, WHITE);
 
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 5; i++)
         {
             DrawRectangleRec(levelselectbuttons[i], DARKGRAY);
 
@@ -485,6 +469,7 @@ int main(void)
         );
 
 
+
                 ExitGame();
 
                 InvisCountDown(gs.invincibility, gs.invincibilityTimer);
@@ -501,7 +486,7 @@ int main(void)
                     for (auto& lift : gs.lifts)
                         levelLift(gs.Ying, gs.Yan, gs.obj3, gs.rad, lift);
                 }
-                   
+
 
                 if (gs.hasBox)
                 {
@@ -599,6 +584,11 @@ for the button on the left side for the rigth door {
                 DrawRectangleRec(gs.exitDoorHitboxYin,  GREEN);
                 DrawRectangleRec(gs.exitDoorHitboxYang, GREEN);
 
+                if(gs.currentLevelId == 1){
+                    TutText(gs.Ying, gs.Yan, gs.obj3, frameTimer);
+                }
+    
+
             } break;
 
 
@@ -623,8 +613,6 @@ DrawTexturePro(target.texture, src, dst, { 0, 0 }, 0.0f, WHITE);
 EndDrawing();
 
     }
-
-
 
 
     UnloadAnimatedSprite(w_player);

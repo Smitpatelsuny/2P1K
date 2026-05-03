@@ -252,5 +252,3 @@ if (lvl.contains("glassPlatforms"))
         break;
     }
 }
-
-
