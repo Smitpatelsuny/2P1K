@@ -320,7 +320,7 @@ void UnloadAnimatedSprite(AnimatedSprite& sprite)
 void TutText(Vector2 Ying, Vector2 Yan, Vector2 obj3, int& framesCounter){
     const char YingMovement[128] = "You are Ying,\nYou use A, & D to move\nand W to jump";
     const char YanMovement[128] = "You are Yan,\nYou use the arrow keys\nto move and jump";
-    const char Merge[248] = "When Ying and Yan overlap press space to merge,\nUse A & D to move, and Up arrow to jump\nIn this merged state, you'll be heavy and have decreased\njump height but you'll be able to take another hit";
+    const char Merge[318] = "When Ying and Yan overlap press space to merge,\nUse A & D to move, and Up arrow to jump,\nIn this merged state, you'll be heavy and have decreased,\njump height but you'll be able to take another hit,\nInvincibility after getting hit as merged will last 1.0 seconds,/\n and prevent you from merging again during that time";
     const char MergeJump[128] = "If Yan holds jump while you unmerge\nin air, he'll get extra height";
     const char Door[128] = "To complete the level both players\nwill have to get to their respective doors";
 
