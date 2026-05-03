@@ -310,8 +310,8 @@ int main(void)
 
                 UpdateAnimatedSprite(m_player, mergedState);
             }
-
-               /*  if (gs.hasVerticalShooter){
+            /*
+                 if (gs.hasVerticalShooter){
                     for (auto& shooter : gs.vshooters)
                         UpdateVerticalShooter(shooter, gs.Ying, gs.Yan, gs.obj3,
                        gs.rad, gs.platforms.data(), (int)gs.platforms.size(),
@@ -326,9 +326,9 @@ int main(void)
                         gs.merged, gs.invincibility, gs.invincibilityTimer,
                         gs.restart, gs.p1Spawn, gs.p2Spawn);
                         }
-                    }*/
+                    }
              
-
+            */
                 if (gs.hasLift)
                 {
                 for (auto& lift : gs.lifts)
