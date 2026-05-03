@@ -53,7 +53,7 @@ int main(void)
         1.5f, 3, 4, 0.15f);
 
      AnimatedSprite b_player = LoadAnimatedSprite(
-        "C:/Users/austi/projects/New2P1K/2P1K-2/assets/Player_b.png",
+        "assets/Player_b.png",
         1.5f, 3, 4, 0.15f);
 
     AnimatedSprite m_player = LoadAnimatedSprite(
@@ -71,7 +71,7 @@ int main(void)
     };
 
     SetTargetFPS(60);
-      if(true) ToggleFullscreen();
+    //if(true) ToggleFullscreen();
 
     while (!WindowShouldClose())
     {
@@ -99,7 +99,7 @@ int main(void)
         MergeObjects(gs.Ying, gs.Yan, gs.obj3, gs.rad, gs.merged, gs.invincibility, gs.Jumpspeed2, gs.Ejected);
 
         // Global pause toggle
-        if(IsKeyPressed(KEY_Q) && gs.currentScreen == GameState::Screen::GAMEPLAY)
+        if(IsKeyPressed(KEY_P) && gs.currentScreen == GameState::Screen::GAMEPLAY)
         {
             paused = !paused;
         }
@@ -465,8 +465,8 @@ int main(void)
             DrawText("PAUSED", screenWidth/2 - titleWidth/2, 200, titleSize, WHITE);
 
             int instrSize = 20;
-            int instrWidth = MeasureText("Press Q or R to resume", instrSize);
-            DrawText("Press Q or R to resume", screenWidth/2 - instrWidth/2, 350, instrSize, LIGHTGRAY);
+            int instrWidth = MeasureText("Press P to resume", instrSize);
+            DrawText("Press P to resume", screenWidth/2 - instrWidth/2, 350, instrSize, LIGHTGRAY);
 
             int instr2Width = MeasureText("Press W to return to level select", instrSize);
             DrawText("Press W to return to level select", screenWidth/2 - instr2Width/2, 400, instrSize, LIGHTGRAY);

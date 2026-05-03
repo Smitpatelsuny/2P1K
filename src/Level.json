@@ -488,7 +488,7 @@
         {
           "label": "firstbox",
             "x": 400,
-            "y": 480,
+            "y": 469,
             "width": 30,
             "height": 30
         }
@@ -531,7 +531,7 @@
           "label": "v1",
           "rect":         { "x": 690, "y": 0,  "width": 40, "height": 20 },
           "projectile":   { "x": 690, "y": 20, "width": 20, "height": 20 },
-          "speed":        3.0,
+          "speed":        6.0,
           "interval":     2.0,
           "active":       false,
           "direction":     1.0 
@@ -541,7 +541,7 @@
           "label": "v2",
           "rect":         { "x": 30, "y": 400,  "width": 40, "height": 20 },
           "projectile":   { "x": 30, "y": 420, "width": 20, "height": 20 },
-          "speed":        1.5,
+          "speed":        3.0,
           "interval":     2.0,
           "active":       false,
           "direction":     1.0
@@ -708,7 +708,7 @@
           "label": "vleft",
           "rect":         { "x": 140, "y": 0,  "width": 40, "height": 20 },
           "projectile":   { "x": 140, "y": 20, "width": 20, "height": 20 },
-          "speed":        3.0,
+          "speed":        6.0,
           "interval":     5.0,
           "active":       false,
           "direction":     1.0
@@ -717,7 +717,7 @@
           "label": "vright",
           "rect":         { "x": 620, "y": 0,  "width": 40, "height": 20 },
           "projectile":   { "x": 620, "y": 20, "width": 20, "height": 20 },
-          "speed":        3.0,
+          "speed":        6.0,
           "interval":     5.0,
           "active":       false,
           "direction":     1.0
@@ -730,7 +730,7 @@
           "label": "hleft1",
           "rect":         { "x": 0, "y": 635,  "width": 20, "height": 40 },
           "projectile":   { "x": 20, "y": 635, "width": 20, "height": 20 },
-          "speed":        0.5,
+          "speed":        1.0,
           "interval":     2.5,
           "active":       false,
           "direction":     1.0
@@ -739,7 +739,7 @@
           "label": "hleft2",
           "rect":         { "x": 295, "y": 525,  "width": 20, "height": 40 },
           "projectile":   { "x": 275, "y": 525, "width": 20, "height": 20 },
-          "speed":        0.5,
+          "speed":        1.0,
           "interval":     3.5,
           "active":       false,
           "direction":     -1.0
@@ -748,7 +748,7 @@
           "label": "hleft3",
           "rect":         { "x": 0, "y": 415,  "width": 20, "height": 40 },
           "projectile":   { "x": 20, "y": 415, "width": 20, "height": 20 },
-          "speed":        0.5,
+          "speed":        1.0,
           "interval":     4.5,
           "active":       false,
           "direction":     1.0
@@ -757,7 +757,7 @@
           "label": "hleft4",
           "rect":         { "x": 295, "y": 305,  "width": 20, "height": 40 },
           "projectile":   { "x": 275, "y": 305, "width": 20, "height": 20 },
-          "speed":        0.5,
+          "speed":        1.0,
           "interval":     5.5,
           "active":       false,
           "direction":     -1.0
@@ -766,7 +766,7 @@
            "label": "hleft5",
           "rect":         { "x": 0, "y": 195,  "width": 20, "height": 40 },
           "projectile":   { "x": 20, "y": 195, "width": 20, "height": 20 },
-          "speed":        0.5,
+          "speed":        1.0,
           "interval":     6.5,
           "active":       false,
           "direction":     1.0
@@ -775,7 +775,7 @@
           "label": "hright1",
           "rect":         { "x": 780, "y": 635,  "width": 20, "height": 40 },
           "projectile":   { "x": 760, "y": 635, "width": 20, "height": 20 },
-          "speed":        0.5,
+          "speed":        1.0,
           "interval":     2.5,
           "active":       false,
           "direction":     -1.0
@@ -784,7 +784,7 @@
           "label": "hright2",
           "rect":         { "x": 485, "y": 525,  "width": 20, "height": 40 },
           "projectile":   { "x": 505, "y": 525, "width": 20, "height": 20 },
-          "speed":        0.5,
+          "speed":        1.0,
           "interval":     3.5,
           "active":       false,
           "direction":     1.0
@@ -793,7 +793,7 @@
           "label": "hright3",
           "rect":         { "x": 780, "y": 415,  "width": 20, "height": 40 },
           "projectile":   { "x": 760, "y": 415, "width": 20, "height": 20 },
-          "speed":        0.5,
+          "speed":        1.0,
           "interval":     4.5,
           "active":       false,
           "direction":     -1.0
@@ -802,7 +802,7 @@
              "label": "hright4",
           "rect":         { "x": 485, "y": 305,  "width": 20, "height": 40 },
           "projectile":   { "x": 505, "y": 305, "width": 20, "height": 20 },
-          "speed":        0.5,
+          "speed":        1.0,
           "interval":     5.5,
           "active":       false,
           "direction":     1.0
@@ -811,7 +811,7 @@
           "label": "hright5",
           "rect":         { "x": 780, "y": 195,  "width": 20, "height": 40 },
           "projectile":   { "x": 760, "y": 195, "width": 20, "height": 20 },
-          "speed":        0.5,
+          "speed":        1.0,
           "interval":     6.5,
           "active":       false,
           "direction":     -1.0
@@ -828,7 +828,17 @@
     "smallSight": { "x": 370, "y": 70, "width": 60,  "height": 60  },
     "largeSight":  { "x": 320, "y": 20, "width": 160, "height": 160 }
     }
-    ]
+    ],
+    "spikes":[],
+    "Boxes":[
+      {
+          "label": "firstbox",
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0
+      }
+      ]
     },
 
      {
@@ -1191,9 +1201,7 @@
           "height": 15
         
     }
-    ]
-    
+    ]  
    }
-
   ]
 }
