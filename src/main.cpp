@@ -53,7 +53,7 @@ int main(void)
         1.5f, 3, 4, 0.15f);
 
      AnimatedSprite b_player = LoadAnimatedSprite(
-        "C:/Users/austi/projects/New2P1K/2P1K-2/assets/Player_b.png",
+        "assets/Player_b.png",
         1.5f, 3, 4, 0.15f);
 
     AnimatedSprite m_player = LoadAnimatedSprite(
@@ -310,8 +310,8 @@ int main(void)
 
                 UpdateAnimatedSprite(m_player, mergedState);
             }
-
-               /*  if (gs.hasVerticalShooter){
+            /*
+                 if (gs.hasVerticalShooter){
                     for (auto& shooter : gs.vshooters)
                         UpdateVerticalShooter(shooter, gs.Ying, gs.Yan, gs.obj3,
                        gs.rad, gs.platforms.data(), (int)gs.platforms.size(),
@@ -326,9 +326,9 @@ int main(void)
                         gs.merged, gs.invincibility, gs.invincibilityTimer,
                         gs.restart, gs.p1Spawn, gs.p2Spawn);
                         }
-                    }*/
+                    }
              
-
+            */
                 if (gs.hasLift)
                 {
                 for (auto& lift : gs.lifts)
