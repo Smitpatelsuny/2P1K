@@ -56,7 +56,7 @@
   },
   "Level": [
     {
-      "id": 1,
+      "id": 2,
       "name": "Level 1",
       "players": {
         "p1Start": {
@@ -263,7 +263,7 @@
         "minHeight": 300,
         "button": {
           "x": 600,
-          "y": 290,
+          "y": 295,
           "width": 10,
           "height": 5
         }
@@ -282,7 +282,7 @@
     
     },
         {
-      "id": 2,
+      "id": 3,
       "name": "Level 2",
       "players": {
         "p1Start": {
@@ -297,13 +297,13 @@
       "exitDoors": {
         "yin": {
           "x": 370,
-          "y": 635,
+          "y": 645,
           "width": 30,
           "height": 30
         },
         "yang": {
           "x": 450,
-          "y": 635,
+          "y": 645,
           "width": 30,
           "height": 30
         }
@@ -512,31 +512,16 @@
       {
         "Label": "MiddleLift",
         "x": 325,
-        "y": 499 ,
+        "y": 499,
         "width": 185,
         "height": 15,
-        "maxHeight": 665,
+        "maxHeight": 655,
         "minHeight": 499,
         "button": {
           "x": 580,
           "y": 495,
           "width": 10,
           "height": 5
-        }
-      },
-      {
-        "Label": "NotRealLift",
-        "x": 1000,
-        "y": 5000 ,
-        "width": 0,
-        "height": 0,
-        "maxHeight": 5000,
-        "minHeight": 4999,
-        "button": {
-          "x": 0,
-          "y": 0,
-          "width": 0,
-          "height": 0
         }
       }
     ],
@@ -584,7 +569,7 @@
     },
 
     {
-      "id": 3,
+      "id": 4,
       "name": "Level 3",
       "players": {
         "p1Start": {
@@ -718,23 +703,13 @@
           "height": 15
         }
       ],
-      "spikes": [],
-       "Boxes": [
-          {
-          "label": "firstbox",
-          "x": 0,
-          "y": 0,
-          "width": 0,
-          "height": 0
-        }
-      ],
       "VerticalShooters": [
        {
           "label": "vleft",
           "rect":         { "x": 140, "y": 0,  "width": 40, "height": 20 },
           "projectile":   { "x": 140, "y": 20, "width": 20, "height": 20 },
           "speed":        6.0,
-          "interval":     2.5,
+          "interval":     5.0,
           "active":       false,
           "direction":     1.0
        },
@@ -743,7 +718,7 @@
           "rect":         { "x": 620, "y": 0,  "width": 40, "height": 20 },
           "projectile":   { "x": 620, "y": 20, "width": 20, "height": 20 },
           "speed":        6.0,
-          "interval":     2.5,
+          "interval":     5.0,
           "active":       false,
           "direction":     1.0
        }
@@ -853,32 +828,42 @@
     "smallSight": { "x": 370, "y": 70, "width": 60,  "height": 60  },
     "largeSight":  { "x": 320, "y": 20, "width": 160, "height": 160 }
     }
-    ]
+    ],
+    "spikes":[],
+    "Boxes":[
+      {
+          "label": "firstbox",
+            "x": 0,
+            "y": 0,
+            "width": 0,
+            "height": 0
+      }
+      ]
     },
 
      {
-      "id": 4,
+      "id": 5,
       "name": "Level 4",
       "players": {
         "p1Start": {
-          "x": 75,
-          "y": 764
+          "x": 340,
+          "y": 270
         },
         "p2Start": {
-          "x": 701,
-          "y": 764
+          "x": 460,
+          "y": 270
         }
       },
       "exitDoors": {
         "yin": {
-          "x": 10,
-          "y": 780,
+          "x": 50,
+          "y": 710,
           "width": 30,
           "height": 30
         },
         "yang": {
-          "x": 760,
-          "y": 780,
+          "x": 250,
+          "y": 710,
           "width": 30,
           "height": 30
         }
@@ -912,47 +897,529 @@
           "y": 0,
           "width": 800,
           "height": 15
+        },
+        {
+          "label": "TopBox",
+          "x": 300,
+          "y": 200, 
+          "width": 200,
+          "height": 15
+        },
+        {
+          "label": "LeftBox",
+          "x": 300,
+          "y": 200,
+          "width": 15,
+          "height": 100
+        },
+        {
+          "label": "RightBox",
+          "x": 485,
+          "y": 200,
+          "width": 15,
+          "height": 100
+        },
+        {
+          "label": "LeftLongWall",
+          "x": 300,
+          "y": 200,
+          "width": 15,
+          "height": 600
+        },
+        {
+          "label": "FirstRightPlatform",
+          "x": 585,
+          "y": 600,
+          "width": 300,
+          "height": 15
+        },
+        {
+          "label": "SecondRightPlatform",
+          "x": 685,
+          "y": 500,
+          "width": 300,
+          "height": 15
+        },
+        {
+          "label": "ThirdRightPlatform",
+          "x": 485,
+          "y": 300,
+          "width": 100,
+          "height": 15
         }
       ],
-      "spikes": [],
+      "spikes": [
+               {
+          "label": "bottomSpike1",
+          "vertices": [
+            {
+              "x": 545,
+              "y": 785
+            },
+            {
+              "x": 585,
+              "y": 785
+            },
+            {
+              "x": 565,
+              "y": 755
+            }
+          ],
+          "hitbox": {
+            "x": 550,
+            "y": 770,
+            "width": 30,
+            "height": 15
+          }
+        },
+        {
+          "label": "bottomSpike2",
+          "vertices": [
+            {
+              "x": 575,
+              "y": 785
+            },
+            {
+              "x": 615,
+              "y": 785
+            },
+            {
+              "x": 595,
+              "y": 755
+            }
+          ],
+          "hitbox": {
+            "x": 580,
+            "y": 770,
+            "width": 30,
+            "height": 15
+          }
+        },
+        {
+          "label": "bottomSpike3",
+          "vertices": [
+            {
+              "x": 605,
+              "y": 785
+            },
+            {
+              "x": 645,
+              "y": 785
+            },
+            {
+              "x": 625,
+              "y": 755
+            }
+          ],
+          "hitbox": {
+            "x": 600,
+            "y": 770,
+            "width": 30,
+            "height": 15
+          }
+        },
+        {
+          "label": "bottomSpike4",
+          "vertices": [
+            {
+              "x": 635,
+              "y": 785
+            },
+            {
+              "x": 675,
+              "y": 785
+            },
+            {
+              "x": 655,
+              "y": 755
+            }
+          ],
+          "hitbox": {
+            "x": 630,
+            "y": 770,
+            "width": 30,
+            "height": 15
+          }
+        },
+        {
+          "label": "bottomSpike5",
+          "vertices": [
+            {
+              "x": 665,
+              "y": 785
+            },
+            {
+              "x": 705,
+              "y": 785
+            },
+            {
+              "x": 685,
+              "y": 755
+            }
+          ],
+          "hitbox": {
+            "x": 660,
+            "y": 770,
+            "width": 30,
+            "height": 15
+          }
+        },
+        {
+          "label": "bottomSpike6",
+          "vertices": [
+            {
+              "x": 695,
+              "y": 785
+            },
+            {
+              "x": 735,
+              "y": 785
+            },
+            {
+              "x": 715,
+              "y": 755
+            }
+          ],
+          "hitbox": {
+            "x": 690,
+            "y": 770,
+            "width": 30,
+            "height": 15
+          }
+        },
+        {
+          "label": "bottomSpike7",
+          "vertices": [
+            {
+              "x": 725,
+              "y": 785
+            },
+            {
+              "x": 765,
+              "y": 785
+            },
+            {
+              "x": 745,
+              "y": 755
+            }
+          ],
+          "hitbox": {
+            "x": 720,
+            "y": 770,
+            "width": 30,
+            "height": 15
+          }
+        },
+        {
+          "label": "bottomSpike8",
+          "vertices": [
+            {
+              "x": 755,
+              "y": 785
+            },
+            {
+              "x": 785,
+              "y": 785
+            },
+            {
+              "x": 775,
+              "y": 755
+            }
+          ],
+          "hitbox": {
+            "x": 750,
+            "y": 770,
+            "width": 30,
+            "height": 15
+          }
+        }
+        
+      ],
+      "lifts": [
+        {
+          "Label": "OnlyLift",
+          "x": 0,
+          "y": 200,
+          "width": 300,
+          "height": 15,
+          "maxHeight": 750,
+          "minHeight": 200,
+          "button": {
+            "x": 320,
+            "y": 195,
+            "width": 10,
+            "height": 10
+          }
+        }
+      ],
       "Boxes": [
           {
           "label": "firstbox",
-          "x": 300,
-          "y": 100,
-          "width": 50,
-          "height": 50
+          "x": 450,
+          "y": 150,
+          "width": 30,
+          "height": 30
         }
       ],
 
-         "Doors": {
-        "lever": {
-        "switched": false,
-        "base":        { "x": 400, "y": 780, "width": 20, "height": 5  },
-        "hitboxLeft":  { "x": 400, "y": 780, "width": 10, "height": 10 },
-        "hitboxRight": { "x": 410, "y": 780, "width": 10, "height": 10 },
-        "spriteOff":   { "x": 402, "y": 772, "width": 5,  "height": 10 },
-        "spriteOn":    { "x": 413, "y": 772, "width": 5,  "height": 10 }
-      },
-      "door": {
-      "closed":  { "x": 510, "y": 690, "width": 20, "height": 100 },
-      "open":    { "x": 490, "y": 690, "width": 20, "height": 100 },
-      "frame": [
-        { "x": 510, "y": 680, "width": 30, "height": 10  },
-        { "x": 530, "y": 690, "width": 10, "height": 100 }
-     ]
-    }
-    },
       "glassPlatforms": [
     {
-      "x": 100,
-      "y": 700,
-      "width": 200,
-      "height": 10
+        "label": "BoxGlass",
+         "x": 300,
+          "y": 300, 
+          "width": 200,
+          "height": 15
+    },
+    {
+        "label": "PlatformGlass",
+          "x": 530,
+          "y": 400, 
+          "width": 150,
+          "height": 15
+        
     }
-    ]
-    
+    ],
+    "HorizontalShooters" :[
+        {
+          "label": "hmiddle1",
+          "rect":         { "x": 300, "y": 560,  "width": 20, "height": 40 },
+          "projectile":   { "x": 320, "y": 560, "width": 20, "height": 20 },
+          "speed":        30.0,
+          "interval":     0.5,
+          "active":       false,
+          "direction":     1.0
+        },
+        {
+             "label": "hmiddle2",
+          "rect":         { "x": 300, "y": 560,  "width": 20, "height": 40 },
+          "projectile":   { "x": 320, "y": 560, "width": 20, "height": 20 },
+          "speed":        30.0,
+          "interval":     0.6,
+          "active":       false,
+          "direction":     1.0
+        },
+        {
+          "label": "hbottomTop1",
+          "rect":         { "x": 300, "y": 660,  "width": 20, "height": 40 },
+          "projectile":   { "x": 320, "y": 660, "width": 20, "height": 20 },
+          "speed":        30.0,
+          "interval":     0.5,
+          "active":       false,
+          "direction":     1.0
+        },
+        {
+             "label": "hbottomTop2",
+          "rect":         { "x": 300, "y": 660,  "width": 20, "height": 40 },
+          "projectile":   { "x": 320, "y": 660, "width": 20, "height": 20 },
+          "speed":        30.0,
+          "interval":     0.6,
+          "active":       false,
+          "direction":     1.0
+        },
+        {
+          "label": "hbottomMiddle1",
+          "rect":         { "x": 300, "y":700, "width": 20, "height": 40 },
+          "projectile":   { "x": 320, "y": 700, "width": 20, "height": 20 },
+          "speed":        30.0,
+          "interval":     0.5,
+          "active":       false,
+          "direction":     1.0
+        },
+        {
+             "label": "hbottomMiddle2",
+          "rect":         { "x": 300, "y": 700, "width": 20, "height": 40 },
+          "projectile":   { "x": 320, "y": 700, "width": 20, "height": 20 },
+          "speed":        30.0,
+          "interval":     0.6,
+          "active":       false,
+          "direction":     1.0
+        },
+             {
+          "label": "hbottomBottom1",
+          "rect":         { "x": 300, "y":740, "width": 20, "height": 40 },
+          "projectile":   { "x": 320, "y": 740, "width": 20, "height": 20 },
+          "speed":        30.0,
+          "interval":     0.5,
+          "active":       false,
+          "direction":     1.0
+        },
+        {
+             "label": "hbottomBottom2",
+          "rect":         { "x": 300, "y": 740, "width": 20, "height": 40 },
+          "projectile":   { "x": 320, "y": 740, "width": 20, "height": 20 },
+          "speed":        30.0,
+          "interval":     0.6,
+          "active":       false,
+          "direction":     1.0
+        },
+             {
+             "label": "hOverglass",
+          "rect":         { "x": 300, "y":340, "width": 20, "height": 40 },
+          "projectile":   { "x": 320, "y": 340, "width": 20, "height": 20 },
+          "speed":       10.0,
+          "interval":     3.0,
+          "active":       false,
+          "direction":     1.0
+        },
+        {
+              "label": "htopleft1",
+            "rect":         { "x": 780, "y": 140, "width": 20, "height": 40 },
+            "projectile":   { "x": 760, "y": 140, "width": 20, "height": 20 },
+            "speed":       10.0,
+            "interval":     4.0,
+            "active":       false,
+            "direction":    -1.0
+        },
+        {
+           "label": "htopleft2",
+            "rect":         { "x": 780, "y": 50, "width": 20, "height": 40 },
+            "projectile":   { "x": 760, "y": 50, "width": 20, "height": 20 },
+            "speed":       10.0,
+            "interval":     4.0,
+            "active":       false,
+            "direction":    -1.0
+        }
+        
+       ],
+        "sentries": [
+          {
+            "label": "sentry1",
+            "x": 200,
+            "y": 360,
+            "speed": 0.5,
+            "radius": 5,
+            "smallSight": { "x": 170, "y": 330, "width": 60,  "height": 60  },
+            "largeSight":  { "x": 120, "y": 280, "width": 160, "height": 160 }
+          },
+          {
+            "label": "sentry2",
+            "x": 100,
+            "y": 560,
+            "speed": 0.5,
+            "radius": 5,
+            "smallSight": { "x": 70, "y": 530, "width": 60,  "height": 60  },
+            "largeSight":  { "x": 20, "y": 480, "width": 160, "height": 160 }
+          },
+          {
+            "label": "sentry3",
+            "x": 200,
+            "y": 760,
+            "speed": 0.5,
+            "radius": 5,
+            "smallSight": { "x": 170, "y": 730, "width": 60,  "height": 60  },
+            "largeSight":  { "x": 120, "y": 680, "width": 160, "height": 160 }
+          }
+        ]
+   },
+   {
+      "id": 1,
+      "name": "Tutorial",
+    "players": {
+        "p1Start": {
+          "x": 40,
+          "y": 764
+        },
+        "p2Start": {
+          "x": 760,
+          "y": 764
+        },
+        "obj3": {
+          "x": 0,
+          "y": 0
+        }
+      },
+      "exitDoors": {
+        "yin": {
+          "x": 30,
+          "y": 380,
+          "width": 30,
+          "height": 30
+        },
+        "yang": {
+          "x": 740,
+          "y": 380,
+          "width": 30,
+          "height": 30
+        }
+      },
+      "platforms": [
+        {
+          "label": "floor",
+          "x": 0,
+          "y": 785,
+          "width": 800,
+          "height": 15
+        },
+        {
+          "label": "leftWall",
+          "x": 0,
+          "y": 0,
+          "width": 15,
+          "height": 800
+        },
+        {
+          "label": "rightWall",
+          "x": 785,
+          "y": 0,
+          "width": 15,
+          "height": 800
+        },
+        {
+          "label": "ceiling",
+          "x": 0,
+          "y": 0,
+          "width": 800,
+          "height": 15
+        },
+        {
+          "label": "MiddlePlatform",
+          "x": 300,
+          "y": 675,
+          "width": 200,
+          "height": 150
+        },
+        {
+          "label": "MiddleFLoatingPlatform",
+          "x": 350,
+          "y": 575,
+          "width": 100,
+          "height": 15
+        },
+        {
+          "label": "RightDoorPlatform",
+          "x": 500,
+          "y": 410,
+          "width": 300,
+          "height": 15
+        },
+        {
+          "label": "LeftFLoatingPlatform",
+          "x": 200,
+          "y": 475,
+          "width": 50,
+          "height": 15
+        },
+        {
+          "label": "LeftDoorPlatform",
+          "x": 0,
+          "y": 410,
+          "width": 100,
+          "height": 15
+        }
+      ],
+      "spikes": [],
+      "lifts":[],
+        "Boxes": [
+          {
+          "label": "firstbox",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        }
+      ], 
+      "sentries": [
+    ] 
    }
-
   ]
 }

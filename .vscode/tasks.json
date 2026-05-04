@@ -16,7 +16,8 @@
                 "-lgdi32",
                 "-lwinmm",
                 "-o",
-                "${workspaceFolder}/game.exe"
+                "${workspaceFolder}/game.exe",
+                "-mwindows"
             ],
             "problemMatcher": "$gcc",
             "group": {
