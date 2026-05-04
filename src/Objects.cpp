@@ -371,9 +371,12 @@ void UpdateDoor(Vector2 Ying, Vector2 Yan, Vector2 obj3, float rad, DoorData& ld
 {
     // Draw lever base
     DrawRectangleRec(ld.leverBase, DARKGRAY);
+    DrawRectangleRec(ld.switched ? ld.spriteOn : ld.spriteOff, ld.switched ? GREEN : RED);
+   
+
 
     // Draw correct lever sprite based on state
-    DrawRectangleRec(ld.switched ? ld.spriteOn : ld.spriteOff, BROWN);
+    
 
     // Toggle lever when any player touches either hitbox
     bool touchingLeft  = CheckCollisionCircleRec(Ying, rad, ld.hitboxLeft)  ||
@@ -384,18 +387,35 @@ void UpdateDoor(Vector2 Ying, Vector2 Yan, Vector2 obj3, float rad, DoorData& ld
                          CheckCollisionCircleRec(Yan,  rad, ld.hitboxRight) ||
                          CheckCollisionCircleRec(obj3, rad, ld.hitboxRight);
 
-    if (touchingLeft && !ld.switched)  ld.switched = true;
-    if (touchingRight && ld.switched)  ld.switched = false;
+   if (ld.direction > 0){
+        if (touchingLeft)  ld.switched = true;
+        if (touchingRight) ld.switched = false;
+    }else{
+        if (touchingLeft)  ld.switched = false;
+        if (touchingRight) ld.switched = true;
+   }
 
-    // Draw door frame (always visible)
-    for (int i = 0; i < 2; i++)
-        DrawRectangleRec(ld.doorFrame[i], DARKGRAY);
+    //Door
 
-    // Draw door — open or closed depending on lever state
-    if (ld.switched)
-        DrawRectangleRec(ld.doorOpen,   BLANK);     // open = invisible/passable
-    else
-        DrawRectangleRec(ld.doorClosed, DARKBROWN); // closed = solid
+    if (ld.switched == true)
+    {
+        DrawRectangleRec(ld.rect, BLANK);
+    }
+    else if (ld.switched == false)
+    {
+            DrawRectangleRec(ld.rect, BROWN);
+    }
+
+
+}
+
+void DoorHorCollisions(Vector2& Ying, Vector2& Yan, Vector2& obj3, float rad,
+                     Vector2& oldP1, Vector2& oldP2, Vector2& oldMerged,
+                     DoorData& currentDoor, const std::vector<BoxData>& box)
+{
+    if (currentDoor.switched) return;
+    // Door horizontal collision
+   PlayerPlatformCollisions(Ying, rad, &currentDoor.rect, 1, Yan, obj3, oldP1, oldP2, oldMerged, box);
 }
 
 

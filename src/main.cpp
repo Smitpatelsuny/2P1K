@@ -23,7 +23,7 @@ int main(void)
 {
     const int screenWidth  = 800;
     const int screenHeight = 800;
-    int frameTimer = 0;
+     int frameTimer = 0;
     bool paused = false;
     int window = 2;
     Vector2 mouse = GetMousePosition();
@@ -36,7 +36,7 @@ int main(void)
 
     GameState gs;   
 
-    InitWindow(1000, 800, "Ying & Yan the Second Coming");
+    InitWindow(1000, 800, "Ying & Yan: The Second Coming");
 
     RenderTexture2D target = LoadRenderTexture(screenWidth, screenHeight);
 
@@ -182,8 +182,6 @@ int main(void)
                                  gs.platforms.data(), (int)gs.platforms.size(),
                                  gs.Yan, gs.obj3, oldP1, oldP2, oldMerged, gs.boxes);
 
-                if (gs.hasDoor && !gs.currentDoor.switched)
-                    gs.platforms.push_back(gs.currentDoor.doorClosed);
 
                 if (gs.hasBox)
                 {
@@ -204,6 +202,16 @@ int main(void)
                     }
                 }
 
+                   if (gs.hasDoor)
+                {
+                    for (auto& door : gs.doors){                   
+                        DoorHorCollisions(gs.Ying, gs.Yan, gs.obj3, gs.rad,
+                                    oldP1, oldP2, oldMerged,
+                                    door, gs.boxes);                      
+                    }
+                }
+
+                
                 // Vertical collisions
                 Jump(gs.Jumpspeed, gs.Jumpspeed2, gs.JumpspeedMerged,
                      gs.P1CanJump, gs.P2CanJump, gs.MergedCanJump,
@@ -312,8 +320,8 @@ int main(void)
 
                 UpdateAnimatedSprite(m_player, mergedState);
             }
-    
-    if (gs.hasLift)
+           
+                if (gs.hasLift)
                 {
                 for (auto& lift : gs.lifts)
                     {
@@ -346,21 +354,10 @@ int main(void)
                         break;
                     }
                 }
-/*
-                if (gs.hasSentry)
-                    for (auto& sentry : gs.sentries)
-                        UpdateSentry(sentry, gs.Ying, gs.Yan, gs.obj3,
-                             gs.rad, gs.merged, gs.invincibility,
-                             gs.invincibilityTimer, gs.restart,
-                             gs.p1Spawn, gs.p2Spawn);
-*/
-                if (gs.hasDoor && !gs.currentDoor.switched)
-                    gs.platforms.pop_back();
+           
 
-        if (gs.hasDoor){
-            UpdateDoor(gs.Ying, gs.Yan, gs.obj3, gs.rad, gs.currentDoor);
-        }
 
+        
           if (gs.hasGlassPlatforms){
             for (auto& gp : gs.glassPlatforms){
                 UpdateGlassPlatform(gp, gs.Ying, gs.Yan, gs.obj3, gs.rad, gs.merged);
@@ -498,10 +495,6 @@ int main(void)
                 }
                 
 
-        if (gs.hasDoor){
-            UpdateDoor(gs.Ying, gs.Yan, gs.obj3, gs.rad, gs.currentDoor);
-        }
-
         if ((gs.hasGlassPlatforms)){
             for (auto& gp : gs.glassPlatforms) {
                     DrawGlassPlatform(gp);
@@ -546,6 +539,13 @@ int main(void)
                   gs.invincibilityTimer, gs.restart,
                   gs.p1Spawn, gs.p2Spawn);
         }
+
+             if (gs.hasDoor)
+                {
+                    for (auto& door : gs.doors){                   
+                        UpdateDoor(gs.Ying, gs.Yan, gs.obj3, gs.rad, door);
+                    }
+                }
             
 
 /*IDk where else to put this, and it's 100% going to get lost here... but
@@ -584,10 +584,9 @@ for the button on the left side for the rigth door {
                 DrawRectangleRec(gs.exitDoorHitboxYin,  GREEN);
                 DrawRectangleRec(gs.exitDoorHitboxYang, GREEN);
 
-                if(gs.currentLevelId == 1){
+                    if(gs.currentLevelId == 1){
                     TutText(gs.Ying, gs.Yan, gs.obj3, frameTimer);
                 }
-    
 
             } break;
 

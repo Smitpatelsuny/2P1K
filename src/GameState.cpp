@@ -24,10 +24,10 @@ void GameState::LoadLevel(const json& data, int levelId)
     hshooters.clear();
     sentries.clear();
     glassPlatforms.clear();
+    doors.clear();
     hasLift = false;                          
     hasBox  = false;                        
     hasDoor    = false;
-    currentDoor = {};
     hasVerticalShooter = false;
     hasHorizontalShooter = false;
     hasSentry = false;
@@ -118,47 +118,47 @@ void GameState::LoadLevel(const json& data, int levelId)
     //Doors
     if (lvl.contains("Doors"))
     {
-        const auto& ld = lvl["Doors"];
-        const auto& lv = ld["lever"];
-        const auto& d  = ld["door"];
-
-    // Lever
-    currentDoor.switched    = lv["switched"].get<bool>();
-    currentDoor.leverBase   = { lv["base"]["x"].get<float>(),
+        for (const auto& entry : lvl["Doors"])
+        {
+         const auto& lv = entry["lever"];
+        const auto& d = entry["door"];
+            DoorData newDoor;
+            // Lever
+            newDoor.leverBase   = { lv["base"]["x"].get<float>(),
                                      lv["base"]["y"].get<float>(),
                                      lv["base"]["width"].get<float>(),
                                      lv["base"]["height"].get<float>() };
-    currentDoor.hitboxLeft  = { lv["hitboxLeft"]["x"].get<float>(),
+            newDoor.hitboxLeft  = { lv["hitboxLeft"]["x"].get<float>(),
                                      lv["hitboxLeft"]["y"].get<float>(),
                                      lv["hitboxLeft"]["width"].get<float>(),
                                      lv["hitboxLeft"]["height"].get<float>() };
-    currentDoor.hitboxRight = { lv["hitboxRight"]["x"].get<float>(),
+            newDoor.hitboxRight = { lv["hitboxRight"]["x"].get<float>(),
                                      lv["hitboxRight"]["y"].get<float>(),
                                      lv["hitboxRight"]["width"].get<float>(),
                                      lv["hitboxRight"]["height"].get<float>() };
-    currentDoor.spriteOff   = { lv["spriteOff"]["x"].get<float>(),
+            newDoor.spriteOff   = { lv["spriteOff"]["x"].get<float>(),
                                      lv["spriteOff"]["y"].get<float>(),
                                      lv["spriteOff"]["width"].get<float>(),
                                      lv["spriteOff"]["height"].get<float>() };
-    currentDoor.spriteOn    = { lv["spriteOn"]["x"].get<float>(),
+            newDoor.spriteOn    = { lv["spriteOn"]["x"].get<float>(),
                                      lv["spriteOn"]["y"].get<float>(),
                                      lv["spriteOn"]["width"].get<float>(),
                                      lv["spriteOn"]["height"].get<float>() };
+                newDoor.direction   = entry["direction"].get<float>();
+
+            // Door
+             newDoor.rect      = { d["x"].get<float>(),      d["y"].get<float>(),
+                                    d["width"].get<float>(),   d["height"].get<float>() };
+             newDoor.startposition = { newDoor.rect.x, newDoor.rect.y };
+            doors.push_back(newDoor);
+             hasDoor           = true;
+        }
+     
+
+   
 
     // Door
-    currentDoor.doorClosed  = { d["closed"]["x"].get<float>(),
-                                     d["closed"]["y"].get<float>(),
-                                     d["closed"]["width"].get<float>(),
-                                     d["closed"]["height"].get<float>() };
-    currentDoor.doorOpen    = { d["open"]["x"].get<float>(),
-                                     d["open"]["y"].get<float>(),
-                                     d["open"]["width"].get<float>(),
-                                     d["open"]["height"].get<float>() };
-    for (int i = 0; i < 2; i++)
-        currentDoor.doorFrame[i] = { d["frame"][i]["x"].get<float>(),
-                                          d["frame"][i]["y"].get<float>(),
-                                          d["frame"][i]["width"].get<float>(),
-                                          d["frame"][i]["height"].get<float>() };
+    
      hasDoor = true;
     }
     
@@ -251,4 +251,6 @@ if (lvl.contains("glassPlatforms"))
         ResetJumpState(); 
         break;
     }
-}
+};
+
+

@@ -23,6 +23,7 @@ struct GameState
     Vector2 p1Spawn    = { 0, 0 };
     Vector2 p2Spawn    = { 0, 0 };
 
+
     float rad            = 20.0f;
     bool  merged         = false;
 
@@ -51,6 +52,7 @@ struct GameState
     std::vector<BoxData>               boxes;
     std::vector<SentryData>            sentries;
     std::vector<GlassPlatformData> glassPlatforms;
+    std::vector<DoorData>               doors;
     Rectangle exitDoorHitboxYin  = { 0 };
     Rectangle exitDoorHitboxYang = { 0 };
 
@@ -63,7 +65,7 @@ struct GameState
     //Doors
 
         bool       hasDoor   = false;
-        DoorData   currentDoor   = {};
+        
  
     // ── Shooter stuff ─────────────────────────────────────────────────────────
 
