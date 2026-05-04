@@ -3,6 +3,7 @@
 #include "DeaStart.h"
 #include "Objects.h"
 #include "GameState.h"
+#include "levelDrawing.h"
 #include "json.hpp"
 #include <fstream>
 #include <iostream>
@@ -42,7 +43,16 @@ int main(void)
 
 
     Texture2D background_menu = LoadTexture("assets/background_menu.jpg");
-    Texture2D gamePlay2       = LoadTexture("assets/gamePlay2.jpg");
+    Texture2D gamePlay2       = LoadTexture("assets/bgIndustry.png");
+    Texture2D platformTiles = LoadTexture("assets/platforms.png");
+    Texture2D liftTexture = LoadTexture("assets/lift.png");
+    Texture2D spikeTexture = LoadTexture("assets/spike.png");
+
+    AnimatedSprite key = LoadAnimatedSprite("assets/key.png", 1.0f, 2, 1, 0.20f);
+    AnimatedSprite liftButtonSprite = LoadAnimatedSprite("assets/button.png", 1.0f, 2, 1, 0.20f);
+    AnimatedSprite door = LoadAnimatedSprite(
+        "assets/door.png",
+        4.0f, 6, 1, 0.25f);
 
     AnimState yingState = ANIM_IDLE;
     AnimState yanState = ANIM_IDLE;
@@ -466,6 +476,12 @@ int main(void)
         );
 
 
+    DrawTexturedPlatforms(gs.platforms, platformTiles);
+
+    DrawSpikeTextures(gs.spikeHitboxes, spikeTexture);
+
+    DrawExitDoors(door, gs.exitDoorHitboxYin, gs.exitDoorHitboxYang);
+
 
                 ExitGame();
 
@@ -477,13 +493,10 @@ int main(void)
                 {
                     for (auto& lift : gs.lifts)
                         for (auto& box : gs.boxes){
+                        DrawLiftWithButton(lift, liftTexture, liftButtonSprite);
                         levelLiftWithBox(gs.Ying, gs.Yan, gs.obj3, gs.rad, lift, box);
                         }
-                    }else if (gs.hasLift){
-                    for (auto& lift : gs.lifts)
-                        levelLift(gs.Ying, gs.Yan, gs.obj3, gs.rad, lift);
-                }
-
+                    }
 
                 if (gs.hasBox)
                 {
@@ -521,13 +534,13 @@ int main(void)
              
                if(gs.hasVerticalShooter){
                 for(auto& vertShoot : gs.vshooters){
-                    DrawRectangleRec(vertShoot.rect, DARKGRAY);
+                    DrawRectangleRec(vertShoot.rect, BLUE);
                 }
                }
 
                if(gs.hasHorizontalShooter){
                 for(auto& horShoot : gs.hshooters){
-                    DrawRectangleRec(horShoot.rect, DARKGRAY);
+                    DrawRectangleRec(horShoot.rect, BLUE);
                 }
                }
         
@@ -575,14 +588,8 @@ for the button on the left side for the rigth door {
                 DrawAnimatedSpriteCentered(m_player, gs.obj3, gs.mergedFacingRight, WHITE);
             }
 
-                for (const auto& p : gs.platforms)
-                    DrawRectangleRec(p, DARKGRAY);
 
-                for (const auto& s : gs.spikes)
-                    DrawTriangle(s[0], s[1], s[2], RED);
-
-                DrawRectangleRec(gs.exitDoorHitboxYin,  GREEN);
-                DrawRectangleRec(gs.exitDoorHitboxYang, GREEN);
+               
 
                     if(gs.currentLevelId == 1){
                     TutText(gs.Ying, gs.Yan, gs.obj3, frameTimer);

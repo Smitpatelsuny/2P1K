@@ -56,6 +56,116 @@
   },
   "Level": [
     {
+      "id": 1,
+      "name": "Tutorial",
+    "players": {
+        "p1Start": {
+          "x": 40,
+          "y": 764
+        },
+        "p2Start": {
+          "x": 760,
+          "y": 764
+        },
+        "obj3": {
+          "x": 0,
+          "y": 0
+        }
+      },
+      "exitDoors": {
+        "yin": {
+          "x": 30,
+          "y": 380,
+          "width": 30,
+          "height": 30
+        },
+        "yang": {
+          "x": 740,
+          "y": 380,
+          "width": 30,
+          "height": 30
+        }
+      },
+      "platforms": [
+        {
+          "label": "floor",
+          "x": 0,
+          "y": 785,
+          "width": 800,
+          "height": 15
+        },
+        {
+          "label": "leftWall",
+          "x": 0,
+          "y": 0,
+          "width": 15,
+          "height": 800
+        },
+        {
+          "label": "rightWall",
+          "x": 785,
+          "y": 0,
+          "width": 15,
+          "height": 800
+        },
+        {
+          "label": "ceiling",
+          "x": 0,
+          "y": 0,
+          "width": 800,
+          "height": 15
+        },
+        {
+          "label": "MiddlePlatform",
+          "x": 300,
+          "y": 675,
+          "width": 200,
+          "height": 150
+        },
+        {
+          "label": "MiddleFLoatingPlatform",
+          "x": 350,
+          "y": 575,
+          "width": 100,
+          "height": 15
+        },
+        {
+          "label": "RightDoorPlatform",
+          "x": 500,
+          "y": 410,
+          "width": 300,
+          "height": 15
+        },
+        {
+          "label": "LeftFLoatingPlatform",
+          "x": 200,
+          "y": 475,
+          "width": 50,
+          "height": 15
+        },
+        {
+          "label": "LeftDoorPlatform",
+          "x": 0,
+          "y": 410,
+          "width": 100,
+          "height": 15
+        }
+      ],
+      "spikes": [],
+      "lifts":[],
+        "Boxes": [
+          {
+          "label": "firstbox",
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        }
+      ], 
+      "sentries": [
+    ] 
+   },
+    {
       "id": 2,
       "name": "Level 1",
       "players": {
@@ -296,14 +406,14 @@
       },
       "exitDoors": {
         "yin": {
-          "x": 370,
-          "y": 645,
+          "x": 330,
+          "y": 640,
           "width": 30,
           "height": 30
         },
         "yang": {
-          "x": 450,
-          "y": 645,
+          "x": 470,
+          "y": 640,
           "width": 30,
           "height": 30
         }
@@ -503,10 +613,10 @@
         "maxHeight": 665,
         "minHeight": 400,
         "button": {
-          "x": 780,
-          "y": 755,
-          "width": 5,
-          "height": 10
+          "x": 750,
+          "y": 780,
+          "width": 10,
+          "height": 5
         }
       },
       {
@@ -552,7 +662,7 @@
     {
     "x": 580,
     "y": 430,
-    "speed": 0.5,
+    "speed": 1.0,
     "radius": 5,
     "smallSight": { "x": 550, "y": 400, "width": 60,  "height": 60  },
     "largeSight":  { "x": 500, "y": 350, "width": 160, "height": 160 }
@@ -583,13 +693,13 @@
       },
       "exitDoors": {
         "yin": {
-          "x": 760,
+          "x": 710,
           "y": 750,
           "width": 30,
           "height": 30
         },
         "yang": {
-          "x": 10,
+          "x": 60,
           "y": 750,
           "width": 30,
           "height": 30
@@ -823,7 +933,7 @@
     {
     "x": 400,
     "y": 100,
-    "speed": 0.5,
+    "speed": 1.0,
     "radius": 5,
     "smallSight": { "x": 370, "y": 70, "width": 60,  "height": 60  },
     "largeSight":  { "x": 320, "y": 20, "width": 160, "height": 160 }
@@ -838,6 +948,44 @@
             "width": 0,
             "height": 0
       }
+      ],
+      "Doors": [
+        {
+          "label": "leftDoor",
+           "direction": 1.0,
+          "door":{
+          "x": 300,
+          "y": 15,
+          "width": 15,
+          "height": 190
+          },
+          "lever": {
+          "switched": false,
+          "base":        { "x": 720, "y": 350, "width": 20, "height": 5  },
+          "hitboxLeft":  { "x": 720, "y": 350, "width": 10, "height": 10 },
+          "hitboxRight": { "x": 730, "y": 350, "width": 10, "height": 10 },
+          "spriteOff":   { "x": 722, "y": 342, "width": 5,  "height": 10 },
+          "spriteOn":    { "x": 733, "y": 342, "width": 5,  "height": 10 }
+          }
+        },
+        {
+          "label": "RightDoor",
+          "direction": -1.0,
+          "door":{
+          "x": 485,
+          "y": 15,
+          "width": 15,
+          "height": 190
+          },
+          "lever": {
+            "switched": false,
+          "base":        { "x": 60, "y": 350, "width": 20, "height": 5  },
+          "hitboxLeft":  { "x": 60, "y": 350, "width": 10, "height": 10 },
+          "hitboxRight": { "x": 70, "y": 350, "width": 10, "height": 10 },
+          "spriteOff":   { "x": 62, "y": 342, "width": 5,  "height": 10 },
+          "spriteOn":    { "x": 73, "y": 342, "width": 5,  "height": 10 }
+          }
+        }
       ]
     },
 
@@ -1286,7 +1434,7 @@
             "label": "sentry1",
             "x": 200,
             "y": 360,
-            "speed": 0.5,
+            "speed": 0.75,
             "radius": 5,
             "smallSight": { "x": 170, "y": 330, "width": 60,  "height": 60  },
             "largeSight":  { "x": 120, "y": 280, "width": 160, "height": 160 }
@@ -1295,7 +1443,7 @@
             "label": "sentry2",
             "x": 100,
             "y": 560,
-            "speed": 0.5,
+            "speed": 0.75,
             "radius": 5,
             "smallSight": { "x": 70, "y": 530, "width": 60,  "height": 60  },
             "largeSight":  { "x": 20, "y": 480, "width": 160, "height": 160 }
@@ -1304,7 +1452,7 @@
             "label": "sentry3",
             "x": 200,
             "y": 760,
-            "speed": 0.5,
+            "speed": 0.75,
             "radius": 5,
             "smallSight": { "x": 170, "y": 730, "width": 60,  "height": 60  },
             "largeSight":  { "x": 120, "y": 680, "width": 160, "height": 160 }

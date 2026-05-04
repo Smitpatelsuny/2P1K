@@ -140,9 +140,6 @@ void LyftHorControls(Vector2& Ying, Vector2& Yan, Vector2& obj3, float rad,
 void levelLiftWithBox(Vector2 Ying, Vector2 Yan, Vector2 obj3, float rad, LiftData& currentLift, BoxData& box)
 {
 
-    DrawRectangleRec(currentLift.button, RED);
-    DrawRectangleRec(currentLift.rect, GRAY);
-
     if (CheckCollisionCircleRec(Ying, rad, currentLift.button) ||
         CheckCollisionCircleRec(Yan,  rad, currentLift.button) ||
         CheckCollisionCircleRec(obj3, rad, currentLift.button) ||
@@ -370,7 +367,7 @@ bool CanMoveBox(BoxData& box, float dx, float dy,
 void UpdateDoor(Vector2 Ying, Vector2 Yan, Vector2 obj3, float rad, DoorData& ld)
 {
     // Draw lever base
-    DrawRectangleRec(ld.leverBase, DARKGRAY);
+    DrawRectangleRec(ld.leverBase, BLACK);
     DrawRectangleRec(ld.switched ? ld.spriteOn : ld.spriteOff, ld.switched ? GREEN : RED);
    
 

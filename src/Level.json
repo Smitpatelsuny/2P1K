@@ -406,14 +406,14 @@
       },
       "exitDoors": {
         "yin": {
-          "x": 370,
-          "y": 645,
+          "x": 330,
+          "y": 640,
           "width": 30,
           "height": 30
         },
         "yang": {
-          "x": 450,
-          "y": 645,
+          "x": 470,
+          "y": 640,
           "width": 30,
           "height": 30
         }
@@ -613,10 +613,10 @@
         "maxHeight": 665,
         "minHeight": 400,
         "button": {
-          "x": 780,
-          "y": 755,
-          "width": 5,
-          "height": 10
+          "x": 750,
+          "y": 780,
+          "width": 10,
+          "height": 5
         }
       },
       {
@@ -693,13 +693,13 @@
       },
       "exitDoors": {
         "yin": {
-          "x": 760,
+          "x": 710,
           "y": 750,
           "width": 30,
           "height": 30
         },
         "yang": {
-          "x": 10,
+          "x": 60,
           "y": 750,
           "width": 30,
           "height": 30
