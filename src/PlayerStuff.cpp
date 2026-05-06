@@ -320,7 +320,7 @@ void UnloadAnimatedSprite(AnimatedSprite& sprite)
 void TutText(Vector2 Ying, Vector2 Yan, Vector2 obj3, int& framesCounter){
     const char YingMovement[128] = "You are Ying,\nYou use A, & D to move\nand W to jump";
     const char YanMovement[128] = "You are Yan,\nYou use the arrow keys\nto move and jump";
-    const char Merge[318] = "When Ying and Yan overlap press space to merge,\nUse A & D to move, and Up arrow to jump,\nIn this merged state, you'll be heavy and have decreased,\njump height but you'll be able to take another hit,\nInvincibility after getting hit as merged will last 1.0 seconds,/\n and prevent you from merging again during that time";
+    const char Merge[318] = "When Ying and Yan overlap press space to merge,\nUse A & D to move, and Up arrow to jump,\nIn this merged state, you'll be heavy and have decreased,\njump height but you'll be able to take another hit,\nInvincibility after getting hit as merged will last 1.0 seconds,\n and prevent you from merging again during that time";
     const char MergeJump[128] = "If Yan holds jump while you unmerge\nin air, he'll get extra height";
     const char Door[128] = "To complete the level both players\nwill have to get to their respective doors";
 
@@ -343,6 +343,70 @@ void TutText(Vector2 Ying, Vector2 Yan, Vector2 obj3, int& framesCounter){
     framesCounter += 4;
 }
 
+bool UpdateDoorOpeningAnimation(AnimatedSprite &door)
+{
+    door.frameTimer += GetFrameTime();
+
+    if (door.frameTimer >= door.frameDuration)
+    {
+        door.frameTimer = 0.0f;
+
+        if (door.currentFrame < door.columns * door.rows - 1)
+        {
+            door.currentFrame++;
+        }
+    }
+
+    int frameX = door.currentFrame % door.columns;
+    int frameY = door.currentFrame / door.columns;
+
+    door.frameRec.x = frameX * door.frameWidth;
+    door.frameRec.y = frameY * door.frameHeight;
+
+    return door.currentFrame >= door.columns * door.rows - 1;
+}
+
+void ResetDoorAnimation(AnimatedSprite &door)
+{
+    door.currentFrame = 0;
+    door.currentRow = 0;
+    door.frameTimer = 0.0f;
+    door.frameRec.x = 0;
+    door.frameRec.y = 0;
+}
+
+void UpdateKeyAnimation(AnimatedSprite& key)
+{
+    int totalFrames = key.columns * key.rows;
+
+    key.frameTimer += GetFrameTime();
+
+    if (key.frameTimer >= key.frameDuration)
+    {
+        key.frameTimer = 0.0f;
+        key.currentFrame++;
+
+        if (key.currentFrame >= totalFrames)
+        {
+            key.currentFrame = 0;
+        }
+    }
+
+    int frameX = key.currentFrame % key.columns;
+    int frameY = key.currentFrame / key.columns;
+
+    key.frameRec.x = (float)(frameX * key.frameWidth);
+    key.frameRec.y = (float)(frameY * key.frameHeight);
+}
+
+
+
+void UpdateButtonSprite(AnimatedSprite& button, ButtonState state )
+{
+    button.currentFrame = (int) state;
+    button.frameRec.x = (float)(button.currentFrame * button.frameWidth);
+    button.frameRec.y = 0.0f;
+};
 
 
 

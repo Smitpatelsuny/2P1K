@@ -38,6 +38,8 @@ int main(void)
     GameState gs;   
 
     InitWindow(1000, 800, "Ying & Yan: The Second Coming");
+    SetExitKey(KEY_NULL);
+    InitAudioDevice();
 
     RenderTexture2D target = LoadRenderTexture(screenWidth, screenHeight);
 
@@ -70,6 +72,18 @@ int main(void)
     AnimatedSprite m_player = LoadAnimatedSprite(
         "assets/player_m.png",
         1.5f, 3, 4, 0.15f);
+
+        // Key + exit door logic
+    bool hasKey = false;
+    bool exitDoorOpening = false;
+    bool exitDoorFinished = false;
+    bool gamePlayMusicStarted = false;
+    bool showNeedKeyMessage = false;
+    float needKeyMessageTimer = 0.0f;
+    bool liftButtonWasPressed = false;
+
+    // Temporary key position.
+    Rectangle keyHitbox = {3850, 465, 30, 30};
     
 
     Rectangle startbutton = { 250, 220, 300, 40 };
@@ -109,6 +123,7 @@ int main(void)
 
 
         MergeObjects(gs.Ying, gs.Yan, gs.obj3, gs.rad, gs.merged, gs.invincibility, gs.Jumpspeed2, gs.Ejected);
+        ExitGame();
 
         // Global pause toggle
         if(IsKeyPressed(KEY_P) && gs.currentScreen == GameState::Screen::GAMEPLAY)
@@ -120,10 +135,6 @@ int main(void)
             gs.currentScreen = GameState::Screen::LEVSEL;
             paused = false;
         }
-
-      
-
-
 
         // ── Update ───────────────────────────────────────────────────────
        switch (gs.currentScreen)
@@ -148,6 +159,12 @@ int main(void)
                         CheckCollisionPointRec({gameX, gameY}, levelselectbuttons[i]))
                     {
                         gs.LoadLevel(data, i + 1);
+                         hasKey = false;
+                        exitDoorOpening = false;
+                        exitDoorFinished = false;
+                        showNeedKeyMessage = false;
+                        needKeyMessageTimer = 0.0f;
+                        ResetDoorAnimation(door);
                         gs.currentScreen = GameState::Screen::GAMEPLAY;
                         break;
                     }
@@ -165,6 +182,70 @@ int main(void)
                     gs.currentScreen = GameState::Screen::LEVSEL;
                     break;
                 }
+
+                 //  Pick up the key
+            if (!hasKey)
+            {
+                UpdateKeyAnimation(key);
+
+                if (CheckCollisionCircleRec(gs.Ying, gs.rad, keyHitbox) ||
+                    CheckCollisionCircleRec(gs.Yan, gs.rad, keyHitbox) ||
+                    (gs.merged && CheckCollisionCircleRec(gs.obj3, gs.rad, keyHitbox)))
+                {
+                    hasKey = true;
+                    //PlaySound(audio.keyPickup);
+                }
+            }
+
+            // Check if both players are at their exit doors
+            bool playersAtExitDoors = ExitDoors(
+                gs.Ying,
+                gs.Yan,
+                gs.exitDoorHitboxYin,
+                gs.exitDoorHitboxYang,
+                gs.rad,
+                gs.currentLevelId);
+            // If players reach the doors without the key, show warning message
+            if (!hasKey && playersAtExitDoors)
+            {
+                showNeedKeyMessage = true;
+                needKeyMessageTimer = 2.0f;
+            }
+
+            if (showNeedKeyMessage)
+            {
+                needKeyMessageTimer -= GetFrameTime();
+
+                if (needKeyMessageTimer <= 0.0f)
+                {
+                    showNeedKeyMessage = false;
+                    needKeyMessageTimer = 0.0f;
+                }
+            }
+
+            // Only open the exit doors if the key was collected first
+            if (hasKey && playersAtExitDoors && !exitDoorOpening && !exitDoorFinished)
+            {
+                exitDoorOpening = true;
+                ResetDoorAnimation(door);
+                //PlaySound(audio.doorOpen);
+            }
+
+            // Play the exit door animation once
+            if (exitDoorOpening)
+            {
+                exitDoorFinished = UpdateDoorOpeningAnimation(door);
+
+                if (exitDoorFinished)
+                {
+
+                    //StopMusicStream(audio.gameplayMusic);
+                    gamePlayMusicStarted = false;
+                    exitDoorOpening = false;
+                    gs.currentScreen = GameState::Screen::LEVSEL;
+                    break;
+                }
+            }
 
                 Vector2 oldP1     = gs.Ying;
                 Vector2 oldP2     = gs.Yan;
@@ -258,6 +339,7 @@ int main(void)
                     }
                 }
 
+                
             if (!gs.merged)
             {
                 if (IsKeyDown(KEY_D))
@@ -331,17 +413,39 @@ int main(void)
                 UpdateAnimatedSprite(m_player, mergedState);
             }
            
+            bool anyLiftButtonPressed = false;
                 if (gs.hasLift)
                 {
                 for (auto& lift : gs.lifts)
                     {
                         for (auto& box : gs.boxes)
                         {
+                            bool liftButtonPressed =
+                        CheckCollisionCircleRec(gs.Ying, gs.rad, lift.button) ||
+                        CheckCollisionCircleRec(gs.Yan, gs.rad, lift.button) ||
+                        (gs.merged && CheckCollisionCircleRec(gs.obj3, gs.rad, lift.button));
+
+                    if (liftButtonPressed)
+                    {
+                        anyLiftButtonPressed = true;
+                        UpdateButtonSprite(liftButtonSprite, button_pushed);
+                    }
+                    else
+                    {
+                        UpdateButtonSprite(liftButtonSprite, button_normal);
+                    }
+
+                    float oldLiftY = lift.rect.y;
+
+                    //levelLiftWithBox(gs.Ying, gs.Yan, gs.obj3, gs.rad, lift, box);
+
                             LyftVertControls(gs.Ying, gs.Yan, gs.obj3, gs.rad,
                                      oldP1, oldP2, oldMerged,
                                      gs.P1CanJump, gs.P2CanJump, gs.MergedCanJump,
                                      gs.Jumpspeed, gs.Jumpspeed2, gs.JumpspeedMerged,
                                      lift, box);
+
+                                     liftButtonWasPressed = anyLiftButtonPressed;
                         }
                     }
                 }
@@ -480,10 +584,38 @@ int main(void)
 
     DrawSpikeTextures(gs.spikeHitboxes, spikeTexture);
 
+    DrawKey(key, keyHitbox, hasKey);
     DrawExitDoors(door, gs.exitDoorHitboxYin, gs.exitDoorHitboxYang);
 
+        if (!gs.merged)
+            {
+                DrawAnimatedSpriteCentered(w_player, gs.Ying, gs.yingFacingRight, WHITE);
+                DrawAnimatedSpriteCentered(b_player, gs.Yan, gs.yanFacingRight, WHITE);
+            }
+            else
+            {
+                DrawAnimatedSpriteCentered(m_player, gs.obj3, gs.mergedFacingRight, WHITE);
+            }
 
-                ExitGame();
+            if (hasKey)
+            {
+                DrawText("Key collected", 10, 35, 20, GOLD);
+            }
+
+            if (showNeedKeyMessage)
+            {
+                const char *message = "You need the key to open the door!";
+                int fontSize = 24;
+                int textWidth = MeasureText(message, fontSize);
+
+                DrawText(
+                    message,
+                    screenWidth / 2 - textWidth / 2,
+                    screenHeight / 2 - fontSize / 2,
+                    fontSize,
+                    RED);
+            }
+
 
                 InvisCountDown(gs.invincibility, gs.invincibilityTimer);
                 Restart(gs.Ying, gs.Yan, gs.obj3, gs.p1Spawn, gs.p2Spawn, gs.merged, gs.restart);

@@ -17,13 +17,17 @@ void PlayerPlatformCollisions(Vector2& player, int rad, Rectangle platforms[], i
 void PlayerJumpCollisions(Vector2& player, Vector2& ballPosition, Vector2& obj3, float rad, Rectangle platforms[], int platformCount, bool& P1CanJump, bool& P2CanJump, bool& MergedCanJump, float& Jumpspeed, float& Jumpspeed2, float& JumpspeedMerged, Vector2& oldP1, Vector2& oldP2, Vector2& oldMerged, Rectangle box);
 void TutText(Vector2 Ying, Vector2 Yan, Vector2 obj3, int& framesCounter);
 
-
 enum AnimState
 {
     ANIM_IDLE = 0,
     ANIM_RUN = 1,
     ANIM_JUMP = 2,
     ANIM_FALL = 3
+};
+enum ButtonState
+{
+    button_normal =0,
+    button_pushed =1
 };
 
 struct AnimatedSprite
@@ -55,5 +59,14 @@ AnimatedSprite LoadAnimatedSprite(const char* filePath, float scale, int columns
 void UpdateAnimatedSprite(AnimatedSprite& sprite, AnimState state);
 void DrawAnimatedSpriteCentered(const AnimatedSprite& sprite, Vector2 centerPos, bool facingRight, Color tint);
 void UnloadAnimatedSprite(AnimatedSprite& sprite);
+
+bool UpdateDoorOpeningAnimation(AnimatedSprite& door);
+void ResetDoorAnimation(AnimatedSprite& door);
+
+void UpdateKeyAnimation(AnimatedSprite& key);
+
+
+void UpdateButtonSprite(AnimatedSprite& button, ButtonState state);
+
 
 #endif
